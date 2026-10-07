@@ -29,7 +29,7 @@ My research centres on **neutron and X-ray scattering**, especially data analysi
 is the main challenge. I connect computational models (Monte Carlo, molecular dynamics, DFT) to measured data,
 with an emphasis on uncertainty quantification. I have taken part in six beamtimes at ISIS, MAX IV, PSI and
 Diamond Light Source, including a four-day neutron spin echo experiment on CAMEA at PSI.
-My MSc thesis determined the neutron total cross section of thymol and p-cymene from neutron transmission.
+My MSc thesis dealt with neutron moderator materials, combining neutron transmission with deep-inelastic neutron scattering.
 
 I also write scientific software and use machine learning where it fits: I developed a graph neural network for
 test beam data from the ALICE@CERN FoCal-E detector upgrade, and in October 2026 I join the Data Analysis and

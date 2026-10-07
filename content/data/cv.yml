@@ -17,12 +17,14 @@
       description:
         - 'Thesis (60 ECTS, grade 12): "Neutron Total Cross Section for Thymol and p-Cymene Obtained From Neutron Transmission". GPA 9.3.'
         - Supervisors Assoc. Prof. Heloisa N. Bordallo and Dr. Svemir Rudić.
-        - Neutron and X-ray scattering, computational chemistry, condensed matter physics, applied machine learning.
+        - 'Courses: Experimental X-ray Physics; Neutron Scattering; Applications of X-ray and Neutron Scattering in Biology, Chemistry and Physics; Applied Machine Learning; Quantum Nanoelectronics; Computational Chemistry; Structural Tools in Nanoscience.'
+        - Six beamtimes at ISIS, MAX IV, PSI and Diamond Light Source.
     - title: BSc in Nanoscience
       institution: University of Copenhagen, Copenhagen, Denmark
       year: 2023 - 2025
       description:
         - Condensed matter physics, quantum chemistry, advanced modelling and explorative data analysis.
+        - 'Courses: Thermodynamics and Kinetics; Molecular Statistics; Quantum Phenomena in Nano Systems (including cleanroom Hall bar fabrication and low-temperature measurements); Applied Statistics.'
     - title: Nanotechnology (bionanotechnology specialisation), no degree awarded
       institution: Aalborg University, Aalborg, Denmark
       year: 2019 - 2023
@@ -49,8 +51,9 @@
       year: 2025 - 2026
       description:
         - Developed a graph neural network to analyse test beam data from the ALICE@CERN FoCal-E detector upgrade.
-        - Six beamtimes at ISIS, MAX IV, PSI and Diamond Light Source, including a 4-day neutron spin echo experiment on CAMEA@PSI.
+        - Six beamtimes at ISIS (TOSCA, POLARIS), MAX IV (CoSAXS), PSI (CAMEA) and Diamond Light Source (VerSoX), including a 4-day neutron spin echo experiment on CAMEA@PSI.
         - Sample preparation, gas loading and in-situ data analysis; beamtime proposals, posters and presentations.
+        - Ad-hoc teaching assistant duties and educational outreach for the thesis supervisor.
     - title: Student Assistant
       institution: Dept. of Materials and Production, Aalborg University, Aalborg, Denmark
       year: 2021 - 2023
@@ -88,7 +91,7 @@
         - Bayesian inference, uncertainty quantification and error propagation
     - title: Programming and machine learning
       elements:
-        - Python (PyTorch, TensorFlow, scikit-learn, XGBoost, LightGBM), Bash, SQL, LaTeX, Typst
+        - Python (PyTorch, TensorFlow, scikit-learn, XGBoost, LightGBM, Optuna), Bash, SQL, LaTeX, Typst
         - Git, CI/CD, Docker, HPC, Linux administration, Google Cloud Platform
         - Agentic coding with Claude Code
 
