@@ -12,7 +12,7 @@ Building this template has been tested (at a cursory level) on Mac OSX, Windows,
 
 ## Development
 
-Dependencies are declared in `pyproject.toml` (for pip/uv) and `pixi.toml` (for [pixi](https://pixi.sh)).
+Dependencies are declared once, in `pyproject.toml` (hatchling backend); `pixi.toml` installs the project from it, so pixi, uv and pip all use the same list.
 
 ```bash
 pixi install          # create the environment (commit the resulting pixi.lock)
@@ -22,4 +22,3 @@ pixi run publish      # production build (publishconf.py), as used by CI
 ```
 
 Without pixi: `uv sync && uv run pelican content -o output -s publishconf.py`.
-When adding a dependency, update both files.
