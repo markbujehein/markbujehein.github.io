@@ -22,3 +22,10 @@ pixi run publish      # production build (publishconf.py), as used by CI
 ```
 
 Without pixi: `uv sync && uv run pelican content -o output -s publishconf.py`.
+
+## CI/CD
+
+- `.github/workflows/ci.yml` runs on pull requests: ruff and yamllint, a strict production build, and `tools/check_output.py` (internal links, HTML parsing, leaked template placeholders).
+- `.github/workflows/deploy.yml` builds on every push to `main` and deploys with the official GitHub Pages actions. In the repository settings, set **Pages > Source** to **GitHub Actions**.
+- Dependabot (`.github/dependabot.yml`) proposes monthly updates for GitHub Actions and the Python dependencies.
+- Once `pixi.lock` is committed, set `locked: true` and `cache: true` in both workflows.

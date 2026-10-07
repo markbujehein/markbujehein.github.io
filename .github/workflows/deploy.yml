@@ -1,54 +1,45 @@
-#deploy.yml
-
-name: Build and Deploy Pelican Site
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main # Trigger on pushes to your 'main' branch
-  workflow_dispatch: # Allows manual triggering of the workflow from the GitHub UI
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: the token may only read the repo and deploy Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; never cancel a deploy that is already running.
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  build_and_deploy:
-    runs-on: ubuntu-latest # GitHub-hosted runner, a Linux environment
-
-    # Define permissions for the GITHUB_TOKEN
-    permissions:
-      contents: write # Required for actions/checkout and peaceiris/actions-gh-pages to push to gh-pages
-      pages: write    # Required for deploying to GitHub Pages
-      id-token: write # Required for OIDC, often used by GitHub Pages deployments
-
-    # Concurrency group to (not) cancel in-progress runs if a new push occurs on the same branch
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: false
-
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-    - name: Checkout repository code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+      - uses: actions/configure-pages@v5
+      - uses: prefix-dev/setup-pixi@v0.11.0
+        with:
+          locked: false # set to true once pixi.lock is committed
+          cache: false # set to true once pixi.lock is committed
+      - run: pixi run publish --fatal warnings
+      - run: python -I tools/check_output.py output https://markbujehein.github.io
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: output
 
-    - name: Set up pixi environment
-      uses: prefix-dev/setup-pixi@v0.8.14
-      with:
-        # No pixi.lock is committed yet; switch to `locked: true` once it is.
-        locked: false
-        cache: false
-
-    - name: Build Pelican site
-      # Production build (publishconf.py sets SITEURL for the live domain).
-      # SCSS is compiled in Python by pelicanconf.py, so no Node.js is needed.
-      run: pixi run publish
-
-    - name: Fix permissions for output directory
-      run: |
-        chmod -c -R +rX "output/" | while read line; do echo "Changed: $line"; done
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./output
-        publish_branch: gh-pages
-        # For a user page (DracoArgenteus.github.io), you typically don't need the 'cname' option here.
-        # GitHub Pages handles the domain implicitly for user pages.
-        # cname: dracoargenteus.github.io # Uncomment ONLY if you explicitly want a CNAME file for THIS specific domain.
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
