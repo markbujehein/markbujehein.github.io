@@ -6,3 +6,4 @@ staging/*
 !staging/.empty
 # pixi
 .pixi/
+.pytest_cache/

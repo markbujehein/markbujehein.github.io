@@ -8,10 +8,11 @@ python = ">=3.10,<3.14"
 
 # Single source of truth for Python dependencies is pyproject.toml.
 [pypi-dependencies]
-markbujehein-site = { path = ".", editable = true }
+markbujehein-site = { path = ".", editable = true, extras = ["dev"] }
 
 [tasks]
 build = { cmd = "pelican content -o output -s pelicanconf.py", description = "Build the site with dev settings" }
 publish = { cmd = "pelican content -o output -s publishconf.py", description = "Build the site with production settings" }
 serve = { cmd = "pelican -lr content -o output -s pelicanconf.py", description = "Serve at http://localhost:8000 and rebuild on change" }
+test = { cmd = "pytest", description = "Run the unit tests" }
 clean = { cmd = "python -c \"import shutil; shutil.rmtree('output', ignore_errors=True)\"", description = "Remove generated output" }

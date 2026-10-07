@@ -36,6 +36,8 @@ jobs:
           # Set to true once pixi.lock is committed.
           locked: false
           cache: false # becomes `cache: true` once pixi.lock exists
+      - name: Unit tests
+        run: pixi run test
       - name: Build (production settings, warnings are fatal)
         run: pixi run publish --fatal warnings
       - name: Check output (internal links, HTML, placeholder leaks)
