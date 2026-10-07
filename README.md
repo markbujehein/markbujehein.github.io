@@ -29,3 +29,7 @@ Without pixi: `uv sync && uv run pelican content -o output -s publishconf.py`.
 - `.github/workflows/deploy.yml` builds on every push to `main` and deploys with the official GitHub Pages actions. In the repository settings, set **Pages > Source** to **GitHub Actions**.
 - Dependabot (`.github/dependabot.yml`) proposes monthly updates for GitHub Actions and the Python dependencies.
 - Once `pixi.lock` is committed, set `locked: true` and `cache: true` in both workflows.
+
+## Branch protection
+
+`.github/rulesets/default-branch.json` is a repository ruleset for `main` (no deletion or force-push, changes via pull request with the `lint` and `build` checks passing). It is not applied automatically: import it under **Settings > Rules > Rulesets > New ruleset > Import a ruleset**. The two required checks only become selectable after CI has run once.
