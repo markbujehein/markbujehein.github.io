@@ -27,40 +27,24 @@ jobs:
     - name: Checkout repository code
       uses: actions/checkout@v4
 
-    - name: Set up Python environment
-      uses: actions/setup-python@v5
+    - name: Set up pixi environment
+      uses: prefix-dev/setup-pixi@v0.8.14
       with:
-        python-version: '3.10' 
-        cache: 'pip' # Cache pip dependencies for faster subsequent runs
-
-    - name: Install Python dependencies
-      # Conditionally install from requirements.txt if it exists, otherwise install core dependencies.
-      # This is more robust for templates that might or might not ship with a requirements.txt initially.
-      run: |
-        if [ -f requirements.txt ]; then
-          pip install -r requirements.txt
-        else
-          echo "requirements.txt not found. Installing core Pelican dependencies."
-          pip install pelican PyYAML markdown bibtexparser invoke
-          # Add any other core dependencies for al-folio-python if not in requirements.txt
-        fi
-
-    # Note: Your pelicanconf.py has 'render_main_scss(SITE)' which handles SCSS compilation in Python.
-    # This typically means you do *not* need a separate Node.js setup or npm install for Sass.
+        # No pixi.lock is committed yet; switch to `locked: true` once it is.
+        locked: false
+        cache: false
 
     - name: Build Pelican site
-      # Use the specific build command instructed by the template author.
-      # This command will use publishconf.py, which typically has SITEURL set for the live domain.
-      run: python -m pelican -s publishconf.py
+      # Production build (publishconf.py sets SITEURL for the live domain).
+      # SCSS is compiled in Python by pelicanconf.py, so no Node.js is needed.
+      run: pixi run publish
 
-    # Fix permissions for the output directory before deployment.
-    # This ensures files created by Pelican/Python have correct read/execute permissions for the web server.
     - name: Fix permissions for output directory
       run: |
         chmod -c -R +rX "output/" | while read line; do echo "Changed: $line"; done
 
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./output

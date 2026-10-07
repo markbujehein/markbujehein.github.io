@@ -4,3 +4,5 @@ output/*
 al_folio_theme/css/main.scss
 staging/*
 !staging/.empty
+# pixi
+.pixi/
