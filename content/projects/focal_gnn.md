@@ -3,7 +3,7 @@ title: Graph neural network for ALICE FoCal-E test beam data
 template: page
 summary: Machine learning for the ALICE@CERN FoCal-E detector upgrade.
 img:
-importance: 3
+importance: 4
 category: software
 ---
 

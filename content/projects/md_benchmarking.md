@@ -3,7 +3,7 @@ title: Molecular dynamics benchmarking
 template: page
 summary: Simulations to validate scattering analysis software.
 img:
-importance: 5
+importance: 7
 category: software
 ---
 

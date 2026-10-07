@@ -3,7 +3,7 @@ title: EasyScience models at ESS DMSC
 template: page
 summary: New models, unit tests and CI/CD for open-source neutron data analysis libraries.
 img:
-importance: 4
+importance: 6
 category: software
 ---
 
