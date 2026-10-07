@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: check --select E9,F --ignore F401,F403,F405 py_code tasks.py pelicanconf.py publishconf.py
+      - name: YAML lint
+        run: |
+          pip install yamllint
+          yamllint -d '{extends: relaxed, rules: {line-length: disable, trailing-spaces: disable, new-line-at-end-of-file: disable}}' \
+            content/config.yml content/data/cv.yml
+
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: prefix-dev/setup-pixi@v0.11.0
+        with:
+          # Set to true once pixi.lock is committed.
+          locked: false
+          cache: false # becomes `cache: true` once pixi.lock exists
+      - name: Unit tests
+        run: pixi run test
+      - name: Build (production settings, warnings are fatal)
+        run: pixi run publish --fatal warnings
+      - name: Check output (internal links, HTML, placeholder leaks)
+        run: python -I tools/check_output.py output https://markbujehein.github.io

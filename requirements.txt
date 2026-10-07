@@ -1,9 +1,0 @@
-markdown
-pelican 
-pelican-webassets
-pelican-sitemap
-pybtex
-pygments
-libsass
-cssmin
-rjsmin

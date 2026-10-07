@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # Reads [project].dependencies in pyproject.toml. Note: pixi's conda
+  # resolution is independent of this; Dependabot only bumps the version
+  # specifiers in pyproject.toml (it does not touch pixi.lock).
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      python:
+        patterns: ["*"]
