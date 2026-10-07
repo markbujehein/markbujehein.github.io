@@ -6,8 +6,8 @@ def filter_projects(page_lst, category=None):
     filtered = []
 
     for page in page_lst:
-        if 'projects' in page.relative_source_path and \
-            (category is None or page.metadata["category"] == category):
+        if page.relative_source_path.replace('\\', '/').startswith('projects/') and \
+            (category is None or page.metadata.get("category") == category):
             filtered.append(page)
     
     sorted_filtered_lst = sorted(filtered, key=lambda el: el.metadata["importance"])
