@@ -13,4 +13,4 @@ The initial project of the Applied Machine Learning course at the Niels Bohr Ins
 - LightGBM regression,
 - clustering with an autoencoder,
 
-on LHC particle-collision data and Gaia star data. The work was presented in an oral group exam.
+on LHC particle-collision data and Gaia star data.
