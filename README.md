@@ -86,5 +86,5 @@ pull request, and the `lint` and `build` checks must pass. It is not applied aut
 
 ## Licence
 
-No licence file is included yet. The upstream al-folio theme and the Pelican port each carry their own licence terms; check
+The upstream al-folio theme and the Pelican port each carry their own licence terms; check
 those projects before redistributing the theme code. The personal content in `content/` (text, CV, photos) is not intended for reuse.
