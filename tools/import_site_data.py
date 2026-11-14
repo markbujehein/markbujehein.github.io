@@ -61,14 +61,11 @@ def strings(node, path="$"):
 
 def load(source):
     data = yaml.safe_load(Path(source).read_text(encoding="utf-8"))
-    findings = []
-    # A quoted date is a string; the news template calls strftime on it and the build would fail.
-    for i, item in enumerate(data.get("news", []) if isinstance(data, dict) else []):
+    # YAML turns an unquoted 2026-10-01 into a date object; keep one string form (YYYY-MM or YYYY-MM-DD) from here on.
+    for item in data.get("news", []) if isinstance(data, dict) else []:
         if isinstance(item, dict) and isinstance(item.get("date"), dt.date):
             item["date"] = item["date"].isoformat()
-        elif isinstance(item, dict) and "date" in item:
-            findings.append(f"news[{i}].date: unquoted-yaml-date-required")
-    return data, findings
+    return data, []
 
 
 def gate(data, denylist=()):
@@ -100,6 +97,11 @@ def semantic(data, out):
     findings += [f"projects[{i}].slug: duplicate" for i, s in enumerate(slugs) if slugs.index(s) != i]
     keys = [p["key"] for p in data["publications"]]
     findings += [f"publications[{i}].key: duplicate" for i, k in enumerate(keys) if keys.index(k) != i]
+    for i, n in enumerate(data["news"]):
+        try:
+            dt.date.fromisoformat(n["date"] if len(n["date"]) == 10 else n["date"] + "-01")
+        except ValueError:
+            findings.append(f"news[{i}].date: invalid-date")
     cats = front_matter(out / "content/pages/projects.md").get("display_categories", [])
     findings += [f"projects[{i}].category: not-in-display_categories" for i, p in enumerate(data["projects"]) if p["category"] not in cats]
     return findings
@@ -154,12 +156,15 @@ def render_home(d):
 
 
 def render_news(d):
-    items = sorted(d["news"], key=lambda n: n["date"], reverse=True)  # the site never sorts
+    items = sorted(d["news"], key=lambda n: n["date"], reverse=True)  # the site never sorts; YYYY-MM sorts before YYYY-MM-DD
     out = ["---", "title: news", "template: news_archive", "nav: false", "summary: An archive of announcements.",
            "status: published", ""]
     out.append("entries:" if items else "entries: []")
     for n in items:
-        out += [f"  - date: {n['date']}", "    content: |", block(n["content"], 6), ""]
+        month_only = len(n["date"]) == 7  # the source states a month only; the site then shows "Oct 2026", not an invented day
+        out += [f"  - date: {n['date'] + '-01' if month_only else n['date']}"]
+        out += ["    month_only: true"] if month_only else []
+        out += ["    content: |", block(n["content"], 6), ""]
     return "\n".join(out) + "---\n"
 
 

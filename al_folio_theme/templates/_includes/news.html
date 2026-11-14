@@ -12,8 +12,8 @@
               {% for item in news[:news_limit] %}
                 <tr>
                   <th scope="row" class="text-nowrap">
-                    <div class="desktop">{{ item.date | strftime("%b %-d, %Y")}} &nbsp;&nbsp; </div> 
-                    <div class="mobile">{{ item.date | strftime("%m/%d/%y") }}&nbsp;&nbsp;</div> 
+                    <div class="desktop">{{ item.date | strftime("%b %Y" if item.month_only else "%b %-d, %Y") }} &nbsp;&nbsp; </div> 
+                    <div class="mobile">{{ item.date | strftime("%m/%y" if item.month_only else "%m/%d/%y") }}&nbsp;&nbsp;</div> 
                   </th>
                   <td>
                     {{ item.content | replace('<p>', '') | replace('</p>', '') }}

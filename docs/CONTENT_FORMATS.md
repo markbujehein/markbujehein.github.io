@@ -19,7 +19,7 @@ Public by definition. Unknown keys are rejected. Summary:
 
 - `profile`: `subtitle`, `bio_markdown`, optional `contact_line`, `location`, and `seeking` (`headline`, `detail`,
   optional `start`, `location`). `seeking` feeds the front-page hero.
-- `news[]`: `date` (an **unquoted** YAML date, day precision) and `content` (markdown). Sorted newest first by the importer.
+- `news[]`: `date` as `YYYY-MM` (shown as "Oct 2026") or `YYYY-MM-DD`, and `content` (markdown). Sorted newest first by the importer.
 - `cv.general[]` and `cv.sections[]` of type `time_table`, `nested_list` or `list`.
 - `projects[]`: `slug` (`[a-z0-9_-]`), `title`, `summary`, `category` (must be in `projects.md` `display_categories`),
   integer `importance`, `body_markdown`.
@@ -27,7 +27,7 @@ Public by definition. Unknown keys are rejected. Summary:
 
 Gates (rule ids are reported with the JSON path, never the value): `schema-*`, `html`, `template`, `email`, `phone`,
 `national-id`, `url-scheme`, `url-host`, `secret`, `control-char`, `multiline-plain-field`, `denylist`, `duplicate`,
-`not-in-display_categories`, `unquoted-yaml-date-required`. The only address allowed in public output is the obfuscated
+`not-in-display_categories`, `invalid-date`. The only address allowed in public output is the obfuscated
 work address; the host allowlist is `ALLOWED_HOSTS` in the importer.
 
 Plain-text fields are HTML-escaped (`&` only) because Jinja autoescape is off; markdown fields reject `<`, `{{`, `{%`

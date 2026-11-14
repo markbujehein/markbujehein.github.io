@@ -72,6 +72,13 @@ def test_escaping_and_hero(tree):
     assert "selected_papers: true" in home
 
 
+def test_month_only_news_dates(tree):
+    imp.apply(imp.validate(export(tree, put(["news", 0, "date"], "2026-05")), tree), tree)
+    news = (tree / "content/pages/news.md").read_text(encoding="utf-8")
+    assert "date: 2026-05-01\n    month_only: true" in news
+    assert "date: 2026-03-15\n    content:" in news  # a day-level date stays day-level
+
+
 def test_empty_publications_skip_the_page(tree):
     imp.apply(imp.validate(export(tree, lambda d: d.update(publications=[])), tree), tree)
     assert "status: skip" in (tree / "content/pages/publications.md").read_text(encoding="utf-8")
@@ -106,7 +113,8 @@ NEGATIVE = {
     "list_groups": (put(["cv", "sections", 0, "type"], "list_groups"), "cv.sections.0: schema-oneOf"),
     "over-length": (put(["profile", "subtitle"], "x" * 401), "profile.subtitle: schema-maxLength"),
     "illegal-slug": (put(["projects", 0, "slug"], "../evil"), "projects.0.slug: schema-pattern"),
-    "quoted-date": (put(["news", 0, "date"], "2026-05-01"), "news[0].date: unquoted-yaml-date-required"),
+    "bad-month": (put(["news", 0, "date"], "2026-13"), "news[0].date: invalid-date"),
+    "bad-date-shape": (put(["news", 0, "date"], "May 2026"), "news.0.date: schema-pattern"),
     "duplicate-slug": (put(["projects", 1, "slug"], "crystal_growth"), "projects[1].slug: duplicate"),
     "bad-category": (put(["projects", 0, "category"], "teaching"), "projects[0].category: not-in-display_categories"),
     "html": (put(["profile", "bio_markdown"], "hi <script>x</script>"), "profile.bio_markdown: html"),
