@@ -6,6 +6,9 @@
 
 {% block content %}
       <div class="post">
+        {% if page.hero %}
+        {% include '_includes/hero.html' %}
+        {% else %}
         <header class="post-header">
           <div class="desktop">
             <h1 class="post-title">
@@ -17,7 +20,9 @@
             <p class="desc">{{ page.subtitle }}</p>
           </div>
         </header>
+        {% endif %}
         <article>
+          {% if page.hero %}<h2 class="home-who">who I am</h2>{% endif %}
           {% if page.profile -%}
           <div class="desktop">
             <div class="profile float-{%- if page.profile.align == 'left' -%}left{%- else -%}right{%- endif -%}">
@@ -82,6 +87,38 @@
           <div class="clearfix">
             {{ page.content }}
           </div>
+
+          {% if page.hero %}
+          <!-- What I have done -->
+          {% set featured = (pages | filter_projects)[:3] %}
+          {% if featured %}
+          <section class="home-section">
+            <h2>what I have done</h2>
+            <ul class="home-projects">
+              {% for project in featured %}
+              <li><a href="{{ project.url | relative_url }}">{{ project.metadata.title }}</a><p>{{ project.summary }}</p></li>
+              {% endfor %}
+            </ul>
+            <p><a href="{{ 'projects/' | relative_url }}">All projects</a> and the <a href="{{ 'cv/' | relative_url }}">full CV</a></p>
+          </section>
+          {% endif %}
+
+          <!-- What I can do -->
+          {% set skill_sections = SITE.data.cv | selectattr('type', 'equalto', 'nested_list') | list %}
+          {% if skill_sections %}
+          <section class="home-section">
+            <h2>what I can do</h2>
+            <div class="home-skills">
+              {% for group in skill_sections[0].contents %}
+              <div>
+                <h3>{{ group.title }}</h3>
+                <ul>{% for item in group.elements %}<li>{{ item }}</li>{% endfor %}</ul>
+              </div>
+              {% endfor %}
+            </div>
+          </section>
+          {% endif %}
+          {% endif %}
 
           <!-- News -->
           {% if page.news and SITE.announcements.enabled -%}

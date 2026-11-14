@@ -15,7 +15,7 @@
       institution: University of Copenhagen, Copenhagen, Denmark
       year: 2025 - 2026
       description:
-        - 'Thesis (60 ECTS, grade 12): "Neutron Total Cross Section for Thymol and p-Cymene Obtained From Neutron Transmission". GPA 9.3.'
+        - 'Thesis (60 ECTS, grade 12): "Neutron Total Cross Section for Thymol and p-Cymene Obtained From Neutron Transmission".'
         - Supervisors Assoc. Prof. Heloisa N. Bordallo and Dr. Svemir Rudić.
         - 'Courses: Experimental X-ray Physics; Neutron Scattering; Applications of X-ray and Neutron Scattering in Biology, Chemistry and Physics; Applied Machine Learning; Quantum Nanoelectronics; Computational Chemistry; Structural Tools in Nanoscience.'
         - Six beamtimes at ISIS, MAX IV, PSI and Diamond Light Source.
@@ -75,8 +75,6 @@
       year: 2025
     - title: Applied Machine Learning initial project, Niels Bohr Institute
       year: 2025
-      description:
-        - Project score 90/100.
 
 - title: Technical Skills
   type: nested_list

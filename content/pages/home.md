@@ -14,6 +14,11 @@ profile:
     <p>Email: mark.sorensen [at] nbi.ku.dk</p>
     <p>Birkerød, Denmark</p>
 
+hero:
+  headline: Hire a physicist.
+  detail: PhD position wanted. Modelling, experiments, fitting, Bayesian analysis.
+  contact: "Email: mark.sorensen [at] nbi.ku.dk"
+
 news: true  # includes a list of news items
 latest_posts: false # includes a list of the newest posts
 selected_papers: false # includes a list of papers marked as "selected={true}"
@@ -21,7 +26,7 @@ talks: false # includes latest talks
 ---
 
 I am a nanoscientist working between experiment and computation. I completed my MSc in Nanoscience at the
-University of Copenhagen in June 2026 (thesis graded 12, GPA 9.3) and am currently a guest researcher at the
+University of Copenhagen in June 2026 (thesis graded 12) and am currently a guest researcher at the
 Niels Bohr Institute, where I am drafting a first-author manuscript from my thesis with
 Assoc. Prof. Heloisa N. Bordallo and collaborators at the ISIS Neutron and Muon Source.
 
