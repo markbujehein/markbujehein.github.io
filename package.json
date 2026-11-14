@@ -10,13 +10,15 @@
     "check": "tsc --noEmit --runExternalCode",
     "build": "pnpm run check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest run"
   },
   "dependencies": {
     "astro": "^7.4.12"
   },
   "devDependencies": {
     "@astrojs/ts-content-mapper": "^0.2.0",
-    "typescript": "7.1.0-beta"
+    "typescript": "7.1.0-beta",
+    "vitest": "^5.1.0"
   }
 }

@@ -16,3 +16,6 @@ dist/
 # environment variables
 .env
 .env.production
+
+# superpowers executing-plans scratch
+.superpowers/
