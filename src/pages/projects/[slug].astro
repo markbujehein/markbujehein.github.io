@@ -4,7 +4,12 @@ import Base from "../../layouts/Base.astro";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
-  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+  // cacheKey lets incremental builds skip a project page until its content changes.
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+    cacheKey: String(project.digest),
+  }));
 }
 
 const { project } = Astro.props;

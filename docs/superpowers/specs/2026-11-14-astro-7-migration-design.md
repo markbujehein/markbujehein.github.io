@@ -65,7 +65,8 @@ redesigned later to match it. The content and spirit of the current site carry o
 3. Content pages from the existing files (home, news, CV + PDF, projects, talks, teaching, publications).
 4. Importer retarget: write collection files instead of Pelican files; update its tests and `docs/CONTENT_FORMATS.md`.
 5. Site-wide design aligned to the hero, then the interactive elements.
-6. Cutover: swap the deploy workflow, retire Pelican code, update the README.
+6. Cutover: swap the deploy workflow, retire Pelican code, update the README. The workflow must cache and restore
+   `node_modules/.astro/` between builds, or incremental builds (enabled in `astro.config.mjs`) re-render every page.
 
 ## Left to the builder
 

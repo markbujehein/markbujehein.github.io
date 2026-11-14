@@ -14,4 +14,8 @@ export default defineConfig({
       fallbacks: ["Georgia", "serif"],
     },
   ],
+  experimental: {
+    parallelPrerender: true,
+    incrementalBuild: true,
+  },
 });
