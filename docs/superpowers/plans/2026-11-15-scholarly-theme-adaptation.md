@@ -132,3 +132,25 @@
 - [ ] **Step 2:** Run a Lighthouse audit (accessibility and best practices at least 95) on `/`, `/projects/`, `/cv/` in both themes; fix findings.
 - [ ] **Step 3:** Verify `prefers-reduced-motion` (no lift, no scroll animation) in the browser.
 - [ ] **Step 4:** All checks; commit "Polish and accessibility pass".
+
+### Task 9: KaTeX math in Markdown (from Academic Pages Astro)
+
+**Reference:** `https://github.com/arghyadipchak/academicpages-astro` v0.6.1, MIT (© Stuart Geiger, Michael Rose). Its `astro.config.ts` uses `markdown.processor: unified({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex] })` and imports `katex/dist/katex.min.css`.
+
+**Files:**
+- Create: `src/utils/markdown.test.ts`
+- Modify: `astro.config.mjs`, `src/styles/global.css`, `package.json`, `THIRD_PARTY_NOTICES.md`
+
+**Interfaces:**
+- Consumes: Markdown bodies of `home`, `projects`, `news` (all rendered through the configured processor).
+- Produces: inline `$...$` and display `$$...$$` math rendered at build time (no client JavaScript).
+
+- [ ] **Step 1: Failing test.** `markdown.test.ts` renders `"Energy $E=mc^2$ and\n\n$$\\int_0^1 x\\,dx$$"` with `createMarkdownProcessor` from `@astrojs/markdown-remark` using the same remark/rehype plugins as the config; asserts the HTML contains `class="katex"` and `class="katex-display"`, and that plain text without `$` is unchanged.
+- [ ] **Step 2:** Run `pnpm test`. Expected: FAIL (plugins not installed or not configured).
+- [ ] **Step 3:** `pnpm add @astrojs/markdown-remark remark-math rehype-katex katex`; set `markdown.processor` to `unified({ remarkPlugins: [remarkMath], rehypePlugins: [rehypeKatex] })`; import `katex/dist/katex.min.css` in `global.css`; add dark-mode contrast and horizontal scroll for `.katex-display` (as the reference does).
+- [ ] **Step 4:** Confirm the existing Markdown (7 projects, 4 news, bio) still builds with identical text (the processor switches from Sätteri to unified, so diff `dist/` text before and after). Add a sample formula to one scratch page, check it renders, remove it.
+- [ ] **Step 5:** Run all checks; add the Academic Pages Astro MIT notice to `THIRD_PARTY_NOTICES.md` if any code or CSS was copied; commit "Add KaTeX math support".
+
+## Other ideas seen in Academic Pages Astro (not scheduled; pick any)
+
+Cmd/Ctrl+K search (Pagefind), RSS feed, per-page Open Graph images, Google Scholar citation meta tags (needs publications), sitemap, viewport prefetch (`prefetch: { prefetchAll: true, defaultStrategy: 'viewport' }`), external-link and table-wrapper rehype plugins.
