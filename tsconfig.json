@@ -1,25 +1,14 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [
-    ".astro/types.d.ts",
-    "src/**/*"
-  ],
-  "exclude": [
-    "dist",
-    "output",
-    "node_modules"
-  ],
+  "include": [".astro/types.d.ts", "src/**/*"],
+  "exclude": ["dist", "output", "node_modules"],
   "contentMappers": [
     {
       "package": "@astrojs/ts-content-mapper",
-      "extensions": [
-        ".astro"
-      ]
+      "extensions": [".astro"]
     }
   ],
   "compilerOptions": {
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   }
 }

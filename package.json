@@ -2,9 +2,6 @@
   "name": "markbujehein-github-io",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=22.23.4"
-  },
   "scripts": {
     "dev": "astro dev",
     "check": "astro sync && tsc --noEmit --runExternalCode",
@@ -13,7 +10,9 @@
     "astro": "astro",
     "test": "vitest run",
     "check:output": "python -I tools/check_output.py dist https://markbujehein.github.io",
-    "lint": "oxlint src"
+    "lint": "oxlint src",
+    "format": "oxfmt src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json",
+    "format:check": "oxfmt --check src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json"
   },
   "dependencies": {
     "@astrojs/svelte": "^9.1.6",
@@ -25,8 +24,12 @@
   "devDependencies": {
     "@astrojs/ts-content-mapper": "^0.2.0",
     "@types/node": "^24.19.2",
+    "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
     "typescript": "7.1.0-beta",
     "vitest": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=22.23.4"
   }
 }

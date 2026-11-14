@@ -10,7 +10,9 @@ export function groupByCategory<T extends { id: string; data: { category: string
   for (const entry of entries) {
     const group = groups.get(entry.data.category);
     if (!group) {
-      throw new Error(`Project "${entry.id}" has category "${entry.data.category}", not one of: ${categories.join(", ")}`);
+      throw new Error(
+        `Project "${entry.id}" has category "${entry.data.category}", not one of: ${categories.join(", ")}`,
+      );
     }
     group.push(entry);
   }
