@@ -56,3 +56,104 @@
     @apply bg-paper-50 font-sans text-ink-700 dark:bg-ink-950 dark:text-paper-300;
   }
 }
+
+@theme {
+  --shadow-paper: 0 1px 1px rgb(20 9 46 / 0.04), 0 12px 28px -22px rgb(20 9 46 / 0.32);
+  --shadow-paper-lg: 0 1px 2px rgb(20 9 46 / 0.05), 0 18px 38px -24px rgb(90 42 140 / 0.34);
+}
+
+/* Component classes ported from the Scholarly theme (MIT, see THIRD_PARTY_NOTICES.md),
+   recoloured to the hero palette. Motion is opt-in via motion-safe. */
+
+/* Page structure */
+@utility page-stack {
+  @apply space-y-7 pb-2 sm:space-y-10 sm:pb-4;
+}
+@utility page-header {
+  @apply relative space-y-3 border-b border-paper-300/90 pt-2 pb-5 sm:pb-6 dark:border-ink-700;
+}
+@utility page-title {
+  @apply font-heading text-[2.25rem] leading-[1.02] font-bold tracking-[-0.025em] text-ink-950 sm:text-[2.75rem] dark:text-paper-50;
+}
+@utility page-description {
+  @apply max-w-[44rem] font-sans text-[1.0625rem] leading-7 text-ink-600 dark:text-paper-300;
+}
+@utility body-copy {
+  @apply font-sans text-base leading-7 text-ink-700 dark:text-paper-300;
+}
+@utility section-heading {
+  @apply font-heading text-2xl leading-[1.08] font-bold tracking-[-0.015em] text-ink-900 sm:text-[1.75rem] dark:text-paper-100;
+}
+
+/* Entry hierarchy: title, supporting text, summary, metadata */
+@utility entry-title {
+  @apply font-heading text-[1.25rem] leading-[1.28] font-bold tracking-[-0.01em] text-ink-950 dark:text-paper-50;
+}
+@utility entry-supporting {
+  @apply font-sans text-base leading-6 font-normal text-ink-600 dark:text-paper-300;
+}
+@utility entry-summary {
+  @apply font-sans text-base leading-[1.625rem] font-normal text-ink-700 dark:text-paper-300;
+}
+@utility entry-meta {
+  @apply font-sans text-sm leading-[1.375rem] font-normal text-ink-600 dark:text-paper-300;
+}
+@utility entry-index {
+  @apply font-mono text-xs leading-[1.125rem] font-semibold whitespace-nowrap text-accent-700 tabular-nums dark:text-accent-300;
+}
+
+/* Surfaces and chips */
+@utility surface-card {
+  @apply rounded-xl border border-paper-300/90 bg-white/70 p-5 shadow-paper transition-all duration-200 sm:p-6 dark:border-ink-700/80 dark:bg-ink-900/65;
+}
+@utility surface-card-hover {
+  @apply surface-card focus-within:border-accent-500 hover:border-accent-500 hover:shadow-paper-lg motion-safe:hover:-translate-y-0.5 dark:hover:border-accent-400 dark:hover:bg-ink-900;
+}
+@utility meta-chip {
+  @apply inline-flex min-h-7 items-center gap-1.5 rounded-md border border-paper-300 bg-paper-100/90 px-2.5 py-1 font-sans text-xs leading-none font-semibold text-ink-700 dark:border-ink-700 dark:bg-ink-800 dark:text-paper-300;
+}
+
+/* Actions */
+@utility action-link {
+  @apply inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 font-sans text-sm font-bold text-accent-700 no-underline underline-offset-4 transition-colors duration-200 hover:text-accent-900 hover:underline dark:text-accent-300 dark:hover:text-accent-100;
+}
+@utility link-muted {
+  @apply font-sans text-ink-600 no-underline underline-offset-4 transition-colors hover:text-ink-900 hover:underline dark:text-paper-400 dark:hover:text-paper-100;
+}
+
+/* Rendered Markdown (Preflight strips list bullets, heading scale and link styling). */
+@layer components {
+  .prose-site {
+    @apply font-sans text-base leading-7 text-ink-700 dark:text-paper-300;
+  }
+  .prose-site > * + * {
+    @apply mt-4;
+  }
+  .prose-site :where(h2, h3, h4) {
+    @apply mt-8 mb-2 font-heading font-bold text-ink-950 dark:text-paper-50;
+  }
+  .prose-site h2 {
+    @apply text-2xl;
+  }
+  .prose-site h3 {
+    @apply text-xl;
+  }
+  .prose-site ul {
+    @apply list-disc pl-6;
+  }
+  .prose-site ol {
+    @apply list-decimal pl-6;
+  }
+  .prose-site li + li {
+    @apply mt-1;
+  }
+  .prose-site a {
+    @apply text-accent-700 underline underline-offset-4 hover:text-accent-900 dark:text-accent-300 dark:hover:text-accent-100;
+  }
+  .prose-site :where(code) {
+    @apply rounded bg-paper-200 px-1 py-0.5 font-mono text-[0.9em] dark:bg-ink-800;
+  }
+  .prose-site blockquote {
+    @apply border-l-4 border-accent-400 pl-4 text-ink-600 italic dark:text-paper-400;
+  }
+}
