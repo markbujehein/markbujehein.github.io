@@ -12,36 +12,15 @@ const rendered = await Promise.all(
 );
 ---
 
-<ul class="news">
+<ul class="timeline">
   {rendered.map(({ item, Content }) => (
-    <li>
-      <time datetime={isoDate(item.data.date, item.data.monthOnly)}>
+    <li class="timeline-item">
+      <time class="entry-index" datetime={isoDate(item.data.date, item.data.monthOnly)}>
         {formatNewsDate(item.data.date, item.data.monthOnly)}
       </time>
-      <div>
+      <div class="prose-site mt-1">
         <Content />
       </div>
     </li>
   ))}
 </ul>
-
-<style>
-  .news {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  li {
-    display: grid;
-    grid-template-columns: 6rem 1fr;
-    gap: 1rem;
-    padding: 0.5rem 0;
-    border-top: 1px solid #d9d4e5;
-  }
-  time {
-    font-weight: 500;
-  }
-  div :global(p) {
-    margin: 0;
-  }
-</style>

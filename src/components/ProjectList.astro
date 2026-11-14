@@ -8,29 +8,19 @@ interface Props {
 const { projects } = Astro.props;
 ---
 
-<ul class="projects">
+<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
   {projects.map((project) => (
-    <li>
-      <a href={`/projects/${project.id}/`}>{project.data.title}</a>
-      <p>{project.data.summary}</p>
+    <li class="surface-card-hover interactive relative flex flex-col gap-2">
+      <span class="meta-chip self-start capitalize">{project.data.category}</span>
+      <h3 class="entry-title">
+        <a
+          href={`/projects/${project.id}/`}
+          class="text-inherit no-underline after:absolute after:inset-0 after:content-['']"
+        >
+          {project.data.title}
+        </a>
+      </h3>
+      <p class="entry-supporting">{project.data.summary}</p>
     </li>
   ))}
 </ul>
-
-<style>
-  .projects {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  li {
-    padding: 0.75rem 0;
-    border-top: 1px solid #d9d4e5;
-  }
-  a {
-    font-weight: 500;
-  }
-  p {
-    margin: 0.2rem 0 0;
-  }
-</style>

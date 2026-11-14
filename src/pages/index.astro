@@ -34,53 +34,44 @@ const news = latest(await getCollection("news"), 5); // the full list lives at /
     projectsHref="/projects/"
   />
 
-  <div class="sections">
+  <div class="page-stack mt-12">
     <section>
-      <h2>who I am</h2>
+      <h2 class="section-heading heading-bar mb-4">who I am</h2>
       <Image
-        class="portrait"
+        class="float-right mb-4 ml-6 size-40 rounded-full object-cover"
         src={profile}
         alt="Portrait of Mark B.H. Sørensen"
         width={160}
         height={160}
         densities={[1, 2]}
       />
-      <Bio />
+      <div class="prose-site">
+        <Bio />
+      </div>
     </section>
 
     <section>
-      <h2>what I have done</h2>
+      <h2 class="section-heading heading-bar mb-4">what I have done</h2>
       <ProjectList projects={featured} />
     </section>
 
     {skills && skills.data.type === "nested_list" && (
       <section>
-        <h2>what I can do</h2>
+        <h2 class="section-heading heading-bar mb-4">what I can do</h2>
         <CVNested section={skills.data} />
       </section>
     )}
 
     <section>
-      <h2>
-        <a href="/news/">news</a>
+      <h2 class="section-heading heading-bar mb-4">
+        <a
+          href="/news/"
+          class="text-inherit no-underline hover:text-accent-700 dark:hover:text-accent-300"
+        >
+          news
+        </a>
       </h2>
       <NewsList items={news} />
     </section>
   </div>
 </Base>
-
-<style>
-  .sections {
-    max-width: 64rem;
-    margin: 0 auto;
-  }
-  section {
-    margin: 3rem 0;
-  }
-  .portrait {
-    float: right;
-    margin: 0 0 1rem 1.5rem;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-</style>

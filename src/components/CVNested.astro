@@ -8,11 +8,11 @@ interface Props {
 const { section } = Astro.props;
 ---
 
-<div class="groups">
+<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
   {section.contents.map((group) => (
-    <div>
-      <h3>{group.title}</h3>
-      <ul>
+    <div class="surface-card">
+      <h3 class="entry-title mb-2">{group.title}</h3>
+      <ul class="entry-summary list-disc space-y-1 pl-5 marker:text-accent-500">
         {group.elements.map((element) => (
           <li>{element}</li>
         ))}
@@ -20,19 +20,3 @@ const { section } = Astro.props;
     </div>
   ))}
 </div>
-
-<style>
-  .groups {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: 1.5rem;
-  }
-  h3 {
-    margin: 0 0 0.5rem;
-    font-size: 1.05rem;
-  }
-  ul {
-    margin: 0;
-    padding-left: 1.1rem;
-  }
-</style>
