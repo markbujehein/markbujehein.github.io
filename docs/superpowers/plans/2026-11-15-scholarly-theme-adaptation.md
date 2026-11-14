@@ -154,3 +154,20 @@
 ## Other ideas seen in Academic Pages Astro (not scheduled; pick any)
 
 Cmd/Ctrl+K search (Pagefind), RSS feed, per-page Open Graph images, Google Scholar citation meta tags (needs publications), sitemap, viewport prefetch (`prefetch: { prefetchAll: true, defaultStrategy: 'viewport' }`), external-link and table-wrapper rehype plugins.
+
+### Task 10: Accent details and responsive patterns (from My Scholar)
+
+**Reference (ideas only, no code copied):** `https://github.com/mychiffonn/myscholar` v2.2.6, **Apache-2.0** (so any copied code would need a NOTICE entry and a change statement). Seen on the live demo: short accent bar under section headings, accent dot under the active nav link, timeline rail with hollow accent dots, translucent accent borders/tints via `color-mix`, accent text selection, breadcrumbs, count chips, collapsible sections. Executed right after Task 3, before Task 4, because Tasks 4-7 use these pieces.
+
+**Files:**
+- Modify: `src/styles/global.css`, `src/components/Nav.astro`
+- Create: `src/components/Breadcrumbs.astro`
+
+**Interfaces:**
+- Produces: utilities `heading-bar`, `timeline`, `timeline-item`, `interactive`, `disclosure`; `Breadcrumbs` props `{ items: { label: string; href?: string }[] }` (last item is the current page, no link).
+
+- [ ] **Step 1:** In `global.css` add `heading-bar` (2rem x 3px accent-400 bar under the element), `timeline`/`timeline-item` (left rail, hollow accent dot), `interactive` (accent border/tint via `color-mix(in oklab, var(--color-accent-400) ...)`), `disclosure` (styled `<details>`/`<summary>` with chevron), `::selection` in accent, and an accent `:focus-visible` outline in `@layer base`.
+- [ ] **Step 2:** Add the accent dot under the current nav link in `Nav.astro`.
+- [ ] **Step 3:** `Breadcrumbs.astro` renders a `nav[aria-label="Breadcrumb"]` ordered list with `aria-current="page"` on the last item.
+- [ ] **Step 4:** Probe page using every new class: build, assert each appears in the built CSS, remove the probe. All checks. Commit "Add accent details".
+- [ ] **Step 5 (used by later tasks):** project and CV pages use `heading-bar` on section headings, `timeline` for CV time tables and news, `interactive` on hovered cards and filter chips with counts, `disclosure` for "Other projects", `Breadcrumbs` on detail pages; verify at 390 px that nothing overflows horizontally.
