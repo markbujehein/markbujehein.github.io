@@ -1,0 +1,47 @@
+---
+interface Props {
+  items: { id: string; label: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="On this page" class="jump-nav md:sticky md:top-20 md:self-start" data-jump-nav>
+  <ul class="flex flex-wrap gap-2 md:flex-col md:gap-1">
+    {items.map((item) => (
+      <li>
+        <a
+          href={`#${item.id}`}
+          class="block rounded-md px-2 py-1 text-sm text-ink-600 no-underline hover:text-accent-700 aria-[current=location]:bg-accent-100 aria-[current=location]:font-bold aria-[current=location]:text-accent-800 dark:text-paper-400 dark:hover:text-accent-300 dark:aria-[current=location]:bg-ink-800 dark:aria-[current=location]:text-accent-300"
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  // Scroll-spy: mark the link of the section nearest the top with aria-current="location".
+  document.addEventListener("astro:page-load", () => {
+    const nav = document.querySelector<HTMLElement>("[data-jump-nav]");
+    if (!nav) return;
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>("a")];
+    const targets = links
+      .map((a) => document.getElementById(a.hash.slice(1)))
+      .filter((el): el is HTMLElement => el !== null);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          for (const a of links) {
+            if (a.hash === `#${entry.target.id}`) a.setAttribute("aria-current", "location");
+            else a.removeAttribute("aria-current");
+          }
+        }
+      },
+      { rootMargin: "-80px 0px -70% 0px" },
+    );
+    targets.forEach((t) => observer.observe(t));
+  });
+</script>
