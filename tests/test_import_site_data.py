@@ -69,6 +69,7 @@ def test_escaping_and_hero(tree):
     imp.apply(imp.validate(FIXTURE, tree), tree)
     home = (tree / "content/pages/home.md").read_text(encoding="utf-8")
     assert "fitting &amp; Bayesian" in home and "headline: \"Hire a physicist.\"" in home
+    assert 'linkedin: "https://www.linkedin.com/in/example"' in home
     assert "selected_papers: true" in home
 
 

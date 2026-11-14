@@ -155,6 +155,8 @@ def render_home(d):
         out += [f"  {k}: {q_plain(v)}" for k, v in p["seeking"].items()]
         if p.get("contact_line"):
             out.append(f"  contact: {q_plain(p['contact_line'])}")
+        if p.get("linkedin"):
+            out.append(f"  linkedin: {q_plain(p['linkedin'])}")
     selected = any(x.get("selected") for x in d["publications"])
     out += ["", "news: true", "latest_posts: false", f"selected_papers: {str(selected).lower()}", "talks: false", "---", ""]
     return "\n".join(out) + "\n" + p["bio_markdown"].strip() + "\n"

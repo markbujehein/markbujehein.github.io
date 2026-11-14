@@ -18,7 +18,7 @@ manifest is never touched.
 Public by definition. Unknown keys are rejected. Summary:
 
 - `profile`: `subtitle`, `bio_markdown`, optional `contact_line`, `location`, and `seeking` (`headline`, `detail`,
-  optional `start`, `location`). `seeking` feeds the front-page hero.
+  optional `start`, `location`). `seeking` feeds the front-page hero. Optional `profile.linkedin` (https URL) adds a LinkedIn button.
 - `news[]`: `date` as `YYYY-MM` (shown as "Oct 2026") or `YYYY-MM-DD`, and `content` (markdown). Sorted newest first by the importer.
 - `cv.general[]` and `cv.sections[]` of type `time_table`, `nested_list` or `list`.
 - `projects[]`: `slug` (`[a-z0-9_-]`), `title`, `summary`, `category` (must be in `projects.md` `display_categories`),
