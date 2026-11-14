@@ -1,0 +1,23 @@
+---
+import Breadcrumbs from "./Breadcrumbs.astro";
+
+interface Props {
+  title: string;
+  summary?: string;
+  crumbs: { label: string; href?: string }[];
+}
+
+const { title, summary, crumbs } = Astro.props;
+---
+
+<article class="mx-auto max-w-3xl">
+  <Breadcrumbs items={crumbs} />
+  <header class="page-header mb-8">
+    <slot name="meta" />
+    <h1 class="page-title">{title}</h1>
+    {summary && <p class="page-description">{summary}</p>}
+  </header>
+  <div class="prose-site">
+    <slot />
+  </div>
+</article>

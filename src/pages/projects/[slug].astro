@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
+import DetailShell from "../../components/DetailShell.astro";
 import Base from "../../layouts/Base.astro";
 
 export async function getStaticPaths() {
@@ -17,22 +18,18 @@ const { Content } = await render(project);
 ---
 
 <Base title={project.data.title} description={project.data.summary}>
-  <article class="page">
-    <p>
-      <a href="/projects/">← projects</a>
-    </p>
-    <h1>{project.data.title}</h1>
-    <p class="summary">{project.data.summary}</p>
+  <DetailShell
+    title={project.data.title}
+    summary={project.data.summary}
+    crumbs={[
+      { label: "Home", href: "/" },
+      { label: "Projects", href: "/projects/" },
+      { label: project.data.title },
+    ]}
+  >
+    <span slot="meta" class="meta-chip capitalize">
+      {project.data.category}
+    </span>
     <Content />
-  </article>
+  </DetailShell>
 </Base>
-
-<style>
-  .page {
-    max-width: 44rem;
-    margin: 0 auto;
-  }
-  .summary {
-    font-size: 1.15rem;
-  }
-</style>
