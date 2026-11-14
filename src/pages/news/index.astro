@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import NewsList from "../../components/NewsList.astro";
+import Base from "../../layouts/Base.astro";
+
+const news = await getCollection("news");
+---
+
+<Base title="news" description="An archive of announcements.">
+  <div class="page">
+    <h1>news</h1>
+    <NewsList items={news} />
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+</style>
