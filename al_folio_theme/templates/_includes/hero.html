@@ -1,0 +1,44 @@
+{# Front-page hero. Fields come from page.hero (generated from profile.seeking); absent fields render nothing. #}
+<section class="hero" aria-labelledby="hero-name">
+  <svg class="hero-art" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="hero-grain" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="noise"/>
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -3.4 2.2" result="speckle"/>
+        <feComposite in="SourceGraphic" in2="speckle" operator="in"/>
+      </filter>
+      <radialGradient id="hero-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#8c2981" stop-opacity=".55"/>
+        <stop offset=".6" stop-color="#3b0f70" stop-opacity=".25"/>
+        <stop offset="1" stop-color="#14092e" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle cx="300" cy="300" r="300" fill="url(#hero-glow)"/>
+    <g filter="url(#hero-grain)" fill="none">
+      <circle class="ring" style="--i:0" cx="300" cy="300" r="64" stroke="#fcfdbf" stroke-width="9"/>
+      <circle class="ring" style="--i:1" cx="300" cy="300" r="112" stroke="#fe9f6d" stroke-width="14"/>
+      <circle class="ring" style="--i:2" cx="300" cy="300" r="151" stroke="#de4968" stroke-width="7"/>
+      <circle class="ring" style="--i:3" cx="300" cy="300" r="203" stroke="#fe9f6d" stroke-width="12"/>
+      <circle class="ring" style="--i:4" cx="300" cy="300" r="238" stroke="#8c2981" stroke-width="8"/>
+      <circle class="ring" style="--i:5" cx="300" cy="300" r="281" stroke="#de4968" stroke-width="5"/>
+    </g>
+    <circle cx="300" cy="300" r="22" fill="#14092e"/>
+  </svg>
+  <div class="hero-copy">
+    <h1 id="hero-name" class="hero-name">{{ SITE.first_name }}{% if SITE.middle_name %} {{ SITE.middle_name }}{% endif %} {{ SITE.last_name }}</h1>
+    <p class="hero-headline">{{ page.hero.headline }}</p>
+    <p class="hero-detail">{{ page.hero.detail }}</p>
+    {% if page.subtitle %}<p class="hero-role">{{ page.subtitle }}</p>{% endif %}
+    {% if page.hero.start or page.hero.location %}
+    <ul class="hero-facts">
+      {% if page.hero.start %}<li>{{ page.hero.start }}</li>{% endif %}
+      {% if page.hero.location %}<li>{{ page.hero.location }}</li>{% endif %}
+    </ul>
+    {% endif %}
+    <p class="hero-actions">
+      <a class="hero-btn hero-btn-primary" href="{{ 'cv/' | relative_url }}">Read my CV</a>
+      <a class="hero-btn" href="{{ 'projects/' | relative_url }}">See my projects</a>
+    </p>
+    {% if page.hero.contact %}<p class="hero-contact">{{ page.hero.contact }}</p>{% endif %}
+  </div>
+</section>

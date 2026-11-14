@@ -1,0 +1,67 @@
+# Fictional person. Used only by the importer tests.
+schema_version: 1
+profile:
+  subtitle: Research Fellow, Example Institute
+  contact_line: "Email: mark.sorensen [at] nbi.ku.dk"
+  location: Exampleville, Denmark
+  seeking:
+    headline: Hire a physicist.
+    detail: PhD position wanted. Modelling, experiments, fitting & Bayesian analysis.
+    start: Available from 1 January 2027
+  bio_markdown: |
+    I study **crystal growth** with neutrons & X-rays.
+
+    See my [code](https://github.com/example-user).
+news:
+  - date: 2026-05-01
+    content: |
+      Joined the Example Institute.
+  - date: 2026-03-15
+    content: |
+      Defended the MSc thesis.
+cv:
+  general:
+    - {name: Location, value: "Exampleville, Denmark"}
+    - {name: Languages, value: "Danish: Native (C2); English: Full (C1)"}
+  sections:
+    - title: Education
+      type: time_table
+      entries:
+        - title: MSc in Examples
+          institution: Example University, Denmark
+          year: 2024 - 2026
+          description:
+            - 'Thesis: "On Examples & Counterexamples".'
+            - 'Courses: Scattering; Statistics.'
+    - title: Technical Skills
+      type: nested_list
+      entries:
+        - title: Programming
+          elements: [Python, "C++"]
+    - title: Interests
+      type: list
+      entries: [Neutron scattering, Bayesian inference]
+projects:
+  - slug: crystal_growth
+    title: Crystal growth study
+    summary: Growing crystals and measuring them.
+    category: research
+    importance: 1
+    body_markdown: |
+      We grew crystals and measured them at a **neutron source**.
+  - slug: fit_tool
+    title: A fitting tool
+    summary: Open-source fitting.
+    category: software
+    importance: 2
+    body_markdown: |
+      A small Python library.
+publications:
+  - key: doe2026
+    type: article
+    title: A fictional paper
+    authors: ["Doe, Jane", "Smith, John"]
+    year: "2026"
+    journal: Journal of Examples
+    selected: true
+    links: {pdf: "https://doi.org/10.1000/example"}

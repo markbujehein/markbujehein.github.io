@@ -1,14 +1,14 @@
 ---
-title: EasyScience models at ESS DMSC
+title: "EasyScience models at ESS DMSC"
 template: page
-summary: New models, unit tests and CI/CD for open-source neutron data analysis libraries.
+summary: "New models, unit tests and CI/CD for open-source neutron data analysis libraries."
 img:
 importance: 6
 category: software
 ---
 
-In October 2026 I join the Data Analysis & Modelling group at the European Spallation Source Data Management and
-Software Centre (DMSC) in Lyngby for a four-week internship.
+In October 2026 I spent four weeks in the Data Analysis & Modelling group at the European Spallation Source Data
+Management and Software Centre (DMSC) in Lyngby.
 
-- Implementing new models in EasyScience, open-source libraries for the analysis of neutron scattering data.
-- Writing unit tests and production-grade CI/CD workflows under strict version control and code validation.
+- Implementing new models in open-source neutron data analysis libraries (EasyScience).
+- Writing unit tests and working with production-grade CI/CD workflows under strict version control.

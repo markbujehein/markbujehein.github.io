@@ -1,105 +1,260 @@
+# GENERATED from the source export by tools/import_site_data.py. Do not edit by hand.
 - title: General Information
   type: map
   contents:
-    - name: Full Name
-      value: Mark Buje Hein Sørensen
-    - name: Location
-      value: Birkerød, Denmark
-    - name: Languages
-      value: Danish (native), English (native/bilingual), German (B2 or higher), Swedish (limited working), Spanish (elementary)
+    - name: "Full Name"
+      value: "Mark Buje Hein Sørensen"
+    - name: "Location"
+      value: "Birkerød, Denmark"
+    - name: "Languages"
+      value: "Danish: Native Proficiency (C2); English: Functionally Native Proficiency (C2); German: Limited Working Proficiency (B1); Swedish: Limited Working Proficiency (B1); Spanish: Elementary Proficiency (A1)"
 
-- title: Education
-  type: time_table
-  contents:
-    - title: MSc in Nanoscience
-      institution: University of Copenhagen, Copenhagen, Denmark
-      year: 2025 - 2026
-      description:
-        - 'Thesis (60 ECTS, grade 12): "Neutron Total Cross Section for Thymol and p-Cymene Obtained From Neutron Transmission". GPA 9.3.'
-        - Supervisors Assoc. Prof. Heloisa N. Bordallo and Dr. Svemir Rudić.
-        - 'Courses: Experimental X-ray Physics; Neutron Scattering; Applications of X-ray and Neutron Scattering in Biology, Chemistry and Physics; Applied Machine Learning; Quantum Nanoelectronics; Computational Chemistry; Structural Tools in Nanoscience.'
-        - Six beamtimes at ISIS, MAX IV, PSI and Diamond Light Source.
-    - title: BSc in Nanoscience
-      institution: University of Copenhagen, Copenhagen, Denmark
-      year: 2023 - 2025
-      description:
-        - Condensed matter physics, quantum chemistry, advanced modelling and explorative data analysis.
-        - 'Courses: Thermodynamics and Kinetics; Molecular Statistics; Quantum Phenomena in Nano Systems (including cleanroom Hall bar fabrication and low-temperature measurements); Applied Statistics.'
-    - title: Nanotechnology (bionanotechnology specialisation), no degree awarded
-      institution: Aalborg University, Aalborg, Denmark
-      year: 2019 - 2023
-      description:
-        - All but 15 ECTS completed; problem-based projects in characterisation, modelling and fabrication of nanostructured materials.
-
-- title: Research and Professional Experience
-  type: time_table
-  contents:
-    - title: Data Analysis & Modelling Group Intern
-      institution: European Spallation Source DMSC, Lyngby, Denmark
-      year: Oct 2026
-      description:
-        - Implementing new models in EasyScience, open-source libraries for analysis of neutron scattering data.
-        - Writing unit tests and production-grade CI/CD workflows.
-    - title: Guest Researcher
-      institution: Niels Bohr Institute, University of Copenhagen, Copenhagen, Denmark
-      year: 2026 - now
-      description:
-        - Drafting a first-author manuscript from the MSc thesis.
-        - Running molecular dynamics benchmarking simulations with a postdoctoral collaborator to validate analysis software.
-    - title: MSc Researcher
-      institution: Nano-Science Center, University of Copenhagen, Copenhagen, Denmark
-      year: 2025 - 2026
-      description:
-        - Developed a graph neural network to analyse test beam data from the ALICE@CERN FoCal-E detector upgrade.
-        - Six beamtimes at ISIS (TOSCA, POLARIS), MAX IV (CoSAXS), PSI (CAMEA) and Diamond Light Source (VerSoX), including a 4-day neutron spin echo experiment on CAMEA@PSI.
-        - Sample preparation, gas loading and in-situ data analysis; beamtime proposals, posters and presentations.
-        - Ad-hoc teaching assistant duties and educational outreach for the thesis supervisor.
-    - title: Student Assistant
-      institution: Dept. of Materials and Production, Aalborg University, Aalborg, Denmark
-      year: 2021 - 2023
-      description:
-        - Ad-hoc project and administrative support.
-    - title: Financial Officer
-      institution: Studentersamfundet, Aalborg University, Aalborg, Denmark
-      year: 2021 - 2023
-      description:
-        - Oversaw an annual budget above DKK 1.5M and the revenue of 6-7 student bars.
-        - Trained volunteers in basic economics and budgeting.
-
-- title: Training and Certificates
-  type: time_table
-  contents:
-    - title: ESS DMSC Summer School
-      year: 2026
-    - title: NNSP / SwedNess Introductory Course in Neutron Scattering (4 ECTS)
-      year: 2025
-    - title: Applied Machine Learning initial project, Niels Bohr Institute
-      year: 2025
-      description:
-        - Project score 90/100.
-
-- title: Technical Skills
+- title: "Core Competencies"
   type: nested_list
   contents:
-    - title: Scattering and characterisation
+    - title: "Scattering and signal analysis"
       elements:
-        - INS, NSE, SAXS/WAXS, XRD, neutron powder diffraction, neutron transmission
-        - FTIR, UV-Vis, fluorescence, 1D-NMR, DSC, AFM, Raman and light microscopy
-    - title: Modelling
+        - "Neutron and X-ray scattering and diffraction: INS, QENS, NPD, SAXS/WAXS, XRD and neutron transmission; neutron time-of-flight and quasielastic scattering analysis in the time, frequency and spatial domains"
+        - "Six beamtimes at ISIS, MAX IV, PSI and Diamond Light Source: sample preparation, gas loading, in-situ data analysis and beamtime proposal writing"
+    - title: "Data analysis and statistics"
       elements:
-        - Monte Carlo, molecular dynamics, DFT and ab initio methods
-        - Bayesian inference, uncertainty quantification and error propagation
-    - title: Programming and machine learning
+        - "χ² and maximum-likelihood fits, background fitting and subtraction, Monte Carlo simulation, hypothesis testing, Bayesian inference, multivariate analysis and time series, applied to famous CERN particle-physics datasets"
+        - "Error propagation and uncertainty quantification"
+    - title: "Modelling and simulation"
       elements:
-        - Python (PyTorch, TensorFlow, scikit-learn, XGBoost, LightGBM, Optuna), Bash, SQL, LaTeX, Typst
-        - Git, CI/CD, Docker, HPC, Linux administration, Google Cloud Platform
-        - Agentic coding with Claude Code
+        - "Monte Carlo, molecular dynamics (GROMACS, Martini), DFT and ab initio methods (Quantum ESPRESSO, ORCA) and semi-empirical quantum chemistry (MOPAC)"
+    - title: "Scientific software"
+      elements:
+        - "Python (daily use) with PyTorch, TensorFlow, scikit-learn, XGBoost, LightGBM and Optuna; graph neural networks, autoencoders and gradient-boosted trees"
+        - "Git and GitHub (forks, pull requests, review), unit testing and CI/CD; contributions to open-source neutron data analysis libraries (EasyScience)"
+        - "Research software development with agentic coding workflows (Claude Code)"
+    - title: "Experimental and laboratory work"
+      elements:
+        - "AFM, UV-Vis and fluorescence spectroscopy, FTIR, 1D-NMR, DSC, light and Raman microscopy, nanoparticle tracking analysis, electrospinning and microfluidics"
+        - "Cleanroom work; fabricated a Hall bar with software-calibrated lithographic alignment and etching and experimentally observed the Quantum Hall effect at sub-Kelvin temperatures"
 
-- title: Voluntary Work
+- title: "Research and Professional Experience"
   type: time_table
   contents:
-    - title: Policy group chair, Forskningsreserven 2024
-      institution: Danish Social Liberal Party
-      year: 2024
-    - title: Executive committee member, IDA STEM Students; member, IDA Education and Higher Research Committee
-      institution: IDA, the Danish Society of Engineers
+    - title: "Data Analysis &amp; Modelling Group Intern"
+      institution: "European Spallation Source DMSC, Lyngby, Denmark"
+      year: "Oct 2026 (4 weeks)"
+      description:
+        - "Implemented models in open-source neutron data analysis libraries (EasyScience): models merged into EasyDynamics; a maths module for EasyScience Core is under review."
+        - "Worked with unit testing, production-grade CI/CD workflows under strict version control, and Claude Code in a scientific codebase."
+    - title: "Guest Researcher"
+      institution: "Niels Bohr Institute, University of Copenhagen, Copenhagen, Denmark"
+      year: "Jul 2026 - present"
+      description:
+        - "Drafting a first-author manuscript from the MSc thesis, with Assoc. Prof. Heloisa N. Bordallo and collaborators at ISIS Neutron and Muon Source."
+        - "Running molecular dynamics benchmarking simulations in GROMACS with a postdoc collaborator to validate analysis software and support publication."
+
+- title: "Education"
+  type: time_table
+  contents:
+    - title: "MSc in Nanoscience (cand.scient., 120 ECTS)"
+      institution: "University of Copenhagen, Copenhagen, Denmark"
+      year: "Feb 2025 - Jun 2026"
+      description:
+        - "Thesis (60 ECTS, grade 12): \"Neutron Total Cross Section for Thymol and p-Cymene Obtained From Neutron Transmission\". Supervisors Assoc. Prof. Heloisa N. Bordallo and Dr. Svemir Rudić."
+        - "Derived energy-dependent total neutron cross sections from VESUVIO transmission data, calibrated against the free-atom limit, and compared the results with cross sections calculated in NCrystal; reduced and analysed TOSCA and VESUVIO data in Mantid through its Python API."
+        - "Six beamtimes at ISIS Neutron and Muon Source (UK), the MAX IV synchrotron (Sweden), the Paul Scherrer Institute (Switzerland) and the Diamond Light Source (UK), including a four-day experiment on the CAMEA multiplexing neutron spectrometer at PSI measuring magnon dispersion in antiferromagnetic MnWO4."
+        - "Handled sample preparation, gas loading and in-situ data analysis, wrote beamtime proposals, and was trusted to independently support experiments for the thesis supervisor and departmental researchers."
+        - "Applied Machine Learning group project: developed a graph attention network for ALICE FoCal test beam data (electron versus hadron classification)."
+        - "Coursework: Experimental X-ray Physics; Neutron Scattering; Applications of X-ray and Neutron Scattering in Biology, Chemistry and Physics; Applied Machine Learning; Quantum Nanoelectronics; Computational Chemistry; Structural Tools in Nanoscience."
+    - title: "BSc in Nanoscience"
+      institution: "University of Copenhagen, Copenhagen, Denmark"
+      year: "Sep 2023 - Feb 2025"
+      description:
+        - "232.5 ECTS credit scope because of the transfer from Aalborg University."
+        - "Coursework covering condensed matter physics, quantum chemistry, thermodynamics and kinetics, molecular statistics, advanced modelling and applied statistics (error propagation, chi-square and maximum-likelihood fits, Bayesian statistics, multivariate analysis)."
+        - "Quantum Phenomena in Nano Systems: fabricated a Hall bar in the cleanroom and measured it at about 4 K and about 0.4 K."
+    - title: "Nanotechnology (bionanotechnology specialisation), no degree awarded"
+      institution: "Aalborg University, Aalborg, Denmark"
+      year: "Sep 2019 - Jun 2023"
+      description:
+        - "All but 15 ECTS of the BSc completed."
+        - "Seven group projects (85 ECTS), each written up in a report and defended orally."
+        - "BSc project (Biosensors module, 20 ECTS): micellisation in surfactant mixtures, using UV-Vis spectroscopy with a dye probe and nanoparticle tracking analysis of micelle size."
+        - "In group projects, carried out the optical measurements (UV-Vis absorption and fluorescence), the semi-empirical quantum chemistry (MOPAC), pKa modelling and structure optimisation, and set up GROMACS and Martini with scripts that helped the group start molecular dynamics."
+    - title: "Upper secondary school (STX), natural science study line"
+      institution: "Aalborg City Gymnasium, Aalborg, Denmark"
+      year: "Sep 2017 - Jun 2019"
+      description:
+        - "Mathematics A, Physics A, Chemistry B, English A."
+        - "Selected for the Talent Academy of North Jutland Upper Secondary Schools (Nordjyske Gymnasiers Talentakademi)."
+        - "Student council chair, Nov 2017 - Jun 2018."
+
+- title: "Schools, Workshops and Conferences"
+  type: time_table
+  contents:
+    - title: "MDANSE Workshop 2026"
+      institution: "ESS DMSC, DTU Lyngby, Denmark"
+      year: "Nov 2026"
+      description:
+        - "Simulating neutron spectra with DFT, lattice dynamics and molecular dynamics."
+    - title: "ESS DMSC Summer School"
+      year: "Aug 2026"
+      description:
+        - "Python for scientific computing, data management, simulation of neutron scattering experiments, data reduction and analysis, metadata and reproducibility."
+        - "Presented a scientific poster on the MSc thesis results."
+    - title: "DanScatt 2026"
+      institution: "University of Copenhagen, Copenhagen, Denmark"
+      year: "May 2026"
+      description:
+        - "Participant."
+    - title: "Theory meets XFELs 2025"
+      institution: "European XFEL, Schenefeld, and CFEL, DESY, Hamburg, Germany"
+      year: "Nov 2025"
+      description:
+        - "Participant in a theoretical workshop on ultrafast dynamics."
+    - title: "Laser and photobiological safety course, taught by DFM (Danish National Metrology Institute)"
+      institution: "Niels Bohr Institute, University of Copenhagen, Copenhagen, Denmark"
+      year: "Oct 2025"
+    - title: "8th Nordic Neutron School, Introductory Course in Neutron Scattering (NNSP / SwedNess, 4 ECTS)"
+      institution: "LINXS, Lund, Sweden"
+      year: "Sep - Oct 2025"
+      description:
+        - "Lectures and exercises, facility visits at MAX IV and ESS, and a beamtime proposal exam."
+
+- title: "Selected Research Projects"
+  type: time_table
+  contents:
+    - title: "Quasielastic neutron scattering at TOSCA, ISIS"
+      year: "Feb 2026"
+      description:
+        - "Beamtime working directly with Assoc. Prof. Heloisa N. Bordallo and Dr. Svemir Rudić on a QENS experiment."
+    - title: "Refactoring of VESUVIO analysis scripts"
+      year: "Nov 2025 - Feb 2026"
+      description:
+        - "Refactored existing Mantid-based VESUVIO analysis scripts using GitHub Copilot's coding agent: configuration-driven runs, plotting and CI."
+    - title: "Magnon dispersion in MnWO4 on CAMEA, PSI"
+      year: "Jun 2025"
+      description:
+        - "Four-day beamtime in a group of four on antiferromagnetic MnWO4 (AF1 phase), written up as an exam report."
+    - title: "Graph attention network for ALICE FoCal test beam data"
+      institution: "Applied Machine Learning group project, Niels Bohr Institute"
+      year: "2025"
+      description:
+        - "Hits as graph nodes with nearest-neighbour edges, electron versus hadron classification, Optuna hyperparameter search."
+        - "Developed the data pipeline, the graph network and the hyperparameter search within a group of three."
+    - title: "Applied Machine Learning initial project"
+      institution: "Niels Bohr Institute, University of Copenhagen"
+      year: "2025"
+      description:
+        - "LightGBM classification with Optuna, LightGBM regression and autoencoder clustering on LHC particle-collision data and Gaia star data; presented in an oral group exam."
+    - title: "gromatrix"
+      institution: "Open-source alpha"
+      year: "Oct 2026"
+      description:
+        - "Pipeline from PDB IDs to a matrix of comparable GROMACS simulations, from structure preparation and topology build to runs with checkpoint resume and analysis."
+
+- title: "Other Employment"
+  type: time_table
+  contents:
+    - title: "Financial Officer"
+      institution: "Studentersamfundet, Aalborg University, Aalborg, Denmark"
+      year: "Sep 2021 - Apr 2023"
+      description:
+        - "Oversaw an annual budget above DKK 1.5M and the revenue of 6-7 student bars, oversaw the business group and took part in hiring."
+        - "Stabilised finances in a difficult year, including moving the printed magazine to a digital format to cut costs."
+        - "Cleaned up a 15-16 page budget with the board and secretariat to improve overview and reporting."
+        - "Trained volunteers in basic economics and budgeting (workshops and a crash course for bar volunteers)."
+    - title: "Student Assistant"
+      institution: "Dept. of Materials and Production, Aalborg University, Aalborg, Denmark"
+      year: "Oct 2021 - Jul 2023"
+      description:
+        - "Ad-hoc project and administrative support; main task was supporting a larger relocation of the department's offices."
+    - title: "Tour guide and travel leader training"
+      institution: "Service &amp; Co."
+      year: "Apr - Jun 2017"
+      description:
+        - "Trained and certified as a tour guide at a state-approved guide school, including a first-aid course."
+
+- title: "Teaching and Leadership"
+  type: list
+  contents:
+    - "Ad-hoc teaching assistant duties and educational outreach for the MSc thesis supervisor (Feb 2025 - Jun 2026)."
+    - "Workshops and a crash course in basic economics and budgeting for student-bar volunteers (Studentersamfundet, 2021-23)."
+    - "Workshop protocol and facilitation for a national research-policy group (Radikale Venstre, 2023)."
+    - "Orientation leader mentoring new university students, and kitchen manager instructing and leading shifts of kitchen teams (Aalborg University, 2020-22)."
+    - "Tour-guide training in presentation technique and constructive feedback (2017)."
+    - "Leadership Course 1 (5 ECTS), Home Guard School."
+
+- title: "Volunteer Experience"
+  type: time_table
+  contents:
+    - title: "IDA STEM Students: Board Member (Executive Committee), Policy Officer for Higher Education"
+      institution: "IDA"
+      year: "Feb 2024 - Mar 2026"
+      description:
+        - "Advised on national higher education and research policy."
+    - title: "Member, Higher Education and Research Committee"
+      institution: "IDA"
+      year: "Mar 2024 - Mar 2025"
+      description:
+        - "National education and research policy advice."
+    - title: "Member of the Board of Representatives"
+      institution: "IDA"
+      year: "Nov 2023 - Mar 2025"
+      description:
+        - "Approved recent changes to the bylaws and approved the current chairperson of IDA."
+    - title: "Committee Chair, Policy Development Group"
+      institution: "Radikale Venstre (Danish Social Liberal Party)"
+      year: "Mar - Dec 2023"
+      description:
+        - "Chaired the group on the national research reserve (Forskningsreserven 2024), translating scientific consensus into legislative inputs."
+        - "Sought expert advice, developed a workshop protocol for the first working meeting, and coordinated and led the drafting of policy recommendations for party MPs."
+        - "Handed the group's proposals over in person to partners inside parliament."
+    - title: "Orientation Leader (rus/tutor) and Kitchen Manager"
+      institution: "Aalborg University, Aalborg, Denmark"
+      year: "Sep 2020 - Dec 2022"
+      description:
+        - "Mentored new university students, facilitating their transition into rigorous academic environments."
+        - "Managed logistics, trained kitchen teams, and handled high-pressure kitchen catering during orientation cabin trips; instructing and leading shifts of kitchen teams (Kitchen Manager in 2021 and 2022)."
+    - title: "Treasurer and Event Responsible"
+      institution: "IGLO (department-level student union), Aalborg University, Aalborg, Denmark"
+      year: "Nov 2019 - Nov 2021"
+      description:
+        - "Treasurer (2020-21): negotiated the budget with the Studentersamfundet Financial Officer and the secretariat."
+        - "Event Responsible (2019-20): coordinated events with external partners and university professors."
+
+- title: "Publications and Presentations"
+  type: list
+  contents:
+    - "No publications yet. A first-author manuscript from the MSc thesis is in preparation."
+    - "Scientific poster on the MSc thesis results, ESS DMSC Summer School (Aug 2026)."
+
+- title: "Technical Skills"
+  type: nested_list
+  contents:
+    - title: "Programming and machine learning"
+      elements:
+        - "Python (strong, daily use) with PyTorch, TensorFlow, scikit-learn, XGBoost, LightGBM and Optuna"
+        - "Bash, Git, SQL, JSON, YAML, LaTeX, Typst, Markdown, HTML, CSS"
+        - "Graph neural networks, autoencoders, gradient-boosted trees"
+    - title: "Scattering and characterisation"
+      elements:
+        - "INS, QENS, NSE, DINS, SAXS/WAXS, XRD, neutron powder diffraction, neutron transmission"
+        - "FTIR, UV-Vis, fluorescence, 1D-NMR, evolved gas analysis, DSC, AFM, light and Raman microscopy, lithography, electrospinning, microfluidics"
+    - title: "Modelling and analysis tools"
+      elements:
+        - "Monte Carlo, Markov chains, Bayesian inference, bootstrap and jackknife resampling"
+        - "GROMACS with the Martini force field, Quantum ESPRESSO, ORCA (hybrid functionals including B3LYP, PBE0 and LC-PBE; Dunning basis sets), MOPAC"
+        - "Mantid, NCrystal, ASE, MDANSE, OpenMM"
+    - title: "Systems and software engineering"
+      elements:
+        - "Linux (Arch, Debian), HPC, Docker, Google Cloud Platform, SSH, server administration"
+        - "Git and GitHub workflows, pytest, ruff, pixi, GitHub Actions, pre-commit"
+        - "Research software development with agentic coding workflows (Claude Code)"
+        - "Raspberry Pi and ESP-32 hardware, basic soldering"
+
+- title: "Personal Interests"
+  type: list
+  contents:
+    - "Bouldering and gymnastic rings, specialty coffee, practical gastronomy and fermentation, home tinkering with Arch Linux, a Raspberry Pi home server and ESP-32 sensors, learning natural languages and travelling."
+
+- title: "References"
+  type: list
+  contents:
+    - "Available on request."

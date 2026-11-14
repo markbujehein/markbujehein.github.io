@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://markbujehein.github.io/schema/site-export.schema.json",
+  "title": "Site export, schema version 1",
+  "description": "Curated, public-by-definition export that tools/import_site_data.py turns into site content. Unknown keys are rejected. Content rules that JSON Schema cannot express (HTML, URLs, PII, denylist) live in the importer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile", "news", "cv", "projects", "publications"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subtitle", "bio_markdown"],
+      "properties": {
+        "subtitle": {"$ref": "#/$defs/line"},
+        "contact_line": {"$ref": "#/$defs/line"},
+        "location": {"$ref": "#/$defs/line"},
+        "bio_markdown": {"$ref": "#/$defs/markdown"},
+        "seeking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["headline", "detail"],
+          "properties": {
+            "headline": {"$ref": "#/$defs/line"},
+            "detail": {"$ref": "#/$defs/line"},
+            "start": {"$ref": "#/$defs/line"},
+            "location": {"$ref": "#/$defs/line"}
+          }
+        }
+      }
+    },
+    "news": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["date", "content"],
+        "properties": {
+          "date": {"type": "string", "pattern": "^\\d{4}-\\d{2}(-\\d{2})?$"},
+          "content": {"$ref": "#/$defs/markdown"}
+        }
+      }
+    },
+    "cv": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["general", "sections"],
+      "properties": {
+        "general": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "value"],
+            "properties": {"name": {"$ref": "#/$defs/line"}, "value": {"$ref": "#/$defs/line"}}
+          }
+        },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["title", "type", "entries"],
+                "properties": {
+                  "title": {"$ref": "#/$defs/line"},
+                  "type": {"const": "time_table"},
+                  "entries": {
+                    "type": "array",
+                    "maxItems": 40,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["title"],
+                      "properties": {
+                        "title": {"$ref": "#/$defs/line"},
+                        "institution": {"$ref": "#/$defs/line"},
+                        "year": {"$ref": "#/$defs/line"},
+                        "description": {"type": "array", "maxItems": 12, "items": {"$ref": "#/$defs/line"}}
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["title", "type", "entries"],
+                "properties": {
+                  "title": {"$ref": "#/$defs/line"},
+                  "type": {"const": "nested_list"},
+                  "entries": {
+                    "type": "array",
+                    "maxItems": 20,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["title", "elements"],
+                      "properties": {
+                        "title": {"$ref": "#/$defs/line"},
+                        "elements": {"type": "array", "maxItems": 20, "items": {"$ref": "#/$defs/line"}}
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["title", "type", "entries"],
+                "properties": {
+                  "title": {"$ref": "#/$defs/line"},
+                  "type": {"const": "list"},
+                  "entries": {"type": "array", "maxItems": 30, "items": {"$ref": "#/$defs/line"}}
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slug", "title", "summary", "category", "importance", "body_markdown"],
+        "properties": {
+          "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,59}$"},
+          "title": {"$ref": "#/$defs/line"},
+          "summary": {"$ref": "#/$defs/line"},
+          "category": {"$ref": "#/$defs/line"},
+          "importance": {"type": "integer", "minimum": 1, "maximum": 999},
+          "body_markdown": {"$ref": "#/$defs/markdown"}
+        }
+      }
+    },
+    "publications": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "type", "title", "authors", "year"],
+        "properties": {
+          "key": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,40}$"},
+          "type": {"enum": ["article", "inproceedings", "misc", "phdthesis", "mastersthesis"]},
+          "title": {"$ref": "#/$defs/line"},
+          "authors": {"type": "array", "minItems": 1, "maxItems": 50, "items": {"$ref": "#/$defs/line"}},
+          "year": {"type": "string", "pattern": "^\\d{4}$"},
+          "journal": {"$ref": "#/$defs/line"},
+          "booktitle": {"$ref": "#/$defs/line"},
+          "school": {"$ref": "#/$defs/line"},
+          "doi": {"$ref": "#/$defs/line"},
+          "selected": {"type": "boolean"},
+          "links": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "arxiv": {"$ref": "#/$defs/url"}, "html": {"$ref": "#/$defs/url"}, "pdf": {"$ref": "#/$defs/url"},
+              "code": {"$ref": "#/$defs/url"}, "poster": {"$ref": "#/$defs/url"}, "slides": {"$ref": "#/$defs/url"},
+              "website": {"$ref": "#/$defs/url"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "line": {"type": "string", "minLength": 1, "maxLength": 400, "pattern": "^[^\\n\\r]+$"},
+    "markdown": {"type": "string", "minLength": 1, "maxLength": 6000},
+    "url": {"type": "string", "maxLength": 300, "pattern": "^https://[^\\s]+$"}
+  }
+}

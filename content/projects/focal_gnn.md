@@ -1,11 +1,11 @@
 ---
-title: Graph neural network for ALICE FoCal-E test beam data
+title: "Graph neural network for ALICE FoCal test beam data"
 template: page
-summary: Machine learning for the ALICE@CERN FoCal-E detector upgrade.
+summary: "Machine learning for the ALICE@CERN FoCal detector upgrade."
 img:
 importance: 4
 category: software
 ---
 
-As part of my work at the Nano-Science Center I developed a graph neural network to analyse test beam data
-from the FoCal-E detector upgrade of the ALICE experiment at CERN.
+In an Applied Machine Learning group project I developed a graph attention network to classify electrons and
+hadrons in test beam data from the FoCal detector upgrade of the ALICE experiment at CERN.
