@@ -1,1 +1,58 @@
 @import "tailwindcss";
+
+/* Dark mode follows <html data-theme="dark">, set by the inline script in Base.astro. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Palette anchored on the hero: ink #14092e, paper #f4f1fa, accent #fe9f6d. */
+@theme {
+  --color-ink-50: #efecf6;
+  --color-ink-100: #d6d0e6;
+  --color-ink-200: #b3a9d0;
+  --color-ink-300: #9186b8;
+  --color-ink-400: #7a6da6;
+  --color-ink-500: #65588f;
+  --color-ink-600: #4f4373;
+  --color-ink-700: #3a2f58;
+  --color-ink-800: #2a2044;
+  --color-ink-900: #1d1238;
+  --color-ink-950: #14092e;
+
+  --color-paper-50: #faf9fc;
+  --color-paper-100: #f4f1fa;
+  --color-paper-200: #e9e4f3;
+  --color-paper-300: #d9d4e5;
+  --color-paper-400: #b9b1cf;
+  --color-paper-500: #9a90b6;
+  --color-paper-600: #7d7299;
+  --color-paper-700: #62587c;
+  --color-paper-800: #483f5e;
+  --color-paper-900: #322b43;
+  --color-paper-950: #201b2b;
+
+  --color-accent-50: #fff4ec;
+  --color-accent-100: #ffe5d3;
+  --color-accent-200: #ffcaa8;
+  --color-accent-300: #fead7d;
+  --color-accent-400: #fe9f6d;
+  --color-accent-500: #f0783b;
+  --color-accent-600: #d45a1f;
+  --color-accent-700: #a8420f;
+  --color-accent-800: #82330d;
+  --color-accent-900: #5e270c;
+  --color-accent-950: #331204;
+
+  --font-heading: var(--font-serif), Georgia, serif;
+  --font-sans: var(--font-body), system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-paper-50 font-sans text-ink-700 dark:bg-ink-950 dark:text-paper-300;
+  }
+}

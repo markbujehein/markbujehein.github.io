@@ -20,6 +20,14 @@ export default defineConfig({
       styles: ["normal"],
       fallbacks: ["Georgia", "serif"],
     },
+    {
+      provider: fontProviders.fontsource(),
+      name: "Atkinson Hyperlegible",
+      cssVariable: "--font-body",
+      weights: [400, 700],
+      styles: ["normal"],
+      fallbacks: ["system-ui", "sans-serif"],
+    },
   ],
 
   experimental: {

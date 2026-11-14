@@ -20,7 +20,27 @@ const { title, description } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    <script is:inline>
+      // Set the theme before first paint (no flash) and again after every view-transition swap.
+      (() => {
+        const apply = () => {
+          let saved = null;
+          try {
+            saved = localStorage.getItem("theme");
+          } catch {}
+          document.documentElement.dataset.theme =
+            saved === "light" || saved === "dark"
+              ? saved
+              : matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+        };
+        apply();
+        document.addEventListener("astro:after-swap", apply);
+      })();
+    </script>
     <Font cssVariable="--font-serif" preload />
+    <Font cssVariable="--font-body" preload />
     <ClientRouter />
   </head>
   <body>
@@ -31,17 +51,3 @@ const { title, description } = Astro.props;
     <Footer />
   </body>
 </html>
-
-<style is:global>
-  :root {
-    color-scheme: light;
-  }
-  body {
-    margin: 0;
-    padding: 1.5rem;
-    font-family: system-ui, sans-serif;
-    line-height: 1.5;
-    background: #faf9fc;
-    color: #1d1630;
-  }
-</style>
