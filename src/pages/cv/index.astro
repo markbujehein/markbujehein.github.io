@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import CVSection from "../../components/cv/CVSection.astro";
+import PageJumpNav from "../../components/PageJumpNav.astro";
 import Base from "../../layouts/Base.astro";
 import { sortByOrder } from "../../utils/cv";
 
@@ -8,56 +10,23 @@ const sections = sortByOrder(await getCollection("cv"));
 ---
 
 <Base title="cv" description="Research and professional experience, education and skills.">
-  <div class="page">
-    <h1>cv</h1>
-    <p>
-      <a href="/pdf/cv.pdf">Download CV (PDF)</a>
-    </p>
-    <div class="layout">
-      <nav aria-label="CV sections">
-        <ul>
-          {sections.map((section) => (
-            <li>
-              <a href={`#${section.id}`}>{section.data.title}</a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <div>
-        {sections.map((section) => (
-          <CVSection id={section.id} section={section.data} />
-        ))}
-      </div>
+  <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "CV" }]} />
+  <header class="page-header mb-8">
+    <h1 class="page-title">cv</h1>
+    <p class="page-description">Research and professional experience, education and skills.</p>
+    <a
+      href="/pdf/cv.pdf"
+      class="inline-flex min-h-11 items-center rounded-lg bg-accent-400 px-4 font-bold text-ink-950 no-underline transition-colors hover:bg-accent-300"
+    >
+      Download CV (PDF)
+    </a>
+  </header>
+  <div class="grid gap-8 md:grid-cols-[14rem_1fr]">
+    <PageJumpNav items={sections.map((s) => ({ id: s.id, label: s.data.title }))} />
+    <div class="space-y-12">
+      {sections.map((section) => (
+        <CVSection id={section.id} section={section.data} />
+      ))}
     </div>
   </div>
 </Base>
-
-<style>
-  .page {
-    max-width: 64rem;
-    margin: 0 auto;
-  }
-  nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    padding: 0;
-    list-style: none;
-  }
-  @media (min-width: 768px) {
-    .layout {
-      display: grid;
-      grid-template-columns: 14rem 1fr;
-      gap: 2rem;
-    }
-    nav {
-      position: sticky;
-      top: 1rem;
-      align-self: start;
-    }
-    nav ul {
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-  }
-</style>
