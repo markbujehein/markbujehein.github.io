@@ -1,0 +1,22 @@
+{
+  "name": "markbujehein-github-io",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "check": "tsc --noEmit --runExternalCode",
+    "build": "pnpm run check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^7.4.12"
+  },
+  "devDependencies": {
+    "@astrojs/ts-content-mapper": "^0.2.0",
+    "typescript": "7.1.0-beta"
+  }
+}

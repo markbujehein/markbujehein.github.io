@@ -7,3 +7,12 @@ staging/*
 # pixi
 .pixi/
 .pytest_cache/
+
+# Astro / Node
+node_modules/
+dist/
+.astro/
+
+# environment variables
+.env
+.env.production

@@ -1,0 +1,4 @@
+[tools]
+node = "24" # matches the Node default of withastro/action
+pnpm = "latest"
+"npm:@pnpm/pnpr" = "next" # pnpm registry server, prerelease only

@@ -1,0 +1,300 @@
+---
+interface Props {
+  name: string;
+  headline: string;
+  detail: string;
+  role?: string;
+  start?: string;
+  location?: string;
+  contact?: string;
+  linkedin?: string;
+  cvHref: string;
+  projectsHref: string;
+}
+
+const { name, headline, detail, role, start, location, contact, linkedin, cvHref, projectsHref } =
+  Astro.props;
+
+// Ring radius, stroke, colour and parallax depth (viewBox units). Inner rings move most.
+const rings = [
+  { r: 64, w: 9, c: "#fcfdbf", depth: 30, grow: -0.05 },
+  { r: 112, w: 14, c: "#fe9f6d", depth: 24, grow: -0.03 },
+  { r: 151, w: 7, c: "#de4968", depth: 18, grow: -0.01 },
+  { r: 203, w: 12, c: "#fe9f6d", depth: 13, grow: 0.01 },
+  { r: 238, w: 8, c: "#8c2981", depth: 9, grow: 0.03 },
+  { r: 281, w: 5, c: "#de4968", depth: 5, grow: 0.05 },
+];
+---
+
+<section class="hero" aria-labelledby="hero-name">
+  <svg class="hero-art" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="hero-grain" x="0" y="0" width="100%" height="100%">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.9"
+          numOctaves="2"
+          seed="11"
+          result="noise"></feTurbulence>
+        <feColorMatrix
+          in="noise"
+          type="matrix"
+          values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -3.4 2.2"
+          result="speckle"></feColorMatrix>
+        <feComposite in="SourceGraphic" in2="speckle" operator="in"></feComposite>
+      </filter>
+      <radialGradient id="hero-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="#8c2981" stop-opacity=".55"></stop>
+        <stop offset=".6" stop-color="#3b0f70" stop-opacity=".25"></stop>
+        <stop offset="1" stop-color="#14092e" stop-opacity="0"></stop>
+      </radialGradient>
+    </defs>
+    <circle cx="300" cy="300" r="300" fill="url(#hero-glow)"></circle>
+    <g filter="url(#hero-grain)" fill="none">
+      {
+        rings.map((ring, i) => (
+          <g class="shift" style={`--depth:${ring.depth}; --grow:${ring.grow}`}>
+            <circle
+              class="ring"
+              style={`--i:${i}`}
+              cx="300"
+              cy="300"
+              r={ring.r}
+              stroke={ring.c}
+              stroke-width={ring.w}
+            />
+          </g>
+        ))
+      }
+    </g>
+    <circle cx="300" cy="300" r="22" fill="#14092e"></circle>
+  </svg>
+
+  <div class="hero-copy">
+    <h1 id="hero-name" class="hero-name">{name}</h1>
+    <p class="hero-headline">{headline}</p>
+    <p class="hero-detail">{detail}</p>
+    {role && <p class="hero-role">{role}</p>}
+    {
+      (start || location) && (
+        <ul class="hero-facts">
+          {start && <li>{start}</li>}
+          {location && <li>{location}</li>}
+        </ul>
+      )
+    }
+    <p class="hero-actions">
+      <a class="hero-btn hero-btn-primary" href={cvHref}>Read my CV</a>
+      <a class="hero-btn" href={projectsHref}>See my projects</a>
+      {
+        linkedin && (
+          <a class="hero-btn" href={linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+        )
+      }
+    </p>
+    {contact && <p class="hero-contact">{contact}</p>}
+  </div>
+</section>
+
+<style>
+  .hero {
+    --hero-bg: #14092e;
+    --hero-text: #f4f1fa;
+    --hero-accent: #fe9f6d;
+    /* Set by the script below: cursor offset in [-1, 1] and its distance from the centre in [0, 1]. */
+    --px: 0;
+    --py: 0;
+    --m: 0;
+    position: relative;
+    overflow: hidden;
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: 3.5rem 2.5rem;
+    border-radius: 6px;
+    background: var(--hero-bg);
+    color: var(--hero-text);
+  }
+
+  .hero-art {
+    position: absolute;
+    top: 50%;
+    right: -13rem;
+    width: 32rem;
+    height: 32rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  /* Each ring drifts with the cursor (parallax by depth) and breathes slightly with its distance. */
+  .shift {
+    transform-origin: 300px 300px;
+    transform: translate(calc(var(--px) * var(--depth) * 1px), calc(var(--py) * var(--depth) * 1px))
+      scale(calc(1 + var(--m) * var(--grow)));
+  }
+
+  .ring {
+    transform-origin: 300px 300px;
+    animation: ring-in 1.1s ease-out both;
+    animation-delay: calc(var(--i) * 140ms);
+  }
+
+  @keyframes ring-in {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .hero-copy {
+    position: relative;
+    max-width: 30rem;
+  }
+
+  .hero-name {
+    margin: 0 0 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: rgb(244 241 250 / 0.82);
+  }
+
+  .hero-headline {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-serif);
+    font-size: clamp(2.8rem, 8vw, 4.6rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-detail {
+    margin: 0 0 1.25rem;
+    font-size: 1.2rem;
+    line-height: 1.45;
+    color: rgb(244 241 250 / 0.92);
+  }
+
+  .hero-role {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    color: rgb(244 241 250 / 0.78);
+  }
+
+  .hero-facts {
+    margin: 0 0 1.25rem;
+    padding: 0 0 0 0.9rem;
+    list-style: none;
+    border-left: 2px solid var(--hero-accent);
+    font-size: 0.95rem;
+    color: rgb(244 241 250 / 0.9);
+  }
+  .hero-facts li + li {
+    margin-top: 0.25rem;
+  }
+
+  .hero-actions {
+    margin: 0 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero-btn {
+    padding: 0.6rem 1.1rem;
+    border: 1px solid rgb(244 241 250 / 0.6);
+    border-radius: 4px;
+    color: var(--hero-text);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .hero-btn:hover {
+    border-color: var(--hero-text);
+    background: rgb(244 241 250 / 0.1);
+  }
+  .hero-btn:focus-visible {
+    outline: 3px solid var(--hero-accent);
+    outline-offset: 2px;
+  }
+  .hero-btn-primary {
+    background: var(--hero-accent);
+    border-color: var(--hero-accent);
+    color: var(--hero-bg);
+  }
+  .hero-btn-primary:hover {
+    background: #ffb287;
+    border-color: #ffb287;
+  }
+
+  .hero-contact {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgb(244 241 250 / 0.78);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero {
+      padding: 2rem 1.25rem 12.5rem;
+    }
+    .hero-art {
+      top: auto;
+      bottom: -13rem;
+      right: 50%;
+      transform: translateX(50%);
+      width: 26rem;
+      height: 26rem;
+      opacity: 0.85;
+    }
+  }
+</style>
+
+<script>
+  // Cursor-reactive rings: ease --px/--py/--m on each hero toward the pointer; stops when settled.
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (const hero of document.querySelectorAll<HTMLElement>(".hero")) {
+      const art = hero.querySelector<SVGElement>(".hero-art");
+      if (!art) continue;
+
+      let tx = 0;
+      let ty = 0;
+      let x = 0;
+      let y = 0;
+      let frame = 0;
+
+      const render = () => {
+        x += (tx - x) * 0.08;
+        y += (ty - y) * 0.08;
+        hero.style.setProperty("--px", x.toFixed(4));
+        hero.style.setProperty("--py", y.toFixed(4));
+        hero.style.setProperty("--m", Math.min(1, Math.hypot(x, y)).toFixed(4));
+        frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.001 ? requestAnimationFrame(render) : 0;
+      };
+      const kick = () => {
+        if (!frame) frame = requestAnimationFrame(render);
+      };
+
+      hero.addEventListener("pointermove", (e) => {
+        const box = art.getBoundingClientRect(); // the rings' centre is the art's centre
+        const reach = hero.clientWidth / 2;
+        tx = Math.max(-1, Math.min(1, (e.clientX - (box.left + box.width / 2)) / reach));
+        ty = Math.max(-1, Math.min(1, (e.clientY - (box.top + box.height / 2)) / reach));
+        kick();
+      });
+      hero.addEventListener("pointerleave", () => {
+        tx = 0;
+        ty = 0;
+        kick();
+      });
+    }
+  }
+</script>
