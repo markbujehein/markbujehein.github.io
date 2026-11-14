@@ -51,7 +51,7 @@
       year: 2025 - 2026
       description:
         - Developed a graph neural network to analyse test beam data from the ALICE@CERN FoCal-E detector upgrade.
-        - Six beamtimes at ISIS (TOSCA, POLARIS), MAX IV (CoSAXS), PSI (CAMEA) and Diamond Light Source (VerSoX), including a 4-day neutron spin echo experiment on CAMEA@PSI.
+        - Six beamtimes at ISIS (TOSCA, POLARIS), MAX IV (CoSAXS), PSI (CAMEA) and Diamond Light Source (VerSoX), including a 4-day experiment on CAMEA@PSI measuring magnon dispersion in antiferromagnetic MnWO4.
         - Sample preparation, gas loading and in-situ data analysis; beamtime proposals, posters and presentations.
         - Ad-hoc teaching assistant duties and educational outreach for the thesis supervisor.
     - title: Student Assistant
@@ -98,6 +98,6 @@
   contents:
     - title: Policy group chair, Forskningsreserven 2024
       institution: Danish Social Liberal Party
-      year: 2024
+      year: Mar - Dec 2023
     - title: Executive committee member, IDA STEM Students; member, IDA Education and Higher Research Committee
       institution: IDA, the Danish Society of Engineers

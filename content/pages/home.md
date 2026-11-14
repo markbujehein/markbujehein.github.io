@@ -33,7 +33,7 @@ Assoc. Prof. Heloisa N. Bordallo and collaborators at the ISIS Neutron and Muon 
 My research centres on **neutron and X-ray scattering**, especially data analysis where low signal-to-noise
 is the main challenge. I connect computational models (Monte Carlo, molecular dynamics, DFT) to measured data,
 with an emphasis on uncertainty quantification. I have taken part in six beamtimes at ISIS, MAX IV, PSI and
-Diamond Light Source, including a four-day neutron spin echo experiment on CAMEA at PSI.
+Diamond Light Source, including a four-day experiment on CAMEA at PSI measuring magnon dispersion in antiferromagnetic MnWO4.
 My MSc thesis dealt with neutron moderator materials, combining neutron transmission with deep-inelastic neutron scattering.
 
 I also write scientific software and use machine learning where it fits: I developed a graph neural network for

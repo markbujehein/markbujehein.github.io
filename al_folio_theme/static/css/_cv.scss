@@ -213,3 +213,8 @@ ul.timeline li::before {
      color: var(--global-text-color);
 }
 */
+// Month-level dates ("Feb 2025 - Jun 2026") are longer than the 75px badge column: wrap instead of overflowing into the title.
+table.table-cv span.badge {
+  white-space: normal;
+  line-height: 1.35;
+}
