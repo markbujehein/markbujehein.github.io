@@ -1,0 +1,34 @@
+---
+import { getCollection } from "astro:content";
+import ProjectList from "../../components/ProjectList.astro";
+import Base from "../../layouts/Base.astro";
+import { groupByCategory, sortByImportance } from "../../utils/projects";
+
+const categories = ["research", "software"] as const;
+const groups = groupByCategory(sortByImportance(await getCollection("projects")), categories);
+---
+
+<Base title="projects" description="Research and software projects from my studies and current work.">
+  <div class="page">
+    <h1>projects</h1>
+    <p>Research and software projects from my studies and current work.</p>
+    {
+      [...groups].map(([category, projects]) => (
+        <section>
+          <h2>{category}</h2>
+          <ProjectList projects={projects} />
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  section {
+    margin: 2rem 0;
+  }
+</style>
