@@ -103,10 +103,8 @@ const rings = [
     --hero-bg: #14092e;
     --hero-text: #f4f1fa;
     --hero-accent: #fe9f6d;
-    /* Set by the script below: cursor offset in [-1, 1] and its distance from the centre in [0, 1]. */
-    --px: 0;
-    --py: 0;
-    --m: 0;
+    /* Set by the script below: how far the hero has scrolled out of view, 0 (top of page) to 1 (gone). */
+    --p: 0;
     position: relative;
     overflow: hidden;
     max-width: 64rem;
@@ -127,11 +125,11 @@ const rings = [
     pointer-events: none;
   }
 
-  /* Each ring drifts with the cursor (parallax by depth) and breathes slightly with its distance. */
+  /* After the entrance, scrolling pulls the rings apart: parallax by depth plus a slight breathing. */
   .shift {
     transform-origin: 300px 300px;
-    transform: translate(calc(var(--px) * var(--depth) * 1px), calc(var(--py) * var(--depth) * 1px))
-      scale(calc(1 + var(--m) * var(--grow)));
+    transform: translate(calc(var(--p) * var(--depth) * -1.5px), calc(var(--p) * var(--depth) * 2.5px))
+      scale(calc(1 + var(--p) * var(--grow) * 2));
   }
 
   .ring {
@@ -259,42 +257,30 @@ const rings = [
 </style>
 
 <script>
-  // Cursor-reactive rings: ease --px/--py/--m on each hero toward the pointer; stops when settled.
+  // Scroll-driven rings: write the hero's scroll progress to --p (one write per frame, passive listener).
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    for (const hero of document.querySelectorAll<HTMLElement>(".hero")) {
-      const art = hero.querySelector<SVGElement>(".hero-art");
-      if (!art) continue;
+    const heroes = document.querySelectorAll<HTMLElement>(".hero");
+    let queued = false;
 
-      let tx = 0;
-      let ty = 0;
-      let x = 0;
-      let y = 0;
-      let frame = 0;
+    const update = () => {
+      queued = false;
+      for (const hero of heroes) {
+        const { top, height } = hero.getBoundingClientRect();
+        const p = Math.max(0, Math.min(1, -top / height));
+        hero.style.setProperty("--p", p.toFixed(4));
+      }
+    };
 
-      const render = () => {
-        x += (tx - x) * 0.08;
-        y += (ty - y) * 0.08;
-        hero.style.setProperty("--px", x.toFixed(4));
-        hero.style.setProperty("--py", y.toFixed(4));
-        hero.style.setProperty("--m", Math.min(1, Math.hypot(x, y)).toFixed(4));
-        frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.001 ? requestAnimationFrame(render) : 0;
-      };
-      const kick = () => {
-        if (!frame) frame = requestAnimationFrame(render);
-      };
-
-      hero.addEventListener("pointermove", (e) => {
-        const box = art.getBoundingClientRect(); // the rings' centre is the art's centre
-        const reach = hero.clientWidth / 2;
-        tx = Math.max(-1, Math.min(1, (e.clientX - (box.left + box.width / 2)) / reach));
-        ty = Math.max(-1, Math.min(1, (e.clientY - (box.top + box.height / 2)) / reach));
-        kick();
-      });
-      hero.addEventListener("pointerleave", () => {
-        tx = 0;
-        ty = 0;
-        kick();
-      });
-    }
+    addEventListener(
+      "scroll",
+      () => {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
   }
 </script>
