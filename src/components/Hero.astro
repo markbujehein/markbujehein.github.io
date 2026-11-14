@@ -258,30 +258,27 @@ const rings = [
 
 <script>
   // Scroll-driven rings: write the hero's scroll progress to --p (one write per frame, passive listener).
+  // Heroes are looked up on every frame, so the listeners survive view-transition page swaps.
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const heroes = document.querySelectorAll<HTMLElement>(".hero");
     let queued = false;
 
     const update = () => {
       queued = false;
-      for (const hero of heroes) {
+      for (const hero of document.querySelectorAll<HTMLElement>(".hero")) {
         const { top, height } = hero.getBoundingClientRect();
         const p = Math.max(0, Math.min(1, -top / height));
         hero.style.setProperty("--p", p.toFixed(4));
       }
     };
+    const queue = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
 
-    addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
-    addEventListener(
-      "scroll",
-      () => {
-        if (!queued) {
-          queued = true;
-          requestAnimationFrame(update);
-        }
-      },
-      { passive: true },
-    );
-    update();
+    addEventListener("resize", queue, { passive: true });
+    addEventListener("scroll", queue, { passive: true });
+    document.addEventListener("astro:page-load", update);
   }
 </script>
