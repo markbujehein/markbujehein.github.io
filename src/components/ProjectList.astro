@@ -3,9 +3,11 @@ import type { CollectionEntry } from "astro:content";
 
 interface Props {
   projects: CollectionEntry<"projects">[];
+  /** Heading level of each card title: h3 under a section heading, h2 directly under the page h1. */
+  headingLevel?: "h2" | "h3";
 }
 
-const { projects } = Astro.props;
+const { projects, headingLevel: Heading = "h3" } = Astro.props;
 ---
 
 <div class="@container">
@@ -17,14 +19,14 @@ const { projects } = Astro.props;
         data-category={project.data.category}
       >
         <span class="meta-chip self-start capitalize">{project.data.category}</span>
-        <h3 class="entry-title">
+        <Heading class="entry-title">
           <a
             href={`/projects/${project.id}/`}
             class="text-inherit no-underline after:absolute after:inset-0 after:content-['']"
           >
             {project.data.title}
           </a>
-        </h3>
+        </Heading>
         <p class="entry-supporting">{project.data.summary}</p>
       </li>
     ))}
