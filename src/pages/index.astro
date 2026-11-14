@@ -1,22 +1,83 @@
 ---
-import Base from "../layouts/Base.astro";
+import { Image } from "astro:assets";
+import { getCollection, getEntry, render } from "astro:content";
+import CVNested from "../components/CVNested.astro";
 import Hero from "../components/Hero.astro";
+import NewsList from "../components/NewsList.astro";
+import ProjectList from "../components/ProjectList.astro";
+import { site } from "../config/site";
+import profile from "../assets/profile.jpg";
+import Base from "../layouts/Base.astro";
+import { sortByImportance } from "../utils/projects";
+
+const home = await getEntry("home", "index");
+if (!home) throw new Error('Missing home entry "src/content/home/index.md"');
+const { Content: Bio } = await render(home);
+
+const featured = sortByImportance(await getCollection("projects")).slice(0, 3);
+const skills = (await getCollection("cv")).find((s) => s.data.type === "nested_list");
+const news = await getCollection("news");
 ---
 
-<Base
-  title="Mark B.H. Sørensen"
-  description="Personal academic website of Mark B.H. Sørensen: neutron and X-ray scattering, computational materials science and nanoscience."
->
-  <!-- Placeholder values copied from content/pages/home.md; phase 3 loads them from a content collection. -->
+<Base title={site.title} description={site.description}>
   <Hero
-    name="Mark B.H. Sørensen"
-    headline="Hire a physicist."
-    detail="PhD position wanted. Modelling, experiments, fitting, Bayesian analysis."
-    role="Guest Researcher, Niels Bohr Institute, University of Copenhagen"
-    start="Available as soon as possible"
-    contact="Email: mark.sorensen [at] nbi.ku.dk"
-    linkedin="https://www.linkedin.com/in/mbhs%C3%B8rensen"
+    name={site.author}
+    headline={home.data.hero.headline}
+    detail={home.data.hero.detail}
+    role={home.data.subtitle}
+    start={home.data.hero.start}
+    contact={home.data.hero.contact}
+    linkedin={home.data.hero.linkedin}
     cvHref="/cv/"
     projectsHref="/projects/"
   />
+
+  <div class="sections">
+    <section>
+      <h2>who I am</h2>
+      <Image
+        class="portrait"
+        src={profile}
+        alt="Portrait of Mark B.H. Sørensen"
+        width={160}
+        height={160}
+      />
+      <Bio />
+    </section>
+
+    <section>
+      <h2>what I have done</h2>
+      <ProjectList projects={featured} />
+    </section>
+
+    {
+      skills && skills.data.type === "nested_list" && (
+        <section>
+          <h2>what I can do</h2>
+          <CVNested section={skills.data} />
+        </section>
+      )
+    }
+
+    <section>
+      <h2>news</h2>
+      <NewsList items={news} />
+    </section>
+  </div>
 </Base>
+
+<style>
+  .sections {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  section {
+    margin: 3rem 0;
+  }
+  .portrait {
+    float: right;
+    margin: 0 0 1rem 1.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+</style>
