@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "katex/dist/katex.min.css";
 
 /* Dark mode follows <html data-theme="dark">, set by the inline script in Base.astro. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
@@ -240,4 +241,9 @@
   & > :not(summary) {
     @apply px-5 pb-5;
   }
+}
+
+/* KaTeX: long formulas scroll sideways instead of widening the page. */
+.katex-display {
+  @apply overflow-x-auto overflow-y-hidden py-1;
 }

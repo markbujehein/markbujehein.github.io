@@ -1,8 +1,10 @@
 // @ts-check
 import { defineConfig, fontProviders } from "astro/config";
 
+import { unified } from "@astrojs/markdown-remark";
 import preact from "@astrojs/preact";
 import tailwindcss from "@tailwindcss/vite";
+import { rehypePlugins, remarkPlugins } from "./src/utils/markdown-plugins";
 
 // User site (markbujehein.github.io): no `base`.
 export default defineConfig({
@@ -28,6 +30,9 @@ export default defineConfig({
   },
 
   prefetch: true,
+
+  // KaTeX math in Markdown: $inline$ and $$ blocks $$, rendered at build time.
+  markdown: { processor: unified({ remarkPlugins, rehypePlugins }) },
 
   integrations: [preact()],
 
