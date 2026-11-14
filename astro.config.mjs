@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig, fontProviders } from "astro/config";
 
-import svelte from "@astrojs/svelte";
+import preact from "@astrojs/preact";
 import tailwindcss from "@tailwindcss/vite";
 
 // User site (markbujehein.github.io): no `base`.
@@ -29,7 +29,7 @@ export default defineConfig({
 
   prefetch: true,
 
-  integrations: [svelte()],
+  integrations: [preact()],
 
   vite: {
     plugins: [tailwindcss()],

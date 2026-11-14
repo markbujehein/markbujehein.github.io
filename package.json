@@ -11,14 +11,14 @@
     "test": "vitest run",
     "check:output": "python -I tools/check_output.py dist https://markbujehein.github.io",
     "lint": "oxlint src",
-    "format": "oxfmt src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --write \"src/**/*.{astro,svelte}\"",
-    "format:check": "oxfmt --check src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --check \"src/**/*.{astro,svelte}\""
+    "format": "oxfmt src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --write \"src/**/*.astro\"",
+    "format:check": "oxfmt --check src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --check \"src/**/*.astro\""
   },
   "dependencies": {
-    "@astrojs/svelte": "^9.1.6",
+    "@astrojs/preact": "^6.1.6",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.12",
-    "svelte": "^5.57.3",
+    "preact": "^11.2.0",
     "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
@@ -28,7 +28,6 @@
     "oxlint": "^1.93.0",
     "prettier": "^3.10.1",
     "prettier-plugin-astro": "^1.1.2",
-    "prettier-plugin-svelte": "^4.1.1",
     "typescript": "7.1.0-beta",
     "vitest": "^5.1.0"
   },

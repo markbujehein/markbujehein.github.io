@@ -4,9 +4,9 @@
 
 **Goal:** Restyle the whole Astro site with the layout, components and design-token system of the Scholarly theme, recoloured and re-toned to match the hero.
 
-**Architecture:** Scholarly's ~300 lines of UnoCSS shortcuts become Tailwind 4 `@theme` tokens plus `@utility` classes in `src/styles/global.css`. Its palette (`paper`/`ink`/`accent`) is replaced by the hero palette. Its filter bar becomes the first Svelte island. Content stays on our collections and importer; none of Scholarly's YAML/BibTeX content model is adopted.
+**Architecture:** Scholarly's ~300 lines of UnoCSS shortcuts become Tailwind 4 `@theme` tokens plus `@utility` classes in `src/styles/global.css`. Its palette (`paper`/`ink`/`accent`) is replaced by the hero palette. Its filter bar becomes the first Preact island. Content stays on our collections and importer; none of Scholarly's YAML/BibTeX content model is adopted.
 
-**Tech Stack:** Astro 7.4, Tailwind CSS 4, Svelte 5, Vitest 5, Oxlint, Oxfmt, Prettier (`.astro`/`.svelte`).
+**Tech Stack:** Astro 7.4, Tailwind CSS 4, Preact 11 (`@astrojs/preact`), Vitest 5, Oxlint, Oxfmt, Prettier (`.astro`).
 
 **Spec:** `docs/superpowers/specs/2026-11-14-astro-7-migration-design.md` (phase 5, "Site-wide design aligned to the hero, then the interactive elements").
 
@@ -19,7 +19,7 @@
 - MIT notice: ported styling/markup keeps Scholarly's copyright and licence text in `THIRD_PARTY_NOTICES.md`.
 - Text contrast at least 4.5:1 (WCAG AA) in both light and dark themes.
 - The contact line stays plain obfuscated text: no `mailto:`, no real address.
-- Svelte islands: `tsc` (TS 7) cannot read `.svelte`, and Svelte's ambient `*.svelte` typing rejects `client:*` attributes. Each island gets a sidecar `Name.svelte.d.ts` declaring a function type, e.g. `declare const X: (props: { start?: number } & { [K in `client:${string}`]?: string | true }) => unknown; export default X;`. Verified: correct props pass, a wrong prop type fails `pnpm run check`, the build emits the island. Island logic lives in a tested `.ts` file.
+- Islands are Preact `.tsx` components: `tsc` (TS 7) checks their internals and their props at every call site; no shims or sidecar files (verified in a scratch copy).
 - `pnpm run check`, `lint`, `format:check`, `test`, `build`, `check:output` all pass at the end of every task.
 - Dev toolbar stays dev-only (`devToolbar.enabled: true`; never in `dist/`).
 
@@ -68,14 +68,14 @@
 
 **Files:**
 - Modify: `src/layouts/Base.astro`, `src/components/Nav.astro`, `src/components/Footer.astro`
-- Create: `src/components/ThemeToggle.svelte`, `src/components/ThemeToggle.svelte.d.ts`, `src/components/PageJumpNav.astro`, `src/components/SkipLink.astro`
+- Create: `src/components/ThemeToggle.tsx`, `src/components/PageJumpNav.astro`, `src/components/SkipLink.astro`
 
 **Interfaces:**
 - Consumes: `navState` from `src/utils/nav.ts`; `site` from `src/config/site.ts`.
 - Produces: `PageJumpNav` props `{ items: { id: string; label: string }[] }`.
 
 - [ ] **Step 1:** Header with blurred chrome, nav (keeps `aria-current` logic), theme toggle island with `transition:persist`; skip link as first focusable element; footer restyled.
-- [ ] **Step 2:** Add the sidecar `ThemeToggle.svelte.d.ts` (see Global Constraints).
+- [ ] **Step 2:** `ThemeToggle.tsx` is a Preact island with `client:load`.
 - [ ] **Step 3:** `PageJumpNav` ported from Scholarly (28 lines), scroll-spy via `IntersectionObserver`, re-initialised on `astro:page-load`.
 - [ ] **Step 4:** Verify in a browser: toggle persists across a view transition, skip link reaches `main`. Run all checks. Commit "Add the site shell".
 
@@ -91,9 +91,8 @@
 ### Task 5: Projects page and the filter island
 
 **Files:**
-- Create: `src/utils/filter.ts`, `src/utils/filter.test.ts`, `src/components/ProjectFilter.svelte`
+- Create: `src/utils/filter.ts`, `src/utils/filter.test.ts`, `src/components/ProjectFilter.tsx`
 - Modify: `src/pages/projects/index.astro`
-- Create: `src/components/ProjectFilter.svelte.d.ts`
 
 **Interfaces:**
 - Produces: `filterProjects<T extends { data: { category: string } }>(items: T[], category: string): T[]` (`"all"` returns everything, in input order, without mutating); `ProjectFilter` props `{ categories: { id: string; label: string; count: number }[] }`.
@@ -101,8 +100,7 @@
 - [ ] **Step 1: Failing tests.** `filterProjects(items,"all")` returns all items in order; `"research"` returns only research items; an unknown category returns an empty array; the input array is not mutated.
 - [ ] **Step 2:** Run `pnpm test`. Expected: FAIL.
 - [ ] **Step 3:** Implement `filterProjects`.
-- [ ] **Step 4:** Build `ProjectFilter.svelte` (Svelte 5 runes) from Scholarly's `FilterBar`: buttons with `aria-pressed`, counts, `aria-live` status. The list is server-rendered with `data-category`; the island toggles `hidden`. With JavaScript off, all projects show.
-- [ ] **Step 4b:** Add the sidecar `ProjectFilter.svelte.d.ts` typing `categories` and the `client:*` directives.
+- [ ] **Step 4:** Build `ProjectFilter.tsx` (Preact hooks) from Scholarly's `FilterBar`: buttons with `aria-pressed`, counts, `aria-live` status. The list is server-rendered with `data-category`; the island toggles `hidden`. With JavaScript off, all projects show.
 - [ ] **Step 5:** Render each project as a `surface-card-hover` with its category. Browser check including a JS-disabled load; all checks; commit "Add the projects filter island".
 
 ### Task 6: CV page
