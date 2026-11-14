@@ -1,4 +1,5 @@
-# COPIED (generated upstream) from the source export by tools/import_site_data.py. Do not edit by hand.
+# COPIED from the source export by tools/import_site_data.py, plus hand-added `id` and `order` per section
+# (the importer retarget must emit both). Edit the content upstream, not here.
 - id: general-information
   order: 0
   title: General Information

@@ -271,6 +271,7 @@ const rings = [
       }
     };
 
+    addEventListener("resize", () => requestAnimationFrame(update), { passive: true });
     addEventListener(
       "scroll",
       () => {

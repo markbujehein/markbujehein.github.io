@@ -5,3 +5,7 @@ export function formatNewsDate(date: Date, monthOnly: boolean): string {
   const month = `${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
   return monthOnly ? month : `${date.getUTCDate()} ${month}`;
 }
+
+export function isoDate(date: Date, monthOnly: boolean): string {
+  return date.toISOString().slice(0, monthOnly ? 7 : 10);
+}

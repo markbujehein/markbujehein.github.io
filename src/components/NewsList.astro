@@ -1,6 +1,6 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
-import { formatNewsDate } from "../utils/date";
+import { formatNewsDate, isoDate } from "../utils/date";
 
 interface Props {
   items: CollectionEntry<"news">[];
@@ -16,7 +16,7 @@ const rendered = await Promise.all(
   {
     rendered.map(({ item, Content }) => (
       <li>
-        <time datetime={item.data.date.toISOString().slice(0, 10)}>
+        <time datetime={isoDate(item.data.date, item.data.monthOnly)}>
           {formatNewsDate(item.data.date, item.data.monthOnly)}
         </time>
         <div>
