@@ -6,13 +6,17 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<nav aria-label="On this page" class="jump-nav md:sticky md:top-20 md:self-start" data-jump-nav>
-  <ul class="flex flex-wrap gap-2 md:flex-col md:gap-1">
+<nav
+  aria-label="On this page"
+  class="jump-nav sticky top-[3.75rem] z-30 -mx-4 border-b border-paper-300 bg-paper-50/95 px-4 backdrop-blur md:top-20 md:mx-0 md:self-start md:border-0 md:bg-transparent md:px-0 md:backdrop-blur-none dark:border-ink-700 dark:bg-ink-950/95 dark:md:bg-transparent"
+  data-jump-nav
+>
+  <ul class="flex gap-1 overflow-x-auto py-1 md:flex-col md:overflow-visible">
     {items.map((item) => (
       <li>
         <a
           href={`#${item.id}`}
-          class="block rounded-md px-2 py-1 text-sm text-ink-600 no-underline hover:text-accent-700 aria-[current=location]:bg-accent-100 aria-[current=location]:font-bold aria-[current=location]:text-accent-800 dark:text-paper-400 dark:hover:text-accent-300 dark:aria-[current=location]:bg-ink-800 dark:aria-[current=location]:text-accent-300"
+          class="block rounded px-2 py-2 text-sm whitespace-nowrap md:whitespace-normal text-ink-600 no-underline hover:text-accent-700 aria-[current=location]:bg-accent-100 aria-[current=location]:font-bold aria-[current=location]:text-accent-800 dark:text-paper-400 dark:hover:text-accent-300 dark:aria-[current=location]:bg-ink-800 dark:aria-[current=location]:text-accent-300"
         >
           {item.label}
         </a>

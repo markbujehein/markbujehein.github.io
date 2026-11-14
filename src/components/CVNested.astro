@@ -8,15 +8,17 @@ interface Props {
 const { section } = Astro.props;
 ---
 
-<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-  {section.contents.map((group) => (
-    <div class="surface-card">
-      <h3 class="entry-title mb-2">{group.title}</h3>
-      <ul class="entry-summary list-disc space-y-1 pl-5 marker:text-accent-500">
-        {group.elements.map((element) => (
-          <li>{element}</li>
-        ))}
-      </ul>
-    </div>
-  ))}
+<div class="@container">
+  <div class="grid gap-4 @xl:grid-cols-2 @4xl:grid-cols-3">
+    {section.contents.map((group) => (
+      <div class="surface-card">
+        <h3 class="entry-title mb-2">{group.title}</h3>
+        <ul class="entry-summary list-disc space-y-1 pl-5 marker:text-accent-500">
+          {group.elements.map((element) => (
+            <li>{element}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
 </div>

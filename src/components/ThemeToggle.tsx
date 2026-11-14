@@ -29,7 +29,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       aria-pressed={theme === "dark"}
       aria-label="Dark theme"
-      class="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg border border-paper-300 text-ink-600 transition-colors hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-500 dark:border-ink-700 dark:text-paper-300 dark:hover:text-accent-300"
+      class="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded border border-paper-300 text-ink-600 transition-colors hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-500 dark:border-ink-700 dark:text-paper-300 dark:hover:text-accent-300"
     >
       <svg
         viewBox="0 0 24 24"

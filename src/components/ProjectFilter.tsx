@@ -35,7 +35,7 @@ export default function ProjectFilter({ items, categories }: Props) {
           key={o.id}
           aria-pressed={active === o.id}
           onClick={() => setActive(o.id)}
-          class="interactive inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border px-3.5 text-sm font-semibold text-ink-700 dark:text-paper-300"
+          class="interactive inline-flex min-h-11 cursor-pointer items-center gap-2 rounded border px-3.5 text-sm font-semibold text-ink-700 dark:text-paper-300"
         >
           <span class="capitalize">{o.label}</span>
           <span class="font-mono text-xs text-accent-700 dark:text-accent-300">{o.count}</span>

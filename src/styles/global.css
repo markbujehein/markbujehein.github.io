@@ -41,8 +41,26 @@
   --color-accent-900: #5e270c;
   --color-accent-950: #331204;
 
+  /* The hero's ring colours, a magma scale. Used for small accent marks, not for text. */
+  --color-magma-yellow: #fcfdbf;
+  --color-magma-orange: #fe9f6d;
+  --color-magma-rose: #de4968;
+  --color-magma-magenta: #8c2981;
+  --color-magma-deep: #3b0f70;
+
   --font-heading: var(--font-serif), Georgia, serif;
-  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* One gradient, the hero rings read left to right. */
+:root {
+  --gradient-magma: linear-gradient(
+    90deg,
+    var(--color-magma-yellow),
+    var(--color-magma-orange),
+    var(--color-magma-rose),
+    var(--color-magma-magenta)
+  );
 }
 
 @layer base {
@@ -63,32 +81,25 @@
   }
 }
 
-@theme {
-  --shadow-paper: 0 1px 1px rgb(20 9 46 / 0.04), 0 12px 28px -22px rgb(20 9 46 / 0.32);
-  --shadow-paper-lg: 0 1px 2px rgb(20 9 46 / 0.05), 0 18px 38px -24px rgb(90 42 140 / 0.34);
-}
-
-/* Component classes ported from the Scholarly theme (MIT, see THIRD_PARTY_NOTICES.md),
-   recoloured to the hero palette. Motion is opt-in via motion-safe. */
+/* Component classes. Shapes follow the hero: 6px radius, hairline borders, a 2px accent rule,
+   solid fills instead of shadows. The accent is a set of small marks (bar, dot, rule, glow). */
 
 /* Page structure */
 @utility page-stack {
-  @apply space-y-7 pb-2 sm:space-y-10 sm:pb-4;
+  @apply space-y-8 pb-2 sm:space-y-12 sm:pb-4;
 }
 @utility page-header {
-  @apply relative space-y-3 border-b border-paper-300/90 pt-2 pb-5 sm:pb-6 dark:border-ink-700;
+  @apply relative space-y-3 border-b border-paper-300 pt-2 pb-5 sm:pb-6 dark:border-ink-700;
 }
 @utility page-title {
-  @apply font-heading text-[2.25rem] leading-[1.02] font-bold tracking-[-0.025em] text-ink-950 sm:text-[2.75rem] dark:text-paper-50;
+  @apply font-heading leading-[1.05] font-bold tracking-[-0.02em] text-ink-950 dark:text-paper-50;
+  font-size: clamp(2.1rem, 1.5rem + 3vw, 3rem);
 }
 @utility page-description {
-  @apply max-w-[44rem] font-sans text-[1.0625rem] leading-7 text-ink-600 dark:text-paper-300;
-}
-@utility body-copy {
-  @apply font-sans text-base leading-7 text-ink-700 dark:text-paper-300;
+  @apply max-w-[44rem] text-[1.0625rem] leading-7 text-ink-600 dark:text-paper-300;
 }
 @utility section-heading {
-  @apply font-heading text-2xl leading-[1.08] font-bold tracking-[-0.015em] text-ink-900 sm:text-[1.75rem] dark:text-paper-100;
+  @apply font-heading text-2xl leading-[1.1] font-bold tracking-[-0.015em] text-ink-950 sm:text-[1.75rem] dark:text-paper-50;
 }
 
 /* Entry hierarchy: title, supporting text, summary, metadata */
@@ -96,41 +107,45 @@
   @apply font-heading text-[1.25rem] leading-[1.28] font-bold tracking-[-0.01em] text-ink-950 dark:text-paper-50;
 }
 @utility entry-supporting {
-  @apply font-sans text-base leading-6 font-normal text-ink-600 dark:text-paper-300;
+  @apply text-base leading-6 text-ink-600 dark:text-paper-300;
 }
 @utility entry-summary {
-  @apply font-sans text-base leading-[1.625rem] font-normal text-ink-700 dark:text-paper-300;
+  @apply text-base leading-[1.65rem] text-ink-700 dark:text-paper-300;
 }
 @utility entry-meta {
-  @apply font-sans text-sm leading-[1.375rem] font-normal text-ink-600 dark:text-paper-300;
+  @apply text-sm leading-[1.375rem] text-ink-600 dark:text-paper-300;
 }
 @utility entry-index {
   @apply font-mono text-xs leading-[1.125rem] font-semibold whitespace-nowrap text-accent-700 tabular-nums dark:text-accent-300;
 }
 
-/* Surfaces and chips */
+/* Surfaces: solid fill, hairline border, the hero's 2px accent rule on the left */
 @utility surface-card {
-  @apply rounded-xl border border-paper-300/90 bg-white/70 p-5 shadow-paper transition-all duration-200 sm:p-6 dark:border-ink-700/80 dark:bg-ink-900/65;
+  @apply rounded-md border border-l-2 border-paper-300 border-l-accent-500 bg-paper-100 p-5 transition-[border-color,box-shadow] duration-200 sm:p-6 dark:border-ink-700 dark:border-l-accent-400 dark:bg-ink-900;
 }
 @utility surface-card-hover {
-  @apply surface-card focus-within:border-accent-500 hover:border-accent-500 hover:shadow-paper-lg motion-safe:hover:-translate-y-0.5 dark:hover:border-accent-400 dark:hover:bg-ink-900;
+  @apply surface-card hover:border-accent-500 focus-within:border-accent-500 dark:hover:border-accent-400;
+  &:hover,
+  &:focus-within {
+    box-shadow: 0 0 26px -10px var(--color-magma-rose);
+  }
 }
 @utility meta-chip {
-  @apply inline-flex min-h-7 items-center gap-1.5 rounded-md border border-paper-300 bg-paper-100/90 px-2.5 py-1 font-sans text-xs leading-none font-semibold text-ink-700 dark:border-ink-700 dark:bg-ink-800 dark:text-paper-300;
+  @apply inline-flex min-h-7 items-center gap-1.5 rounded border border-paper-300 bg-paper-50 px-2.5 py-1 text-xs leading-none font-semibold text-ink-700 dark:border-ink-700 dark:bg-ink-800 dark:text-paper-300;
 }
 
 /* Actions */
 @utility action-link {
-  @apply inline-flex min-h-11 items-center gap-1.5 rounded-md px-1 font-sans text-sm font-bold text-accent-700 no-underline underline-offset-4 transition-colors duration-200 hover:text-accent-900 hover:underline dark:text-accent-300 dark:hover:text-accent-100;
+  @apply inline-flex min-h-11 items-center gap-1.5 rounded px-1 text-sm font-bold text-accent-700 no-underline underline-offset-4 transition-colors duration-200 hover:text-accent-900 hover:underline dark:text-accent-300 dark:hover:text-accent-100;
 }
 @utility link-muted {
-  @apply font-sans text-ink-600 no-underline underline-offset-4 transition-colors hover:text-ink-900 hover:underline dark:text-paper-400 dark:hover:text-paper-100;
+  @apply text-ink-600 no-underline underline-offset-4 transition-colors hover:text-ink-900 hover:underline dark:text-paper-400 dark:hover:text-paper-100;
 }
 
 /* Rendered Markdown (Preflight strips list bullets, heading scale and link styling). */
 @layer components {
   .prose-site {
-    @apply font-sans text-base leading-7 text-ink-700 dark:text-paper-300;
+    @apply text-base leading-7 text-ink-700 dark:text-paper-300;
   }
   .prose-site > * + * {
     @apply mt-4;
@@ -145,10 +160,10 @@
     @apply text-xl;
   }
   .prose-site ul {
-    @apply list-disc pl-6;
+    @apply list-disc pl-6 marker:text-accent-500;
   }
   .prose-site ol {
-    @apply list-decimal pl-6;
+    @apply list-decimal pl-6 marker:text-accent-600;
   }
   .prose-site li + li {
     @apply mt-1;
@@ -160,16 +175,17 @@
     @apply rounded bg-paper-200 px-1 py-0.5 font-mono text-[0.9em] dark:bg-ink-800;
   }
   .prose-site blockquote {
-    @apply border-l-4 border-accent-400 pl-4 text-ink-600 italic dark:text-paper-400;
+    @apply border-l-2 border-accent-500 pl-4 text-ink-600 dark:text-paper-400;
   }
 }
 
-/* Accent details: small deliberate marks rather than large fills. */
+/* Accent marks, all drawn from the hero's magma scale. */
 @utility heading-bar {
   @apply relative pb-2;
   &::after {
     content: "";
-    @apply absolute bottom-0 left-0 h-[3px] w-8 rounded-full bg-accent-400;
+    background: var(--gradient-magma);
+    @apply absolute bottom-0 left-0 h-[3px] w-10 rounded-full;
   }
 }
 @utility timeline {
@@ -179,27 +195,35 @@
   @apply relative pb-6;
   &::before {
     content: "";
-    @apply absolute top-1.5 -left-[1.9rem] size-3 rounded-full border-2 border-accent-500 bg-paper-50 dark:bg-ink-950;
+    @apply absolute top-1.5 -left-[1.9rem] size-3 rounded-full border-2 bg-paper-50 dark:bg-ink-950;
+    border-color: var(--color-magma-orange);
+  }
+  &:nth-child(3n + 2)::before {
+    border-color: var(--color-magma-rose);
+  }
+  &:nth-child(3n)::before {
+    border-color: var(--color-magma-magenta);
   }
 }
 @utility interactive {
   @apply transition-colors duration-200;
-  border-color: color-mix(in oklab, var(--color-accent-400) 55%, var(--color-paper-300));
+  border-color: color-mix(in oklab, var(--color-magma-orange) 45%, var(--color-paper-300));
   &:hover,
   &:focus-within,
   &[aria-pressed="true"] {
-    background-color: color-mix(in oklab, var(--color-accent-400) 14%, transparent);
+    background-color: color-mix(in oklab, var(--color-magma-orange) 14%, transparent);
   }
 }
 @utility nav-dot {
   @apply relative;
   &[aria-current="page"]::after {
     content: "";
-    @apply absolute bottom-1 left-1/2 size-1.5 -translate-x-1/2 rounded-full bg-accent-500;
+    background: var(--gradient-magma);
+    @apply absolute bottom-1 left-1/2 h-[3px] w-5 -translate-x-1/2 rounded-full;
   }
 }
 @utility disclosure {
-  @apply rounded-xl border border-paper-300/90 dark:border-ink-700;
+  @apply rounded-md border border-paper-300 dark:border-ink-700;
   & > summary {
     @apply flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-5 py-3 font-heading text-xl font-bold text-ink-950 dark:text-paper-50;
   }

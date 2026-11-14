@@ -171,3 +171,12 @@ Cmd/Ctrl+K search (Pagefind), RSS feed, per-page Open Graph images, Google Schol
 - [ ] **Step 3:** `Breadcrumbs.astro` renders a `nav[aria-label="Breadcrumb"]` ordered list with `aria-current="page"` on the last item.
 - [ ] **Step 4:** Probe page using every new class: build, assert each appears in the built CSS, remove the probe. All checks. Commit "Add accent details".
 - [ ] **Step 5 (used by later tasks):** project and CV pages use `heading-bar` on section headings, `timeline` for CV time tables and news, `interactive` on hovered cards and filter chips with counts, `disclosure` for "Other projects", `Breadcrumbs` on detail pages; verify at 390 px that nothing overflows horizontally.
+
+### Task 11: Hero-fit pass (user correction, 2026-11-15)
+
+The first pass looked too much like the reference themes. Rule from the user: take inspiration, update the existing site, and adopt every borrowed element to the hero's colours, typeface and contrasts.
+
+- Typeface: hero's own (Source Serif 4 bold headings, system-ui body). Atkinson Hyperlegible removed.
+- Shapes: hero's 6px radius (4px buttons), hairline borders, 2px accent left rule, solid fills, no paper shadows.
+- Accent: the hero's magma ring colours (`#fcfdbf`, `#fe9f6d`, `#de4968`, `#8c2981`, `#3b0f70`) as small marks: gradient bar under headings, gradient dot under the active nav link, timeline dots cycling orange/rose/magenta, rose glow on card hover.
+- Responsive: no-JS phone menu, container-query card grids, horizontally scrolling jump nav, fluid page titles. Verified: no horizontal overflow at 390 px on every page.
