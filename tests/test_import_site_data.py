@@ -55,10 +55,13 @@ def test_generation_is_idempotent_lf_and_sorted(tree):
 
 def test_manifest_deletes_only_generated_files(tree):
     hand = tree / "content/projects/hand_written.md"
+    stale = tree / "content/projects/stale_generated.md"
     hand.write_text("---\ntitle: mine\n---\n", encoding="utf-8")
+    stale.write_text("---\ntitle: old\n---\n", encoding="utf-8")
+    (tree / imp.MANIFEST).write_text('["content/projects/stale_generated.md"]', encoding="utf-8")
     imp.apply(imp.validate(FIXTURE, tree), tree)
     assert hand.exists()  # not in the manifest
-    assert not (tree / "content/projects/hall_bar.md").exists()  # listed in the committed manifest, absent from the export
+    assert not stale.exists()  # listed in the manifest, absent from the export
     assert (tree / "content/projects/crystal_growth.md").exists()
 
 
