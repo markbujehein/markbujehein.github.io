@@ -12,7 +12,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
-    "check:output": "python -I tools/check_output.py dist https://markbujehein.github.io"
+    "check:output": "python -I tools/check_output.py dist https://markbujehein.github.io",
+    "lint": "oxlint src"
   },
   "dependencies": {
     "@astrojs/svelte": "^9.1.6",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@astrojs/ts-content-mapper": "^0.2.0",
     "@types/node": "^24.19.2",
+    "oxlint": "^1.93.0",
     "typescript": "7.1.0-beta",
     "vitest": "^5.1.0"
   }
