@@ -1,9 +1,9 @@
 [
   "content/projects/applied_ml.md",
+  "content/projects/beamtimes.md",
   "content/projects/easyscience.md",
   "content/projects/focal_gnn.md",
   "content/projects/hall_bar.md",
   "content/projects/md_benchmarking.md",
-  "content/projects/neutron_spin_echo.md",
   "content/projects/neutron_transmission.md"
 ]

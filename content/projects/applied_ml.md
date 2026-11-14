@@ -1,7 +1,7 @@
 ---
-title: Applied Machine Learning projects
+title: "Applied Machine Learning projects"
 template: page
-summary: Classification, regression and clustering projects on LHC particle-collision and Gaia star data.
+summary: "Classification, regression and clustering projects on LHC particle-collision and Gaia star data."
 img:
 importance: 5
 category: software

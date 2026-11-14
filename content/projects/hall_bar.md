@@ -1,7 +1,7 @@
 ---
-title: Hall bar fabrication and low-temperature transport
+title: "Hall bar fabrication and low-temperature transport"
 template: page
-summary: Cleanroom Hall bar and low-temperature Hall measurements in the UCPH course Quantum Phenomena in Nano Systems.
+summary: "Cleanroom Hall bar and low-temperature Hall measurements in the UCPH course Quantum Phenomena in Nano Systems."
 img:
 importance: 3
 category: research

@@ -1,6 +1,6 @@
 """Generate site content from the curated export (site-data/site.yml in the private source repo).
 
-    python tools/import_site_data.py --source site.yml [--out .] [--denylist denylist.txt] [--check]
+    python tools/import_site_data.py --source site.yml [--out .] [--denylist denylist.txt] [--check] [--pdf]
 
 The export is public by definition. This script validates it, runs the safety gates and renders
 home.md, news.md, cv.yml, project pages and the BibTeX file. It never invents or rewrites values.
@@ -11,7 +11,10 @@ import datetime as dt
 import html
 import json
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -247,12 +250,69 @@ def apply(d, out):
     write(manifest_path, json.dumps(sorted(r for r in files if r.startswith("content/projects/")), indent=2) + "\n")
 
 
+TEX_ESC = {"\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#", "_": r"\_", "{": r"\{", "}": r"\}",
+           "~": r"\textasciitilde{}", "^": r"\textasciicircum{}", "\u03c7": r"$\chi$", "\u00b2": r"$^2$"}
+
+
+def tex(s):
+    return "".join(TEX_ESC.get(c, c) for c in s)
+
+
+def render_tex(d):
+    """Plain-article LaTeX of the CV sections (base TeX Live only, no third-party class)."""
+    gen = {g["name"]: g["value"] for g in d["cv"]["general"]}
+    name = gen.get("Full Name", "")
+    out = [r"\documentclass[10pt,a4paper]{article}", r"\usepackage[utf8]{inputenc}", r"\usepackage[T1]{fontenc}",
+           r"\usepackage{lmodern,textcomp,xcolor}", r"\usepackage[margin=2cm]{geometry}",
+           r"\usepackage[hidelinks,pdftitle={%s - CV}]{hyperref}" % tex(name),
+           r"\definecolor{acc}{HTML}{14092e}", r"\pagestyle{plain}", r"\setlength{\parindent}{0pt}",
+           r"\setlength{\parskip}{2pt}", r"\renewcommand{\section}[1]{\vspace{9pt}{\large\bfseries\color{acc}#1}\par\vspace{1pt}\hrule\vspace{4pt}}",
+           r"\newenvironment{bul}{\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\topsep}{1pt}\setlength{\parsep}{0pt}}{\end{itemize}}",
+           r"\begin{document}", r"{\LARGE\bfseries %s}\par" % tex(name)]
+    for k, v in gen.items():
+        if k != "Full Name":
+            out.append(r"\textbf{%s:} %s\par" % (tex(k), tex(v)))
+    for sec in d["cv"]["sections"]:
+        out.append(r"\section{%s}" % tex(sec["title"]))
+        if sec["type"] == "list":
+            out += [r"\begin{bul}"] + [r"\item %s" % tex(e) for e in sec["entries"]] + [r"\end{bul}"]
+        elif sec["type"] == "nested_list":
+            for e in sec["entries"]:
+                out += [r"\textbf{%s}" % tex(e["title"]), r"\begin{bul}"] + [r"\item %s" % tex(x) for x in e["elements"]] + [r"\end{bul}"]
+        else:
+            for e in sec["entries"]:
+                out.append(r"\textbf{%s}\hfill %s\par" % (tex(e["title"]), tex(e.get("year", ""))))
+                if e.get("institution"):
+                    out.append(r"\textit{%s}\par" % tex(e["institution"]))
+                if e.get("description"):
+                    out += [r"\begin{bul}"] + [r"\item %s" % tex(x) for x in e["description"]] + [r"\end{bul}"]
+                out.append(r"\vspace{3pt}")
+    out.append(r"\end{document}")
+    return "\n".join(out) + "\n"
+
+
+def build_pdf(d, out):
+    exe = shutil.which("pdflatex")
+    if not exe:
+        raise SystemExit("--pdf needs pdflatex on PATH")
+    with tempfile.TemporaryDirectory() as t:
+        (Path(t) / "cv.tex").write_text(render_tex(d), encoding="utf-8")
+        for _ in range(2):
+            r = subprocess.run([exe, "-interaction=nonstopmode", "-halt-on-error", "cv.tex"], cwd=t, capture_output=True, text=True)
+            if r.returncode:
+                raise SystemExit("pdflatex failed:\n" + "\n".join(r.stdout.splitlines()[-15:]))
+        dest = out / "content/pdf/cv.pdf"
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(Path(t) / "cv.pdf", dest)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--source", required=True)
     ap.add_argument("--out", default=str(ROOT))
     ap.add_argument("--denylist", help="file with one private term per line (# comments allowed)")
     ap.add_argument("--check", action="store_true", help="validate only, write nothing")
+    ap.add_argument("--pdf", action="store_true", help="also build content/pdf/cv.pdf with pdflatex")
     a = ap.parse_args(argv)
     deny = []
     if a.denylist:
@@ -264,6 +324,8 @@ def main(argv=None):
         return 1
     if not a.check:
         apply(data, Path(a.out))
+        if a.pdf:
+            build_pdf(data, Path(a.out))
     print("Export valid." if a.check else "Content generated.")
     return 0
 
