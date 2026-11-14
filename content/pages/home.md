@@ -17,6 +17,7 @@ profile:
 hero:
   headline: Hire a physicist.
   detail: PhD position wanted. Modelling, experiments, fitting, Bayesian analysis.
+  start: Available as soon as possible
   contact: "Email: mark.sorensen [at] nbi.ku.dk"
 
 news: true  # includes a list of news items
