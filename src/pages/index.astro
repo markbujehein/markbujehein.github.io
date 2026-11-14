@@ -53,17 +53,17 @@ const news = latest(await getCollection("news"), 5); // the full list lives at /
       <ProjectList projects={featured} />
     </section>
 
-    {
-      skills && skills.data.type === "nested_list" && (
-        <section>
-          <h2>what I can do</h2>
-          <CVNested section={skills.data} />
-        </section>
-      )
-    }
+    {skills && skills.data.type === "nested_list" && (
+      <section>
+        <h2>what I can do</h2>
+        <CVNested section={skills.data} />
+      </section>
+    )}
 
     <section>
-      <h2><a href="/news/">news</a></h2>
+      <h2>
+        <a href="/news/">news</a>
+      </h2>
       <NewsList items={news} />
     </section>
   </div>

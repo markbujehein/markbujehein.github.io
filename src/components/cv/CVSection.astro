@@ -12,50 +12,44 @@ const { id, section } = Astro.props;
 
 <section {id}>
   <h2>{section.title}</h2>
-  {
-    section.type === "map" && (
-      <dl>
-        {section.contents.map((item) => (
-          <>
-            <dt>{item.name}</dt>
-            <dd>{item.value}</dd>
-          </>
-        ))}
-      </dl>
-    )
-  }
+  {section.type === "map" && (
+    <dl>
+      {section.contents.map((item) => (
+        <>
+          <dt>{item.name}</dt>
+          <dd>{item.value}</dd>
+        </>
+      ))}
+    </dl>
+  )}
   {section.type === "nested_list" && <CVNested section={section} />}
-  {
-    section.type === "time_table" && (
-      <ul class="entries">
-        {section.contents.map((entry) => (
-          <li>
-            <div class="when">{entry.year}</div>
-            <div>
-              <h3>{entry.title}</h3>
-              {entry.institution && <p class="where">{entry.institution}</p>}
-              {entry.description.length > 0 && (
-                <ul>
-                  {entry.description.map((line) => (
-                    <li>{line}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
-    )
-  }
-  {
-    section.type === "list" && (
-      <ul>
-        {section.contents.map((line) => (
-          <li>{line}</li>
-        ))}
-      </ul>
-    )
-  }
+  {section.type === "time_table" && (
+    <ul class="entries">
+      {section.contents.map((entry) => (
+        <li>
+          <div class="when">{entry.year}</div>
+          <div>
+            <h3>{entry.title}</h3>
+            {entry.institution && <p class="where">{entry.institution}</p>}
+            {entry.description.length > 0 && (
+              <ul>
+                {entry.description.map((line) => (
+                  <li>{line}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  )}
+  {section.type === "list" && (
+    <ul>
+      {section.contents.map((line) => (
+        <li>{line}</li>
+      ))}
+    </ul>
+  )}
 </section>
 
 <style>

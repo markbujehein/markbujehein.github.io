@@ -9,18 +9,16 @@ const { section } = Astro.props;
 ---
 
 <div class="groups">
-  {
-    section.contents.map((group) => (
-      <div>
-        <h3>{group.title}</h3>
-        <ul>
-          {group.elements.map((element) => (
-            <li>{element}</li>
-          ))}
-        </ul>
-      </div>
-    ))
-  }
+  {section.contents.map((group) => (
+    <div>
+      <h3>{group.title}</h3>
+      <ul>
+        {group.elements.map((element) => (
+          <li>{element}</li>
+        ))}
+      </ul>
+    </div>
+  ))}
 </div>
 
 <style>

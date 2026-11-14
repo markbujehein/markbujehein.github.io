@@ -7,15 +7,13 @@ const path = Astro.url.pathname;
 
 <nav aria-label="Main">
   <ul>
-    {
-      site.nav.map((item) => (
-        <li>
-          <a href={item.href} aria-current={navState(path, item.href)}>
-            {item.label}
-          </a>
-        </li>
-      ))
-    }
+    {site.nav.map((item) => (
+      <li>
+        <a href={item.href} aria-current={navState(path, item.href)}>
+          {item.label}
+        </a>
+      </li>
+    ))}
   </ul>
 </nav>
 

@@ -8,18 +8,19 @@ const categories = ["research", "software"] as const;
 const groups = groupByCategory(sortByImportance(await getCollection("projects")), categories);
 ---
 
-<Base title="projects" description="Research and software projects from my studies and current work.">
+<Base
+  title="projects"
+  description="Research and software projects from my studies and current work."
+>
   <div class="page">
     <h1>projects</h1>
     <p>Research and software projects from my studies and current work.</p>
-    {
-      [...groups].map(([category, projects]) => (
-        <section>
-          <h2>{category}</h2>
-          <ProjectList projects={projects} />
-        </section>
-      ))
-    }
+    {[...groups].map(([category, projects]) => (
+      <section>
+        <h2>{category}</h2>
+        <ProjectList projects={projects} />
+      </section>
+    ))}
   </div>
 </Base>
 

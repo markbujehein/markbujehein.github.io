@@ -18,7 +18,9 @@ const { Content } = await render(project);
 
 <Base title={project.data.title} description={project.data.summary}>
   <article class="page">
-    <p><a href="/projects/">← projects</a></p>
+    <p>
+      <a href="/projects/">← projects</a>
+    </p>
     <h1>{project.data.title}</h1>
     <p class="summary">{project.data.summary}</p>
     <Content />

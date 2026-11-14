@@ -8,6 +8,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://markbujehein.github.io",
 
+  // Dev server only: Astro never ships the toolbar in `astro build` output.
+  devToolbar: { enabled: true },
+
   fonts: [
     {
       provider: fontProviders.fontsource(),
@@ -23,6 +26,8 @@ export default defineConfig({
     parallelPrerender: true,
     incrementalBuild: true,
   },
+
+  prefetch: true,
 
   integrations: [svelte()],
 
