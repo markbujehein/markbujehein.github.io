@@ -4,6 +4,7 @@ import { z } from "astro/zod";
 import { decodeEntities } from "./utils/cv";
 
 const text = z.string().transform(decodeEntities);
+const section = { order: z.number().int(), title: text };
 
 const projects = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/projects" }),
@@ -43,17 +44,17 @@ const cv = defineCollection({
   schema: z.discriminatedUnion("type", [
     z.object({
       type: z.literal("map"),
-      title: text,
+      ...section,
       contents: z.array(z.object({ name: text, value: text })),
     }),
     z.object({
       type: z.literal("nested_list"),
-      title: text,
+      ...section,
       contents: z.array(z.object({ title: text, elements: z.array(text) })),
     }),
     z.object({
       type: z.literal("time_table"),
-      title: text,
+      ...section,
       contents: z.array(
         z.object({
           title: text,
@@ -63,7 +64,7 @@ const cv = defineCollection({
         }),
       ),
     }),
-    z.object({ type: z.literal("list"), title: text, contents: z.array(text) }),
+    z.object({ type: z.literal("list"), ...section, contents: z.array(text) }),
   ]),
 });
 

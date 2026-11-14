@@ -6,3 +6,8 @@ export type CVSection = CollectionEntry<"cv">["data"];
 export function decodeEntities(text: string): string {
   return text.replaceAll("&amp;", "&");
 }
+
+// getCollection() order is not guaranteed; the data files carry an explicit `order`.
+export function sortByOrder<T extends { data: { order: number } }>(entries: T[]): T[] {
+  return [...entries].sort((a, b) => a.data.order - b.data.order);
+}

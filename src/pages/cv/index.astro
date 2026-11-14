@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import CVSection from "../../components/cv/CVSection.astro";
+import Base from "../../layouts/Base.astro";
+import { sortByOrder } from "../../utils/cv";
+
+const sections = sortByOrder(await getCollection("cv"));
+---
+
+<Base title="cv" description="Research and professional experience, education and skills.">
+  <div class="page">
+    <h1>cv</h1>
+    <p><a href="/pdf/cv.pdf">Download CV (PDF)</a></p>
+    <nav aria-label="CV sections">
+      <ul>
+        {
+          sections.map((section) => (
+            <li>
+              <a href={`#${section.id}`}>{section.data.title}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    {sections.map((section) => <CVSection id={section.id} section={section.data} />)}
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+</style>

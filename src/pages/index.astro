@@ -8,6 +8,7 @@ import ProjectList from "../components/ProjectList.astro";
 import { site } from "../config/site";
 import profile from "../assets/profile.jpg";
 import Base from "../layouts/Base.astro";
+import { sortByOrder } from "../utils/cv";
 import { sortByImportance } from "../utils/projects";
 
 const home = await getEntry("home", "index");
@@ -15,7 +16,7 @@ if (!home) throw new Error('Missing home entry "src/content/home/index.md"');
 const { Content: Bio } = await render(home);
 
 const featured = sortByImportance(await getCollection("projects")).slice(0, 3);
-const skills = (await getCollection("cv")).find((s) => s.data.type === "nested_list");
+const skills = sortByOrder(await getCollection("cv")).find((s) => s.data.type === "nested_list");
 const news = await getCollection("news");
 ---
 
