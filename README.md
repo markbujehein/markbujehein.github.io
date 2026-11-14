@@ -30,6 +30,13 @@ A publications page is included but hidden until there is something to list.
 | `tasks.py`, `Makefile` | Legacy Invoke and Make entry points from the original port; pixi tasks are preferred |
 | `.github/` | CI, deploy workflow, Dependabot config and a branch-protection ruleset |
 
+### Generated content
+
+Home page, news, CV, projects and publications can be generated from a curated export kept in a separate source
+repository: `tools/import_site_data.py` validates it against `schema/site-export.schema.json`, runs the safety gates and
+writes the files. Details and the verified format rules are in [docs/CONTENT_FORMATS.md](docs/CONTENT_FORMATS.md).
+Generated files carry no hand edits; change the source and sync.
+
 ### Editing the content
 
 | What | Where |

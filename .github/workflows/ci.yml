@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: astral-sh/ruff-action@v3
         with:
-          args: check --select E9,F --ignore F401,F403,F405 py_code tasks.py pelicanconf.py publishconf.py
+          args: check --select E9,F --ignore F401,F403,F405 py_code tools tasks.py pelicanconf.py publishconf.py
       - name: YAML lint
         run: |
           pip install yamllint
