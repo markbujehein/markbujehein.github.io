@@ -1,0 +1,16 @@
+---
+import { site } from "../config/site";
+---
+
+<footer>
+  <p>© {new Date().getFullYear()} {site.author}. {site.footer}</p>
+</footer>
+
+<style>
+  footer {
+    max-width: 64rem;
+    margin: 3rem auto 0;
+    font-size: 0.9rem;
+    opacity: 0.75;
+  }
+</style>
