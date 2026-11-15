@@ -35,69 +35,57 @@ def export(tmp_path, mutate=None):
 
 def findings(tmp_path, mutate, deny=()):
     with pytest.raises(imp.ExportError) as e:
-        imp.validate(export(tmp_path, mutate), ROOT, deny)
+        imp.validate(export(tmp_path, mutate), deny)
     return e.value.findings
 
 
 def test_fixture_is_valid():
-    assert imp.validate(FIXTURE, ROOT)
+    assert imp.validate(FIXTURE)
 
 
 def test_generation_is_idempotent_lf_and_sorted(tree):
-    data = imp.validate(FIXTURE, tree)
+    data = imp.validate(FIXTURE)
     imp.apply(data, tree)
-    snapshot = {p: p.read_bytes() for p in (tree / "content").rglob("*") if p.is_file()}
+    snapshot = {p: p.read_bytes() for p in (tree / "src").rglob("*") if p.is_file()}
     imp.apply(data, tree)
-    assert snapshot == {p: p.read_bytes() for p in (tree / "content").rglob("*") if p.is_file()}
+    assert snapshot == {p: p.read_bytes() for p in (tree / "src").rglob("*") if p.is_file()}
     assert all(b"\r" not in (tree / rel).read_bytes() for rel in imp.generated_files(data))
-    news = (tree / "content/pages/news.md").read_text(encoding="utf-8")
-    assert news.index("2026-05-01") < news.index("2026-03-15")  # newest first
+    assert (tree / "src/content/news/2026-05-01.md").exists() and (tree / "src/content/news/2026-03-15.md").exists()
 
 
 def test_manifest_deletes_only_generated_files(tree):
-    hand = tree / "content/projects/hand_written.md"
-    stale = tree / "content/projects/stale_generated.md"
+    hand = tree / "src/content/projects/hand_written.md"
+    stale = tree / "src/content/projects/stale_generated.md"
     hand.write_text("---\ntitle: mine\n---\n", encoding="utf-8")
     stale.write_text("---\ntitle: old\n---\n", encoding="utf-8")
-    (tree / imp.MANIFEST).write_text('["content/projects/stale_generated.md"]', encoding="utf-8")
-    imp.apply(imp.validate(FIXTURE, tree), tree)
+    (tree / imp.MANIFEST).write_text('["src/content/projects/stale_generated.md"]', encoding="utf-8")
+    imp.apply(imp.validate(FIXTURE), tree)
     assert hand.exists()  # not in the manifest
     assert not stale.exists()  # listed in the manifest, absent from the export
-    assert (tree / "content/projects/crystal_growth.md").exists()
+    assert (tree / "src/content/projects/crystal_growth.md").exists()
 
 
 def test_escaping_and_hero(tree):
-    imp.apply(imp.validate(FIXTURE, tree), tree)
-    home = (tree / "content/pages/home.md").read_text(encoding="utf-8")
+    imp.apply(imp.validate(FIXTURE), tree)
+    home = (tree / "src/content/home/index.md").read_text(encoding="utf-8")
     assert "fitting &amp; Bayesian" in home and "headline: \"Hire a physicist.\"" in home
     assert 'linkedin: "https://www.linkedin.com/in/example"' in home
-    assert "selected_papers: true" in home
 
 
 def test_month_only_news_dates(tree):
-    imp.apply(imp.validate(export(tree, put(["news", 0, "date"], "2026-05")), tree), tree)
-    news = (tree / "content/pages/news.md").read_text(encoding="utf-8")
-    assert "date: 2026-05-01\n    month_only: true" in news
-    assert "date: 2026-03-15\n    content:" in news  # a day-level date stays day-level
+    imp.apply(imp.validate(export(tree, put(["news", 0, "date"], "2026-05"))), tree)
+    month = (tree / "src/content/news/2026-05.md").read_text(encoding="utf-8")
+    assert month.startswith("---\ndate: 2026-05-01\nmonthOnly: true\n---\n")
+    day = (tree / "src/content/news/2026-03-15.md").read_text(encoding="utf-8")
+    assert "monthOnly" not in day  # a day-level date stays day-level
 
 
-def test_empty_publications_skip_the_page(tree):
-    imp.apply(imp.validate(export(tree, lambda d: d.update(publications=[])), tree), tree)
-    assert "status: skip" in (tree / "content/pages/publications.md").read_text(encoding="utf-8")
-
-
-@pytest.mark.skip(reason="Pelican is archived in _archive/pelican; the importer still emits the Pelican tree until it is retargeted to Astro")
-def test_generated_tree_builds_strictly(tree):
-    imp.apply(imp.validate(FIXTURE, tree), tree)
-    out = tree / "output"
-    build = subprocess.run([sys.executable, "-m", "pelican", "content", "-o", str(out), "-s", "publishconf.py", "--fatal", "warnings"],
-                           cwd=tree, capture_output=True, text=True)
-    assert build.returncode == 0, build.stdout + build.stderr
-    check = subprocess.run([sys.executable, "-I", "tools/check_output.py", str(out), "https://markbujehein.github.io"],
-                           cwd=tree, capture_output=True, text=True)
-    assert check.returncode == 0, check.stdout + check.stderr
-    index = (out / "index.html").read_text(encoding="utf-8")
-    assert "Hire a physicist." in index and "PhD position wanted" in index
+def test_cv_sections_get_unique_ids_and_order(tree):
+    imp.apply(imp.validate(FIXTURE), tree)
+    cv = yaml.safe_load((tree / "src/data/cv.yml").read_text(encoding="utf-8"))
+    ids = [s["id"] for s in cv]
+    assert ids[0] == "general-information" and len(set(ids)) == len(ids)
+    assert [s["order"] for s in cv] == list(range(len(cv)))
 
 
 def put(path, value):
@@ -119,7 +107,7 @@ NEGATIVE = {
     "bad-month": (put(["news", 0, "date"], "2026-13"), "news[0].date: invalid-date"),
     "bad-date-shape": (put(["news", 0, "date"], "May 2026"), "news.0.date: schema-pattern"),
     "duplicate-slug": (put(["projects", 1, "slug"], "crystal_growth"), "projects[1].slug: duplicate"),
-    "bad-category": (put(["projects", 0, "category"], "teaching"), "projects[0].category: not-in-display_categories"),
+    "bad-category": (put(["projects", 0, "category"], "teaching"), "projects[0].category: unknown-category"),
     "html": (put(["profile", "bio_markdown"], "hi <script>x</script>"), "profile.bio_markdown: html"),
     "template": (put(["projects", 0, "body_markdown"], "{{ SITE }}"), "projects[0].body_markdown: template"),
     "email": (put(["profile", "contact_line"], "me@example.org"), "profile.contact_line: email"),
