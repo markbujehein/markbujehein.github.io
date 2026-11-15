@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from "astro:content";
+import DetailShell from "../../components/DetailShell.astro";
+import Base from "../../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  // cacheKey lets incremental builds skip a project page until its content changes.
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+    cacheKey: String(project.digest),
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Base title={project.data.title} description={project.data.summary}>
+  <DetailShell
+    title={project.data.title}
+    summary={project.data.summary}
+    crumbs={[
+      { label: "Home", href: "/" },
+      { label: "Projects", href: "/projects/" },
+      { label: project.data.title },
+    ]}
+  >
+    <span slot="meta" class="meta-chip capitalize">
+      {project.data.category}
+    </span>
+    <Content />
+  </DetailShell>
+</Base>

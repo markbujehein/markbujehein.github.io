@@ -62,3 +62,7 @@ pages the navigation bar uses. The contact line stays plain text in its obfuscat
 
 `publishconf.py` writes absolute `https://markbujehein.github.io/...` stylesheet URLs, so a production build previewed
 locally shows the live site's CSS. Preview with the dev settings: `pixi run build` then serve `output/`.
+
+## Math in Markdown
+
+Inline math is `$$E=mc^2$$`; a block is `$$` on its own lines. A single `$` is plain text, so prices like "$5 and $10" are safe. Invalid TeX fails the build.

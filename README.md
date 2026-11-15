@@ -1,97 +1,65 @@
 # markbujehein.github.io
 
 Source for the personal academic website of **Mark B.H. Sørensen**, published at
-<https://markbujehein.github.io>. It is a static site built with [Pelican](https://getpelican.com/) (Python)
-and a Jinja port of the [al-folio](https://github.com/alshedivat/al-folio) theme.
+<https://markbujehein.github.io>. A static site built with [Astro](https://astro.build/) 7, TypeScript 7 and
+Tailwind CSS 4, with Preact islands and view transitions.
 
-The site presents a profile and bio, news, a CV, and a list of research and software projects.
-A publications page is included but hidden until there is something to list.
+The site presents a profile, news, a CV with PDF, and research and software projects.
 
 ## Credits
 
-- **[al-folio](https://github.com/alshedivat/al-folio)** by Maruan Al-Shedivat and contributors is the original
-  Jekyll (Ruby) theme this site's design comes from.
-- The Pelican/Jinja port of al-folio (`al_folio_theme/` and the helper code in `py_code/`) is the work of
-  Vivek Bharadwaj, whose own site, <https://vivek-bharadwaj.com>, is built with it. This repository started from that port.
-  Please follow the upstream projects' licences when reusing their code.
+- Design: a hand-built site around the hero, with inspiration from the open-source Astro themes
+  [Scholarly](https://github.com/jxpeng98/astro-theme-scholars) (MIT), [My Scholar](https://github.com/mychiffonn/myscholar)
+  (Apache-2.0) and [Academic Pages Astro](https://github.com/arghyadipchak/academicpages-astro) (MIT).
+  Notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- The previous Pelican site (a Jinja port of [al-folio](https://github.com/alshedivat/al-folio) by Vivek Bharadwaj, based on
+  al-folio by Maruan Al-Shedivat and contributors) is kept in `_archive/pelican/`.
 
 ## Repository layout
 
 | Path | Purpose |
 |---|---|
-| `content/` | Everything you edit: pages, projects, data and images (see below) |
-| `al_folio_theme/` | The Pelican theme: Jinja templates, SCSS and JavaScript |
-| `py_code/` | Pelican plugin and helpers (markdown reader, cache busting, BibTeX parsing, URL filters) |
-| `pelicanconf.py` | Pelican settings for local development |
-| `publishconf.py` | Production settings (absolute URLs, analytics), used for deployment |
-| `tests/` | Unit tests and a build smoke test |
-| `tools/check_output.py` | Post-build checks: internal links, HTML parsing, leaked placeholders |
-| `pyproject.toml`, `pixi.toml` | Dependencies and task runner (see Development) |
-| `tasks.py`, `Makefile` | Legacy Invoke and Make entry points from the original port; pixi tasks are preferred |
-| `.github/` | CI, deploy workflow, Dependabot config and a branch-protection ruleset |
-
-### Generated content
-
-Home page, news, CV, projects and publications can be generated from a curated export kept in a separate source
-repository: `tools/import_site_data.py` validates it against `schema/site-export.schema.json`, runs the safety gates and
-writes the files. Details and the verified format rules are in [docs/CONTENT_FORMATS.md](docs/CONTENT_FORMATS.md).
-Generated files carry no hand edits; change the source and sync.
-
-### Editing the content
-
-| What | Where |
-|---|---|
-| Site title, URL, social handles, feature toggles | `content/config.yml` |
-| Home page (bio, profile picture, contact line) | `content/pages/home.md` |
-| News items | `entries:` in `content/pages/news.md` |
-| CV sections | `content/data/cv.yml` |
-| Projects | one Markdown file per project in `content/projects/` (set `category` and `importance`) |
-| Publications | BibTeX entries in `content/pages/publications.bib`, then set `status: published` in `publications.md` |
-| Images | `content/images/` |
-
-Pages use YAML front matter. `status: published` shows a page, `hidden` builds it without listing it, and `skip` leaves it out.
-The navigation bar is built from pages with `nav: true`, ordered by `nav_order`.
+| `src/` | The Astro site: pages, components, content collections, styles, utilities and their tests |
+| `public/` | Static files (favicon, `pdf/cv.pdf`, exported notebooks in `notebooks/`) |
+| `notebooks/` | marimo notebook sources; `pnpm run notebooks` exports them to `public/notebooks/` in system, light and dark themes (needs `uv`) |
+| `tools/` | `import_site_data.py` (content import) and `check_output.py` (post-build checks) |
+| `schema/`, `content/` | Import schema and the importer's current output (Pelican format, see below) |
+| `tests/` | Importer tests (pytest) |
+| `docs/` | Content formats, design spec and plans |
+| `_archive/pelican/` | The retired Pelican site, kept for reference |
+| `.github/` | CI, deploy workflow, Dependabot, branch-protection ruleset |
 
 ## Development
 
-Dependencies are declared once, in `pyproject.toml` (hatchling backend). `pixi.toml` installs the project from it,
-so pixi, uv and pip all use the same list.
+Node and pnpm are pinned in `mise.toml` (`mise install`).
 
 ```bash
-pixi install          # create the environment (commit the resulting pixi.lock)
-pixi run build        # development build into output/
-pixi run serve        # serve at http://localhost:8000 and rebuild on change
-pixi run publish      # production build (publishconf.py), as used by CI
-pixi run test         # unit tests and a build smoke test
-pixi run clean        # remove output/
+pnpm install
+pnpm dev             # http://localhost:4321
+pnpm run check       # astro sync + type check
+pnpm test            # Vitest
+pnpm run lint        # Oxlint
+pnpm run format      # Oxfmt (src) + Prettier (.astro)
+pnpm run build       # check + astro build into dist/
+pnpm run check:output  # links, HTML, placeholder leaks in dist/
 ```
 
-Without pixi:
+Importer tests: `pixi run test`.
 
-```bash
-uv sync --extra dev
-uv run pelican content -o output -s publishconf.py
-uv run pytest
-```
+## Content
 
-Python 3.10 or newer is required (Pelican 4.12 needs 3.11 or newer, so 3.10 installs 4.11).
+Pages, news, CV and projects live in `src/content/` and `src/data/cv.yml`. They are not yet generated from the private
+source repository: `tools/import_site_data.py` still writes the Pelican-format `content/` tree, and retargeting it to
+`src/` is pending. Format rules: [docs/CONTENT_FORMATS.md](docs/CONTENT_FORMATS.md). Inline math in Markdown is `$$…$$`.
 
 ## CI/CD
 
-- **Pull requests** run `.github/workflows/ci.yml`: ruff and yamllint, the unit tests, a strict production build
-  (warnings are fatal) and `tools/check_output.py`.
-- **Pushes to `main`** run `.github/workflows/deploy.yml`, which builds the site and deploys it with the official GitHub Pages
-  actions. In the repository settings, set **Pages > Source** to **GitHub Actions**.
-- **Dependabot** proposes monthly updates for GitHub Actions and the Python dependencies.
-- Once `pixi.lock` is committed, set `locked: true` and `cache: true` in both workflows.
-
-### Branch protection
-
-`.github/rulesets/default-branch.json` is a repository ruleset for `main`: no deletion or force-push, changes go through a
-pull request, and the `lint` and `build` checks must pass. It is not applied automatically. Import it under
-**Settings > Rules > Rulesets > New ruleset > Import a ruleset**. The two required checks only become selectable after CI has run once.
+- **Pull requests** run `.github/workflows/ci.yml`: `lint` (Oxlint, Oxfmt/Prettier, ruff, yamllint) and `build`
+  (type check, Vitest, Astro build, `check_output.py`, importer tests).
+- **Pushes to `main`** run `.github/workflows/deploy.yml`: build, `check_output.py`, deploy with the GitHub Pages actions.
+  It caches `node_modules/.astro/` for incremental builds. In the repository settings, **Pages > Source** is **GitHub Actions**.
+- `.github/rulesets/default-branch.json` protects `main`: pull request required, `lint` and `build` must pass.
 
 ## Licence
 
-The upstream al-folio theme and the Pelican port each carry their own licence terms; check
-those projects before redistributing the theme code. The personal content in `content/` (text, CV, photos) is not intended for reuse.
+Code follows the licences of the themes credited above. The personal content (text, CV, photos) is not intended for reuse.

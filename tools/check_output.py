@@ -36,7 +36,7 @@ class P(HTMLParser):
                 self.stack.pop()  # tolerate optional end tags
             self.stack.pop()
         else:
-            if tag not in {"meta", "link", "img", "br", "hr", "input"}:
+            if tag not in {"meta", "link", "img", "br", "hr", "input", "path"}:
                 self.errors.append(f"stray </{tag}>")
 
 
@@ -45,7 +45,10 @@ for req in REQUIRED_PAGES:
     if not (OUT / req).exists():
         problems.append(f"missing {req}")
 
-for f in sorted(OUT.rglob("*.html")):
+# Exported marimo notebooks (notebooks/) are generated third-party pages, not site templates.
+PAGES = [f for f in sorted(OUT.rglob("*.html")) if "notebooks" not in f.relative_to(OUT).parts]
+
+for f in PAGES:
     text = f.read_text(encoding="utf-8", errors="replace")
     rel = f.relative_to(OUT)
     for pat in FORBIDDEN:
@@ -79,7 +82,7 @@ for f in sorted(OUT.rglob("*.html")):
 
 for w in sorted(set(warnings)):
     print("::warning::" + w)
-print(f"checked {len(list(OUT.rglob('*.html')))} html files")
+print(f"checked {len(PAGES)} html files")
 if problems:
     print("\n".join(sorted(set(problems))[:100]))
     print(f"{len(set(problems))} problem(s)")

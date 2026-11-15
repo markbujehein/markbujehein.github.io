@@ -23,15 +23,22 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/configure-pages@v6
-      - uses: prefix-dev/setup-pixi@v0.11.2
+      - uses: actions/setup-node@v4
         with:
-          locked: false # set to true once pixi.lock is committed
-          cache: false # set to true once pixi.lock is committed
-      - run: pixi run publish --fatal warnings
-      - run: python -I tools/check_output.py output https://markbujehein.github.io
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      # Incremental builds (astro.config.mjs) keep their cache here; without it every page re-renders.
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.astro
+          key: astro-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: astro-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+      - run: pnpm run build
+      - run: python -I tools/check_output.py dist https://markbujehein.github.io
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: output
+          path: dist
 
   deploy:
     needs: build

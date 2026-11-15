@@ -1,0 +1,56 @@
+---
+import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+import Footer from "../components/Footer.astro";
+import Nav from "../components/Nav.astro";
+import SkipLink from "../components/SkipLink.astro";
+import { site } from "../config/site";
+import "../styles/global.css";
+import { pageTitle } from "../utils/title";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{pageTitle(title, site.title)}</title>
+    {description && <meta name="description" content={description} />}
+    <script is:inline>
+      // Set the theme before first paint (no flash) and again after every view-transition swap.
+      (() => {
+        const apply = () => {
+          let saved = null;
+          try {
+            saved = localStorage.getItem("theme");
+          } catch {}
+          document.documentElement.dataset.theme =
+            saved === "light" || saved === "dark"
+              ? saved
+              : matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+        };
+        apply();
+        document.addEventListener("astro:after-swap", apply);
+      })();
+    </script>
+    <Font cssVariable="--font-serif" preload />
+    <ClientRouter fallback="swap" />
+  </head>
+  <body>
+    <SkipLink />
+    <Nav />
+    <main id="main" class="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

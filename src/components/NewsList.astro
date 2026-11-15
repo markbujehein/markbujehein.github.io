@@ -1,0 +1,28 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import { formatNewsDate, isoDate } from "../utils/date";
+
+interface Props {
+  items: CollectionEntry<"news">[];
+}
+
+const items = [...Astro.props.items].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const rendered = await Promise.all(
+  items.map(async (item) => ({ item, Content: (await render(item)).Content })),
+);
+---
+
+<ul class="timeline">
+  {
+    rendered.map(({ item, Content }) => (
+      <li class="timeline-item">
+        <time class="entry-index" datetime={isoDate(item.data.date, item.data.monthOnly)}>
+          {formatNewsDate(item.data.date, item.data.monthOnly)}
+        </time>
+        <div class="prose-site mt-1">
+          <Content />
+        </div>
+      </li>
+    ))
+  }
+</ul>
