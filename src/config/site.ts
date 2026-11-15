@@ -1,9 +1,9 @@
 export const site = {
-  title: "Mark B.H. Sørensen",
-  author: "Mark B.H. Sørensen",
+  title: "Mark Buje Hein",
+  author: "Mark Buje Hein",
   url: "https://markbujehein.github.io",
   description:
-    "Personal academic website of Mark B.H. Sørensen: neutron and X-ray scattering, computational materials science and nanoscience.",
+    "Personal academic website of Mark Buje Hein: neutron and X-ray scattering, computational materials science and nanoscience.",
   nav: [
     { label: "about", href: "/" },
     { label: "projects", href: "/projects/" },

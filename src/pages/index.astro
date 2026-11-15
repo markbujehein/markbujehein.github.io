@@ -23,6 +23,7 @@ const news = latest(await getCollection("news"), 5); // the full list lives at /
 
 <Base title={site.title} description={site.description}>
   <Hero
+    slot="hero"
     name={site.author}
     headline={home.data.hero.headline}
     detail={home.data.hero.detail}
@@ -40,7 +41,7 @@ const news = latest(await getCollection("news"), 5); // the full list lives at /
       <Image
         class="float-right mb-4 ml-6 size-40 rounded-full object-cover"
         src={profile}
-        alt="Portrait of Mark B.H. Sørensen"
+        alt="Portrait of Mark Buje Hein"
         width={160}
         height={160}
         densities={[1, 2]}

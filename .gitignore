@@ -12,6 +12,8 @@ staging/*
 node_modules/
 dist/
 .astro/
+test-results/
+playwright-report/
 
 # environment variables
 .env
