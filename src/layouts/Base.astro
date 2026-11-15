@@ -42,6 +42,14 @@ const { title, description } = Astro.props;
         document.addEventListener("astro:after-swap", apply);
       })();
     </script>
+    <!-- Controls that only work with JavaScript are hidden without it. -->
+    <noscript
+      ><style is:inline>
+        [data-needs-js] {
+          display: none;
+        }
+      </style></noscript
+    >
     <Font cssVariable="--font-serif" preload />
     <ClientRouter fallback="swap" />
   </head>
