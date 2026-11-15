@@ -74,7 +74,6 @@ const skills = defineCollection({
   schema: z.object({
     term: z.string(),
     name: z.string(),
-    summary: z.string(),
     projects: z.array(z.string()).default([]),
   }),
 });
