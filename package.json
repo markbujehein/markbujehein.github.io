@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
-    "notebooks": "uvx marimo export html-wasm notebooks/bragg_law.py -o public/notebooks/bragg-law.html --single-file --mode run --no-show-code",
+    "notebooks": "bash notebooks/export.sh",
     "check:output": "python -I tools/check_output.py dist https://markbujehein.github.io",
     "lint": "oxlint src",
     "format": "oxfmt src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --write \"src/**/*.astro\"",

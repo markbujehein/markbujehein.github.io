@@ -6,6 +6,8 @@ importance: 8
 category: software
 ---
 
+import NotebookFrame from "../../components/NotebookFrame.astro";
+
 An interactive [marimo](https://marimo.io) notebook. It runs entirely in your browser (Python via WebAssembly), so there is
 no server behind it. A crystal with lattice-plane spacing $$d$$ diffracts radiation of wavelength $$\lambda$$ where
 $$n\lambda = 2d\sin\theta$$, which gives the scattering angle
@@ -14,13 +16,7 @@ $$
 2\theta = 2\arcsin\left(\frac{n\lambda}{2d}\right).
 $$
 
-<iframe
-  src="/notebooks/bragg-law.html"
-  title="Bragg's law notebook"
-  loading="lazy"
-  sandbox="allow-scripts allow-same-origin"
-  class="h-[34rem] w-full rounded-md border border-paper-300 dark:border-ink-700"
-></iframe>
+<NotebookFrame src="/notebooks/bragg-law" title="Bragg's law notebook" />
 
 [Open the notebook full page](/notebooks/bragg-law.html). The first load downloads the Python runtime, which takes a few
 seconds. The runtime comes from the jsDelivr CDN. The notebook source is `notebooks/bragg_law.py` in the
