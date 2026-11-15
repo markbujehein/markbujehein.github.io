@@ -162,7 +162,7 @@
 /* Rendered Markdown: Tailwind Typography, themed with the site palette. */
 @layer components {
   .prose-site {
-    @apply prose max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-[-0.01em] prose-code:before:content-none prose-code:after:content-none;
+    @apply prose relative max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-[-0.01em] prose-code:before:content-none prose-code:after:content-none;
     --tw-prose-body: var(--color-ink-700);
     --tw-prose-headings: var(--color-ink-950);
     --tw-prose-lead: var(--color-ink-600);
@@ -245,11 +245,10 @@
   @apply font-semibold text-key-light-600 underline decoration-key-light-400 decoration-dotted underline-offset-4 hover:decoration-solid dark:text-key-300 dark:decoration-key-500;
 }
 @layer components {
-  .keyword-wrap {
-    @apply relative;
-  }
+  /* The tip is anchored to the nearest positioned ancestor (the card), not to the keyword, so it can never
+     reach past the card and widen the page. With no `top`, its margin (mt-6) lowers it from the keyword's own line to just below it. */
   .keyword-tip {
-    @apply invisible absolute top-full left-0 z-30 w-64 rounded-md border border-l-2 border-paper-300 border-l-key-light-500 bg-paper-50 p-3 text-sm leading-5 font-normal text-ink-700 opacity-0 transition-opacity duration-150 dark:border-ink-700 dark:border-l-key-400 dark:bg-ink-900 dark:text-paper-300;
+    @apply invisible absolute right-0 left-0 z-30 mt-6 max-w-80 rounded-md border border-l-2 border-paper-300 border-l-key-light-500 bg-paper-50 p-3 text-sm leading-5 font-normal text-ink-700 opacity-0 transition-opacity duration-150 dark:border-ink-700 dark:border-l-key-400 dark:bg-ink-900 dark:text-paper-300;
   }
   /* The tip is a child of the wrapper, so moving the pointer onto it keeps it open (WCAG 1.4.13). */
   .keyword-wrap:hover .keyword-tip,
