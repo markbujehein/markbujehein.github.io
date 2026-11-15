@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brand sheet</title>
+<!-- Source of docs/brand/brand.png. Render: see README "Brand". Fonts come from Google Fonts and jsDelivr only for this sheet. -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Spectral:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #888; font: 15px/1.55 "Inter", sans-serif; }
+  .sheet { display: grid; grid-template-columns: 1fr 1fr; width: 1600px; }
+  .panel { padding: 36px 40px 44px; background: var(--bg); color: var(--text); }
+  .dark { --bg:#0F0A24; --surface:#1A1236; --text:#E9E4FA; --muted:#A79FC4; --primary:#2EE6B0; --orange:#FF7A1A; --lavender:#A98BFF; --line:#2E2556; --on-orange:#0F0A24; }
+  .light { --bg:#F8F6FF; --surface:#FFFFFF; --text:#1D1538; --muted:#5A5078; --primary:#08705A; --orange:#A63F00; --lavender:#5636D1; --line:#DDD6F3; --on-orange:#FFFFFF; }
+
+  .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+  .head img { height: 46px; display: block; }
+  .mode { padding: 2px 12px; border: 1px solid var(--line); border-radius: 99px; font-size: 12px; color: var(--muted); }
+  .title { margin: 0; font-size: 46px; line-height: 1.05; letter-spacing: -.02em; font-weight: 700; }
+  .lede { margin: 8px 0 0; color: var(--muted); font-size: 17px; max-width: 52ch; }
+
+  h1, h2, h3 { font-family: "Spectral", serif; margin: 0; }
+  h1 { font-size: 56px; line-height: 1.02; letter-spacing: -.02em; font-weight: 700; }
+  h3 { font-size: 22px; line-height: 1.25; font-weight: 600; margin-top: 18px; }
+  .sec { margin: 44px 0 0; font-size: 26px; font-weight: 700; letter-spacing: -.01em; }
+  .secnote { margin: 4px 0 14px; color: var(--muted); font-size: 13px; max-width: none; }
+  .cap { font-size: 12px; color: var(--muted); }
+  p { margin: 8px 0; max-width: 62ch; }
+
+  .sw { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .sw div, .shades .col div { position: relative; }
+  .sw div { display: flex; flex-direction: column; justify-content: flex-end; min-height: 118px; border: 1px solid var(--line); border-radius: 8px; padding: 12px 10px; font-size: 11px; line-height: 1.4; }
+  .sw b { display: block; font-weight: 600; font-size: 12px; }
+  .rules { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 14px; }
+  .rules li { padding-left: 18px; position: relative; max-width: 74ch; }
+  .rules li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+
+  .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .spec { border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; background: var(--surface); }
+  .spec .n { font-size: 28px; line-height: 1.15; }
+  .spec .g { margin-top: 6px; font-size: 18px; color: var(--text); }
+  .spec small { display: block; margin-top: 8px; color: var(--muted); font: 11px/1.4 "Inter", sans-serif; }
+
+  .inuse { margin-top: 34px; }
+  .sub { margin: 10px 0 0; color: var(--muted); font-size: 17px; }
+  .kw { color: var(--primary); text-decoration: underline dotted; text-underline-offset: 4px; }
+  a { color: var(--orange); text-underline-offset: 3px; }
+  .row { display: flex; gap: 12px; align-items: center; margin: 14px 0; flex-wrap: wrap; }
+  .btn { padding: 9px 16px; border-radius: 4px; font: 600 15px "Inter", sans-serif; background: var(--orange); color: var(--on-orange); border: 1px solid var(--orange); }
+  .btn.hover { background: var(--lavender); border-color: var(--lavender); }
+  .btn.focus { background: none; color: var(--text); border: 1px solid var(--line); outline: 3px solid var(--lavender); outline-offset: 2px; }
+  .math { margin: 6px 0; font-size: 19px; }
+  @font-face { font-family: "Monaspace Neon"; src: url("https://cdn.jsdelivr.net/npm/@fontsource/monaspace-neon/files/monaspace-neon-latin-400-normal.woff2") format("woff2"); }
+  pre { margin: 10px 0 0; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; font: 14px/1.5 "Monaspace Neon", ui-monospace, monospace; }
+
+  .shades { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .shades .col { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .shades .col div { display: flex; flex-direction: column; justify-content: flex-end; padding: 8px 10px; font-size: 11px; line-height: 1.35; }
+  .shades .lt, .shades .dk { height: 56px; }
+  .shades .ba { height: 96px; padding-bottom: 10px; }
+  .shades b { font-size: 12px; font-weight: 600; }
+  .warn { position: absolute; bottom: 8px; right: 7px; padding: 0 6px; border: 1px solid currentColor; border-radius: 99px; font: 600 10px/16px "Inter", sans-serif; }
+
+  .logos { display: grid; grid-template-columns: 170px 1fr; gap: 14px; align-items: stretch; }
+  .logos > div { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); display: flex; align-items: center; justify-content: center; gap: 28px; padding: 18px; flex-wrap: wrap; }
+  .logos img { display: block; }
+  .logos > div:last-child { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; align-items: center; gap: 22px 18px; }
+  .logos > div:last-child img:nth-child(3) { grid-column: 1 / -1; }
+  .logos2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; align-items: start; }
+  .logos2 > div { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 16px 18px; }
+  .sizes { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 8px; }
+  .zone { display: inline-block; padding: 40px; outline: 1px dashed var(--muted); outline-offset: -1px; margin-bottom: 8px; }
+  .zone img { display: block; }
+
+  .pat { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pat div { height: 84px; border-radius: 8px; border: 1px solid var(--line); background-color: var(--surface); }
+  .pat .rings { background-image: repeating-radial-gradient(circle at 72% 50%, transparent 0 13px, color-mix(in srgb, var(--primary) 40%, transparent) 13px 15px); }
+  .pat .dots { background-image: radial-gradient(circle, color-mix(in srgb, var(--lavender) 60%, transparent) 1.3px, transparent 1.5px); background-size: 22px 22px; }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+<script>
+  const hex = { dark: { bg:"#0F0A24", surface:"#1A1236", text:"#E9E4FA", muted:"#A79FC4", primary:"#2EE6B0", orange:"#FF7A1A", lavender:"#A98BFF" },
+                light: { bg:"#F8F6FF", surface:"#FFFFFF", text:"#1D1538", muted:"#5A5078", primary:"#08705A", orange:"#A63F00", lavender:"#5636D1" } };
+  const role = {
+    dark:  { bg:"Iron Gall", surface:"Midnight Codex", text:"Lunar Vellum", muted:"Marginalia", primary:"Athena Core", orange:"Gravity Gun", lavender:"Arcane Torrent" },
+    light: { bg:"Sunlit Vellum", surface:"Illuminated Leaf", text:"Lampblack Ink", muted:"Silverpoint", primary:"Oracle Core", orange:"Spice Melange", lavender:"Arcane Intellect" } };
+  const steps = {"dark": {"bg": ["#1E1A36", "#040013"], "surface": ["#2A2349", "#0C0324"], "text": ["#FCFBFF", "#D2CDE3"], "muted": ["#BDB5DB", "#928AAE"], "primary": ["#53FEC6", "#12CD9B"], "orange": ["#FFA16E", "#DF6A16"], "lavender": ["#BCAAFC", "#9475E7"]}, "light": {"bg": ["#FCFBFF", "#E1DFE8"], "surface": ["#F3F3F3", "#E8E8E8"], "text": ["#2D264B", "#0E0526"], "muted": ["#6E648D", "#473D63"], "primary": ["#2B856E", "#055A48"], "orange": ["#BE5522", "#873201"], "lavender": ["#684FE9", "#4617B9"]}};
+  const lum = (h) => { const c = [1,3,5].map(i => parseInt(h.slice(i,i+2),16)/255).map(x => x <= .03928 ? x/12.92 : ((x+.055)/1.055)**2.4); return .2126*c[0]+.7152*c[1]+.0722*c[2]; };
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return ((x + .05) / (y + .05)).toFixed(2); };
+  const fg = (h) => lum(h) > .35 ? "#0F0A24" : "#FFFFFF";
+  const tex = (t) => katex.renderToString(t, { throwOnError: false });
+  const panel = (mode) => {
+    const h = hex[mode], n = role[mode];
+    const cell = (hx, cls, label, showBg, textRole) => `<div class="${cls}" style="background:${hx};color:${fg(hx)}">${textRole && ratio(hx, h.bg) < 4.5 ? `<span class="warn" title="Below 4.5:1 on the background">&lt;4.5</span>` : ""}${label ? `<b>${label}</b>` : ""}${hx}<br>${showBg ? "" : ratio(hx, h.bg) + ":1"}</div>`;
+    const isText = (k) => k !== "bg" && k !== "surface";
+    const sw = Object.keys(h).map(k => cell(h[k], "", n[k], k === "bg")).join("");
+    const shades = Object.keys(h).map(k => `<div class="col">${cell(steps[mode][k][0], "lt", "", false, isText(k))}${cell(h[k], "ba", n[k], k === "bg", isText(k))}${cell(steps[mode][k][1], "dk", "", false, isText(k))}</div>`).join("");
+    const L = (f, hgt) => `<img src="logo/${f}-${mode}.svg" height="${hgt}" alt="" />`;
+    return `<section class="panel ${mode}">
+      <div class="head">${L("lockup", 46)}<span class="mode">${mode === "dark" ? "Dark mode" : "Bright mode"}</span></div>
+      <h2 class="title">Brand identity</h2>
+      <p class="lede">The personal site of a physicist: modelling, experiments, fitting and Bayesian analysis.</p>
+
+      <h3 class="sec">Colour</h3>
+      <p class="secnote">Seven colours per mode. Every text colour passes 4.5:1 on its background.</p>
+      <div class="sw">${sw}</div>
+      <ul class="rules">
+        <li>${n.primary} marks meaning: keywords and the glossary.</li>
+        <li>${n.orange} is the resting colour of links and buttons; ${n.lavender} answers hover and keyboard focus.</li>
+        <li>${n.bg} and ${n.surface} carry the page and its cards; ${n.text} and ${n.muted} carry text.</li>
+      </ul>
+
+      <h3 class="sec">Typography</h3>
+      <p class="secnote">Spectral and Inter for words, Computer Modern for formulas, Monaspace Neon for code.</p>
+      <div class="specs">
+        <div class="spec"><div class="n" style="font-family:'Spectral',serif;font-weight:700">Spectral</div><div class="g" style="font-family:'Spectral',serif;font-weight:700">Aa Gg 0123 αβγ</div><small>Headings and titles. Bold 700.</small></div>
+        <div class="spec"><div class="n" style="font-family:'Inter',sans-serif;font-weight:600">Inter</div><div class="g" style="font-family:'Inter',sans-serif">Aa Gg 0123 αβγ</div><small>Body and interface text. Regular 400, Medium 500, Semibold 600.</small></div>
+        <div class="spec"><div class="n" style="font-family:KaTeX_Main,serif">Computer Modern</div><div class="g">${tex("\\hbar\\omega = E,\\; n\\lambda = 2d\\sin\\theta")}</div><small>Formulas, set with KaTeX. No look-alike I, l and 1.</small></div>
+        <div class="spec"><div class="n" style="font-family:'Monaspace Neon',monospace;font-size:24px">Monaspace Neon</div><div class="g" style="font-family:'Monaspace Neon',monospace;font-size:15px">fit(q, s_q) == 0</div><small>Code. Widest physics symbol coverage of the fonts compared.</small></div>
+      </div>
+      <div class="inuse">
+        <h1>Hire a physicist.</h1>
+        <p class="sub">PhD position wanted. Modelling, experiments, fitting, Bayesian analysis.</p>
+        <h3>Interactive notebook: Bragg's law</h3>
+        <p>I use <span class="kw">INS</span>, <span class="kw">SAXS</span> and <span class="kw">DFT</span> to link structure and dynamics. The keywords carry the primary colour; <a href="#">links</a> and buttons carry the interaction colours.</p>
+        <div class="row"><span class="btn">Read my CV</span><span class="btn hover">Hover</span><span class="btn focus">Keyboard focus</span><span class="cap">${n.orange} rests; ${n.lavender} answers the pointer and the keyboard</span></div>
+        <div class="math">${tex("S(Q,\\omega)=\\int_{-\\infty}^{\\infty}e^{i\\omega t}\\langle\\rho(Q,t)\\rho(-Q,0)\\rangle\\,dt")}</div>
+        <pre>def fit(q, s_q, *, model):   # code font: Monaspace Neon
+    return model.sample(q, s_q)</pre>
+      </div>
+
+      <h3 class="sec">Shades</h3>
+      <p class="secnote">Each colour in the middle row; a lighter step above it and a darker step below. Use the steps for hover and borders.</p>
+      <div class="shades">${shades}</div>
+
+      <h3 class="sec">Logo</h3>
+      <p class="secnote">A source and the rings drifting away from it. Use the ${mode} files on ${mode} backgrounds. Do not rotate, stretch or recolour.</p>
+      <div class="logos">
+        <div>${L("icon", 120)}</div>
+        <div>${L("lockup", 46)}${L("stacked", 84)}${L("wordmark", 28)}</div>
+      </div>
+      <div class="logos2">
+        <div><div class="sizes">${L("icon", 16)}${L("icon", 32)}${L("icon", 48)}</div><span class="cap">Icon at 16, 32 and 48 px. Minimum size: icon 16 px, lockup 120 px wide.</span></div>
+        <div><div class="zone">${L("lockup", 40)}</div><br><span class="cap">Clear space: the height of the icon on every side.</span></div>
+      </div>
+
+      <h3 class="sec">Patterns</h3>
+      <p class="secnote">Rings from the hero and a dot grid, in the primary and the second interaction colour at low strength.</p>
+      <div class="pat"><div class="rings"></div><div class="dots"></div></div>
+    </section>`;
+  };
+  document.getElementById("sheet").innerHTML = panel("dark") + panel("light");
+</script>
+</body>
+</html>
