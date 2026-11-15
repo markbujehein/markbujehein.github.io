@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "check": "astro sync && tsc --noEmit --runExternalCode",
-    "build": "pnpm run check && astro build",
+    "build": "pnpm run check && astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
@@ -34,6 +34,7 @@
     "@types/node": "^24.19.2",
     "oxfmt": "^0.78.0",
     "oxlint": "^1.93.0",
+    "pagefind": "^1.6.0",
     "prettier": "^3.10.1",
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.1",

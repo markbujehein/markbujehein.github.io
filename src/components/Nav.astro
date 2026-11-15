@@ -1,6 +1,7 @@
 ---
 import { site } from "../config/site";
 import { navState } from "../utils/nav";
+import Search from "./Search.astro";
 import ThemeToggle from "./ThemeToggle";
 
 const path = Astro.url.pathname;
@@ -33,6 +34,7 @@ const link =
           }
         </ul>
       </nav>
+      <Search />
       <ThemeToggle client:load transition:persist />
       <!-- Phones: the same links in a menu that needs no JavaScript. -->
       <details class="relative sm:hidden">
