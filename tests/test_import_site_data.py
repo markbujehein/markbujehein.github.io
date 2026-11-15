@@ -13,7 +13,8 @@ import import_site_data as imp  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURE = ROOT / "tests/fixtures/site-export.yml"
-IGNORE = shutil.ignore_patterns(".git", "output", "cache", "_dev", ".pixi", "__pycache__", ".pytest_cache", "*.egg-info")
+IGNORE = shutil.ignore_patterns(".git", "output", "cache", "_dev", ".pixi", "__pycache__", ".pytest_cache", "*.egg-info",
+                                "node_modules", "dist", ".astro", ".superpowers", ".playwright-mcp", ".remember", ".ruff_cache")
 
 
 @pytest.fixture
@@ -84,6 +85,7 @@ def test_empty_publications_skip_the_page(tree):
     assert "status: skip" in (tree / "content/pages/publications.md").read_text(encoding="utf-8")
 
 
+@pytest.mark.skip(reason="Pelican is archived in _archive/pelican; the importer still emits the Pelican tree until it is retargeted to Astro")
 def test_generated_tree_builds_strictly(tree):
     imp.apply(imp.validate(FIXTURE, tree), tree)
     out = tree / "output"
