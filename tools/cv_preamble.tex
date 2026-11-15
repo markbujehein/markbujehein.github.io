@@ -1,0 +1,49 @@
+% Preamble of the PDF CV, built with lualatex by tools/import_site_data.py (--pdf).
+% The ring-drawing marker below is replaced by generated diffraction-ring code.
+\documentclass[9.5pt,a4paper]{extarticle}
+\usepackage{fontspec}
+\setmainfont{SourceSerif4}[Extension=.otf,UprightFont=*-Regular,ItalicFont=*-RegularIt,
+  BoldFont=*-Semibold,BoldItalicFont=*-SemiboldIt]
+\setsansfont{Roboto}[Extension=.otf,UprightFont=*-Regular,ItalicFont=*-Italic,
+  BoldFont=*-Medium,BoldItalicFont=*-MediumItalic]
+\usepackage[a4paper,left=5.7cm,right=1.9cm,top=2.0cm,bottom=2.1cm]{geometry}
+\usepackage{xcolor,tikz,eso-pic,enumitem,needspace,fancyhdr,microtype}
+\usepackage[hidelinks]{hyperref}
+\definecolor{ink}{HTML}{14092E}
+\definecolor{accent}{HTML}{BC3754}
+\definecolor{muted}{HTML}{6A6580}
+\definecolor{hair}{HTML}{D9D4E3}
+\color{ink}
+\setlength{\parindent}{0pt}\setlength{\parskip}{0pt}
+\linespread{1.08}\selectfont
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[R]{\sffamily\fontsize{7}{8}\selectfont\color{muted}\thepage}
+\setlength{\footskip}{0.9cm}
+
+% Left rail: dates or group names, right-aligned against the timeline.
+\newlength{\railw}\setlength{\railw}{3.2cm}
+\newcommand{\rail}[1]{\llap{\smash{\parbox[t]{\railw}{\raggedleft\sffamily\fontsize{7.8}{10}\selectfont\color{muted}#1}}\hspace{0.8cm}}}
+% Timeline markers sit on the rule, 0.45cm left of the text edge.
+\newcommand{\marker}{\hspace*{-0.45cm}\makebox[0pt][c]{\tikz[baseline=-0.6ex]{\fill[white](0,0)circle(3pt);\draw[accent,line width=0.6pt](0,0)circle(2.6pt);\fill[accent](0,0)circle(0.9pt);}}\hspace*{0.45cm}}
+\newcommand{\bigmarker}{\hspace*{-0.45cm}\makebox[0pt][c]{\tikz[baseline=-0.8ex]{\fill[white](0,0)circle(6pt);\draw[ink,line width=0.5pt](0,0)circle(5pt);\draw[accent,line width=0.8pt](0,0)circle(3pt);\fill[ink](0,0)circle(1.1pt);}}\hspace*{0.45cm}}
+
+\setlist[itemize]{leftmargin=1.05em,labelsep=0.45em,itemsep=1.5pt,topsep=2.5pt,parsep=0pt,partopsep=0pt,
+  label={\raisebox{0.3ex}{\tikz\fill[accent](0,0)circle(0.85pt);}}}
+\newcommand{\railitem}[1]{\item[{\rail{#1}\raisebox{0.3ex}{\tikz\fill[accent](0,0)circle(0.85pt);}}]}
+
+\newcommand{\sect}[1]{\par\vspace{15pt}\Needspace{5\baselineskip}\noindent\bigmarker{\fontsize{15}{18}\selectfont\bfseries\color{ink}#1}\par\vspace{1pt}%
+  {\color{accent}\rule{1.1cm}{0.7pt}}\par\vspace{4pt}}
+\newcommand{\entry}[3]{\par\vspace{7pt}\Needspace{4\baselineskip}\noindent\marker\rail{#1}{\bfseries\color{ink}#2}\par
+  \ifx\relax#3\relax\else{\sffamily\fontsize{8.2}{10}\selectfont\color{muted}#3}\par\fi}
+
+% Page furniture: the timeline, and the diffraction rings on page 1.
+\AddToShipoutPictureBG{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \ifnum\value{page}=1
+      \draw[hair,line width=0.6pt]([xshift=5.25cm,yshift=-8.4cm]current page.north west)--([xshift=5.25cm,yshift=1.5cm]current page.south west);
+      %%RINGS%%
+    \else
+      \draw[hair,line width=0.6pt]([xshift=5.25cm,yshift=-1.3cm]current page.north west)--([xshift=5.25cm,yshift=1.5cm]current page.south west);
+    \fi
+  \end{tikzpicture}}
+\begin{document}

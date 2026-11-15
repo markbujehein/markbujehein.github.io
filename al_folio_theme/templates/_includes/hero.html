@@ -38,6 +38,7 @@
     <p class="hero-actions">
       <a class="hero-btn hero-btn-primary" href="{{ 'cv/' | relative_url }}">Read my CV</a>
       <a class="hero-btn" href="{{ 'projects/' | relative_url }}">See my projects</a>
+      {% if page.hero.linkedin %}<a class="hero-btn" href="{{ page.hero.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>{% endif %}
     </p>
     {% if page.hero.contact %}<p class="hero-contact">{{ page.hero.contact }}</p>{% endif %}
   </div>

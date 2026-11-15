@@ -4,6 +4,7 @@ profile:
   subtitle: Research Fellow, Example Institute
   contact_line: "Email: mark.sorensen [at] nbi.ku.dk"
   location: Exampleville, Denmark
+  linkedin: https://www.linkedin.com/in/example
   seeking:
     headline: Hire a physicist.
     detail: PhD position wanted. Modelling, experiments, fitting & Bayesian analysis.
