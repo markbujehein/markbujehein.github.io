@@ -10,6 +10,8 @@ import argparse
 import datetime as dt
 import html
 import json
+import os
+import random
 import re
 import shutil
 import subprocess
@@ -153,6 +155,8 @@ def render_home(d):
         out += [f"  {k}: {q_plain(v)}" for k, v in p["seeking"].items()]
         if p.get("contact_line"):
             out.append(f"  contact: {q_plain(p['contact_line'])}")
+        if p.get("linkedin"):
+            out.append(f"  linkedin: {q_plain(p['linkedin'])}")
     selected = any(x.get("selected") for x in d["publications"])
     out += ["", "news: true", "latest_posts: false", f"selected_papers: {str(selected).lower()}", "talks: false", "---", ""]
     return "\n".join(out) + "\n" + p["bio_markdown"].strip() + "\n"
@@ -251,59 +255,94 @@ def apply(d, out):
 
 
 TEX_ESC = {"\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#", "_": r"\_", "{": r"\{", "}": r"\}",
-           "~": r"\textasciitilde{}", "^": r"\textasciicircum{}", "\u03c7": r"$\chi$", "\u00b2": r"$^2$"}
+           "~": r"\textasciitilde{}", "^": r"\textasciicircum{}"}
+INFERNO = ((0x42, 0x0A, 0x68), (0x93, 0x26, 0x67), (0xDD, 0x51, 0x3A), (0xFC, 0xA5, 0x0A))
 
 
 def tex(s):
     return "".join(TEX_ESC.get(c, c) for c in s)
 
 
+def rings_tex():
+    """Debye-Scherrer rings bleeding off the top-right corner of page 1. Deterministic."""
+    rng = random.Random(7)
+    out = [r"\coordinate (C) at ([xshift=1.4cm,yshift=0.5cm]current page.north east);"]
+    n = 15
+    for i in range(n):
+        t = i / (n - 1) * (len(INFERNO) - 1)
+        k = min(int(t), len(INFERNO) - 2)
+        f = t - k
+        rgb = "".join(f"{round(a + (b - a) * f):02X}" for a, b in zip(INFERNO[k], INFERNO[k + 1]))
+        r = 1.7 + i * 0.5 + rng.uniform(-0.08, 0.08)
+        w = rng.choice((0.3, 0.45, 0.7, 1.1))
+        out.append(rf"\draw[color={{rgb,255:red,{int(rgb[0:2],16)};green,{int(rgb[2:4],16)};blue,{int(rgb[4:6],16)}}},opacity={rng.uniform(.35,.8):.2f},line width={w}pt](C)circle({r:.2f}cm);")
+        for _ in range(rng.choice((0, 1, 2, 3))):
+            out.append(rf"\fill[color={{rgb,255:red,{int(rgb[0:2],16)};green,{int(rgb[2:4],16)};blue,{int(rgb[4:6],16)}}},opacity=.9](C)++({rng.uniform(185, 265):.1f}:{r:.2f}cm)circle({rng.uniform(.9, 1.9):.2f}pt);")
+    return "\n      ".join(out)
+
+
 def render_tex(d):
-    """Plain-article LaTeX of the CV sections (base TeX Live only, no third-party class)."""
+    """The CV as a lualatex document: own layout (left rail + timeline), preamble in tools/cv_preamble.tex."""
     gen = {g["name"]: g["value"] for g in d["cv"]["general"]}
-    name = gen.get("Full Name", "")
-    out = [r"\documentclass[10pt,a4paper]{article}", r"\usepackage[utf8]{inputenc}", r"\usepackage[T1]{fontenc}",
-           r"\usepackage{lmodern,textcomp,xcolor}", r"\usepackage[margin=2cm]{geometry}",
-           r"\usepackage[hidelinks,pdftitle={%s - CV}]{hyperref}" % tex(name),
-           r"\definecolor{acc}{HTML}{14092e}", r"\pagestyle{plain}", r"\setlength{\parindent}{0pt}",
-           r"\setlength{\parskip}{2pt}", r"\renewcommand{\section}[1]{\vspace{9pt}{\large\bfseries\color{acc}#1}\par\vspace{1pt}\hrule\vspace{4pt}}",
-           r"\newenvironment{bul}{\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\topsep}{1pt}\setlength{\parsep}{0pt}}{\end{itemize}}",
-           r"\begin{document}", r"{\LARGE\bfseries %s}\par" % tex(name)]
-    for k, v in gen.items():
-        if k != "Full Name":
-            out.append(r"\textbf{%s:} %s\par" % (tex(k), tex(v)))
+    p = d["profile"]
+    sk = p.get("seeking", {})
+    out = [(Path(__file__).parent / "cv_preamble.tex").read_text(encoding="utf-8").replace("%%RINGS%%", rings_tex()),
+           r"\hspace*{-3.8cm}\begin{minipage}{13.2cm}\raggedright",
+           r"{\fontsize{31}{34}\selectfont\bfseries %s}\par\vspace{9pt}" % tex(gen.get("Full Name", ""))]
+    if sk.get("headline"):
+        out.append(r"{\fontsize{14}{17}\selectfont\color{accent}%s}\par\vspace{3pt}" % tex(sk["headline"]))
+    if sk.get("detail"):
+        out.append(r"{\fontsize{10.5}{14}\selectfont %s}\par" % tex(sk["detail"]))
+    if sk.get("start"):
+        out.append(r"{\sffamily\fontsize{8.5}{11}\selectfont\color{muted}%s}\par" % tex(sk["start"]))
+    meta = [v for k, v in gen.items() if k not in ("Full Name", "Languages")]
+    if p.get("contact_line"):
+        meta.insert(0, p["contact_line"].replace("Email: ", ""))
+    out += [r"\vspace{8pt}{\sffamily\fontsize{8.5}{11}\selectfont %s}\par" % r" \quad\textbullet\quad ".join(tex(m) for m in meta),
+            r"\end{minipage}\par\vspace{1.3cm}"]
     for sec in d["cv"]["sections"]:
-        out.append(r"\section{%s}" % tex(sec["title"]))
+        if sec["title"] == "Personal Interests" and gen.get("Languages"):
+            out += [r"\sect{Languages}", r"\begin{itemize}"] + [r"\item %s" % tex(x.strip()) for x in gen["Languages"].split(";")] + [r"\end{itemize}"]
+        out.append(r"\sect{%s}" % tex(sec["title"]))
         if sec["type"] == "list":
-            out += [r"\begin{bul}"] + [r"\item %s" % tex(e) for e in sec["entries"]] + [r"\end{bul}"]
+            out += [r"\begin{itemize}"] + [r"\item %s" % tex(e) for e in sec["entries"]] + [r"\end{itemize}"]
         elif sec["type"] == "nested_list":
             for e in sec["entries"]:
-                out += [r"\textbf{%s}" % tex(e["title"]), r"\begin{bul}"] + [r"\item %s" % tex(x) for x in e["elements"]] + [r"\end{bul}"]
+                out.append(r"\vspace{4pt}\begin{itemize}")
+                out += [(r"\railitem{%s} %s" if n == 0 else r"\item %s") % ((tex(e["title"]), tex(x)) if n == 0 else (tex(x),)) for n, x in enumerate(e["elements"])]
+                out.append(r"\end{itemize}")
         else:
             for e in sec["entries"]:
-                out.append(r"\textbf{%s}\hfill %s\par" % (tex(e["title"]), tex(e.get("year", ""))))
-                if e.get("institution"):
-                    out.append(r"\textit{%s}\par" % tex(e["institution"]))
+                out.append(r"\entry{%s}{%s}{%s}" % (tex(e.get("year", "")), tex(e["title"]), tex(e.get("institution", "")) or r"\relax"))
                 if e.get("description"):
-                    out += [r"\begin{bul}"] + [r"\item %s" % tex(x) for x in e["description"]] + [r"\end{bul}"]
-                out.append(r"\vspace{3pt}")
+                    out += [r"\begin{itemize}"] + [r"\item %s" % tex(x) for x in e["description"]] + [r"\end{itemize}"]
     out.append(r"\end{document}")
     return "\n".join(out) + "\n"
 
 
 def build_pdf(d, out):
-    exe = shutil.which("pdflatex")
+    exe = shutil.which("lualatex")
     if not exe:
-        raise SystemExit("--pdf needs pdflatex on PATH")
-    with tempfile.TemporaryDirectory() as t:
+        raise SystemExit("--pdf needs lualatex on PATH")
+    # Fixed timestamp (newest news item) so an unchanged export gives a byte-identical PDF.
+    newest = max((n["date"] for n in d["news"]), default="2026-01-01")
+    epoch = int(dt.datetime.fromisoformat(newest if len(newest) == 10 else newest + "-01").replace(tzinfo=dt.timezone.utc).timestamp())
+    env = {**os.environ, "SOURCE_DATE_EPOCH": str(epoch), "FORCE_SOURCE_DATE": "1"}
+    # A fixed directory name: the PDF /ID is derived from the path, so a random temp dir breaks reproducibility.
+    t = Path(tempfile.gettempdir()) / "site-cv-build"
+    shutil.rmtree(t, ignore_errors=True)
+    t.mkdir()
+    try:
         (Path(t) / "cv.tex").write_text(render_tex(d), encoding="utf-8")
         for _ in range(2):
-            r = subprocess.run([exe, "-interaction=nonstopmode", "-halt-on-error", "cv.tex"], cwd=t, capture_output=True, text=True)
+            r = subprocess.run([exe, "-interaction=nonstopmode", "-halt-on-error", "cv.tex"], cwd=t, capture_output=True, text=True, env=env)
             if r.returncode:
-                raise SystemExit("pdflatex failed:\n" + "\n".join(r.stdout.splitlines()[-15:]))
+                raise SystemExit("lualatex failed:\n" + "\n".join(r.stdout.splitlines()[-15:]))
         dest = out / "content/pdf/cv.pdf"
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(t) / "cv.pdf", dest)
+    finally:
+        shutil.rmtree(t, ignore_errors=True)
 
 
 def main(argv=None):
@@ -312,7 +351,7 @@ def main(argv=None):
     ap.add_argument("--out", default=str(ROOT))
     ap.add_argument("--denylist", help="file with one private term per line (# comments allowed)")
     ap.add_argument("--check", action="store_true", help="validate only, write nothing")
-    ap.add_argument("--pdf", action="store_true", help="also build content/pdf/cv.pdf with pdflatex")
+    ap.add_argument("--pdf", action="store_true", help="also build content/pdf/cv.pdf with lualatex")
     a = ap.parse_args(argv)
     deny = []
     if a.denylist:

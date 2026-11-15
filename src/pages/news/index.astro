@@ -1,0 +1,17 @@
+---
+import { getCollection } from "astro:content";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import NewsList from "../../components/NewsList.astro";
+import Base from "../../layouts/Base.astro";
+
+const news = await getCollection("news");
+---
+
+<Base title="news" description="An archive of announcements.">
+  <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "News" }]} />
+  <header class="page-header mb-8">
+    <h1 class="page-title">news</h1>
+    <p class="page-description">An archive of announcements.</p>
+  </header>
+  <NewsList items={news} />
+</Base>

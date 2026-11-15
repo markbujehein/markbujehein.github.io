@@ -1,0 +1,4 @@
+[tools]
+node = "24.22.3" # major matches the Node default of withastro/action
+pnpm = "12.18.0"
+"npm:@pnpm/pnpr" = "0.1.0-alpha.20" # pnpm registry server, prerelease only

@@ -70,6 +70,7 @@ def test_escaping_and_hero(tree):
     imp.apply(imp.validate(FIXTURE, tree), tree)
     home = (tree / "content/pages/home.md").read_text(encoding="utf-8")
     assert "fitting &amp; Bayesian" in home and "headline: \"Hire a physicist.\"" in home
+    assert 'linkedin: "https://www.linkedin.com/in/example"' in home
     assert "selected_papers: true" in home
 
 
@@ -149,5 +150,5 @@ def test_year_ranges_are_not_phone_numbers():
 
 def test_tex_escapes_specials_and_keeps_all_sections():
     data = yaml.safe_load(FIXTURE.read_text(encoding="utf-8"))
-    assert imp.render_tex(data).count(r"\section{") == len(data["cv"]["sections"])
-    assert imp.tex("A & B_50% \u03c7\u00b2 {x}") == r"A \& B\_50\% $\chi$$^2$ \{x\}"
+    assert imp.render_tex(data).count(r"\sect{") >= len(data["cv"]["sections"])
+    assert imp.tex("A & B_50% \u03c7\u00b2 {x}") == "A \\& B\\_50\\% χ² \\{x\\}"

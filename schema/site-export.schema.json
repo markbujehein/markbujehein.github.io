@@ -17,6 +17,7 @@
         "contact_line": {"$ref": "#/$defs/line"},
         "location": {"$ref": "#/$defs/line"},
         "bio_markdown": {"$ref": "#/$defs/markdown"},
+        "linkedin": {"$ref": "#/$defs/url"},
         "seeking": {
           "type": "object",
           "additionalProperties": false,

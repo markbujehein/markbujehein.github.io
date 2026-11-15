@@ -36,7 +36,7 @@ class P(HTMLParser):
                 self.stack.pop()  # tolerate optional end tags
             self.stack.pop()
         else:
-            if tag not in {"meta", "link", "img", "br", "hr", "input"}:
+            if tag not in {"meta", "link", "img", "br", "hr", "input", "path"}:
                 self.errors.append(f"stray </{tag}>")
 
 

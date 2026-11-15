@@ -1,0 +1,51 @@
+---
+import CVNested from "../CVNested.astro";
+import type { CVSection } from "../../utils/cv";
+
+interface Props {
+  id: string;
+  section: CVSection;
+}
+
+const { id, section } = Astro.props;
+---
+
+<section {id} class="scroll-mt-32 md:scroll-mt-24">
+  <h2 class="section-heading heading-bar mb-5">{section.title}</h2>
+  {section.type === "map" && (
+    <dl class="surface-card grid gap-x-6 gap-y-2 sm:grid-cols-[max-content_1fr]">
+      {section.contents.map((item) => (
+        <>
+          <dt class="entry-meta font-bold text-ink-950 dark:text-paper-50">{item.name}</dt>
+          <dd class="entry-summary">{item.value}</dd>
+        </>
+      ))}
+    </dl>
+  )}
+  {section.type === "nested_list" && <CVNested section={section} />}
+  {section.type === "time_table" && (
+    <ul class="timeline">
+      {section.contents.map((entry) => (
+        <li class="timeline-item">
+          <p class="entry-index">{entry.year}</p>
+          <h3 class="entry-title">{entry.title}</h3>
+          {entry.institution && <p class="entry-supporting">{entry.institution}</p>}
+          {entry.description.length > 0 && (
+            <ul class="entry-summary mt-1 list-disc space-y-1 pl-5 marker:text-accent-500">
+              {entry.description.map((line) => (
+                <li>{line}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  )}
+  {section.type === "list" && (
+    <ul class="surface-card entry-summary list-disc space-y-1 pl-9 marker:text-accent-500">
+      {section.contents.map((line) => (
+        <li>{line}</li>
+      ))}
+    </ul>
+  )}
+</section>

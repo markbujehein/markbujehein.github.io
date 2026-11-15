@@ -1,0 +1,217 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+/* Dark mode follows <html data-theme="dark">, set by the inline script in Base.astro. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Palette anchored on the hero: ink #14092e, paper #f4f1fa, accent #fe9f6d. */
+@theme {
+  --color-ink-50: #efecf6;
+  --color-ink-100: #d6d0e6;
+  --color-ink-200: #b3a9d0;
+  --color-ink-300: #9186b8;
+  --color-ink-400: #7a6da6;
+  --color-ink-500: #65588f;
+  --color-ink-600: #4f4373;
+  --color-ink-700: #3a2f58;
+  --color-ink-800: #2a2044;
+  --color-ink-900: #1d1238;
+  --color-ink-950: #14092e;
+
+  --color-paper-50: #faf9fc;
+  --color-paper-100: #f4f1fa;
+  --color-paper-200: #e9e4f3;
+  --color-paper-300: #d9d4e5;
+  --color-paper-400: #b9b1cf;
+  --color-paper-500: #9a90b6;
+  --color-paper-600: #7d7299;
+  --color-paper-700: #62587c;
+  --color-paper-800: #483f5e;
+  --color-paper-900: #322b43;
+  --color-paper-950: #201b2b;
+
+  --color-accent-50: #fff4ec;
+  --color-accent-100: #ffe5d3;
+  --color-accent-200: #ffcaa8;
+  --color-accent-300: #fead7d;
+  --color-accent-400: #fe9f6d;
+  --color-accent-500: #f0783b;
+  --color-accent-600: #d45a1f;
+  --color-accent-700: #a8420f;
+  --color-accent-800: #82330d;
+  --color-accent-900: #5e270c;
+  --color-accent-950: #331204;
+
+  /* The hero's ring colours, a magma scale. Used for small accent marks, not for text. */
+  --color-magma-yellow: #fcfdbf;
+  --color-magma-orange: #fe9f6d;
+  --color-magma-rose: #de4968;
+  --color-magma-magenta: #8c2981;
+  --color-magma-deep: #3b0f70;
+
+  --font-heading: var(--font-serif), Georgia, serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* One gradient from the hero rings, orange to magenta (the pale yellow vanishes on paper). */
+:root {
+  --gradient-magma: linear-gradient(
+    90deg,
+    var(--color-magma-orange),
+    var(--color-magma-rose),
+    var(--color-magma-magenta)
+  );
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-paper-50 font-sans text-ink-700 dark:bg-ink-950 dark:text-paper-300;
+  }
+  ::selection {
+    @apply bg-accent-400 text-ink-950;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent-600 dark:outline-accent-400;
+  }
+}
+
+/* Component classes. Shapes follow the hero: 6px radius, hairline borders, a 2px accent rule,
+   solid fills instead of shadows. The accent is a set of small marks (bar, dot, rule, glow). */
+
+/* Page structure */
+@utility page-stack {
+  @apply space-y-8 pb-2 sm:space-y-12 sm:pb-4;
+}
+@utility page-header {
+  @apply relative space-y-3 border-b border-paper-300 pt-2 pb-5 sm:pb-6 dark:border-ink-700;
+}
+@utility page-title {
+  @apply font-heading leading-[1.05] font-bold tracking-[-0.02em] text-ink-950 dark:text-paper-50;
+  font-size: clamp(2.1rem, 1.5rem + 3vw, 3rem);
+}
+@utility page-description {
+  @apply max-w-[44rem] text-[1.0625rem] leading-7 text-ink-600 dark:text-paper-300;
+}
+@utility section-heading {
+  @apply font-heading text-2xl leading-[1.1] font-bold tracking-[-0.015em] text-ink-950 sm:text-[1.75rem] dark:text-paper-50;
+}
+
+/* Entry hierarchy: title, supporting text, summary, metadata */
+@utility entry-title {
+  @apply font-heading text-[1.25rem] leading-[1.28] font-bold tracking-[-0.01em] text-ink-950 dark:text-paper-50;
+}
+@utility entry-supporting {
+  @apply text-base leading-6 text-ink-600 dark:text-paper-300;
+}
+@utility entry-summary {
+  @apply text-base leading-[1.65rem] text-ink-700 dark:text-paper-300;
+}
+@utility entry-meta {
+  @apply text-sm leading-[1.375rem] text-ink-600 dark:text-paper-300;
+}
+@utility entry-index {
+  @apply font-mono text-xs leading-[1.125rem] font-semibold whitespace-nowrap text-accent-700 tabular-nums dark:text-accent-300;
+}
+
+/* Surfaces: solid fill, hairline border, the hero's 2px accent rule on the left */
+@utility surface-card {
+  @apply rounded-md border border-l-2 border-paper-300 border-l-accent-500 bg-paper-100 p-5 transition-[border-color,box-shadow] duration-200 sm:p-6 dark:border-ink-700 dark:border-l-accent-400 dark:bg-ink-900;
+}
+@utility surface-card-hover {
+  @apply surface-card hover:border-accent-500 focus-within:border-accent-500 dark:hover:border-accent-400;
+  &:hover,
+  &:focus-within {
+    box-shadow: 0 0 26px -10px var(--color-magma-rose);
+  }
+}
+@utility meta-chip {
+  @apply inline-flex min-h-7 items-center gap-1.5 rounded border border-paper-300 bg-paper-50 px-2.5 py-1 text-xs leading-none font-semibold text-ink-700 dark:border-ink-700 dark:bg-ink-800 dark:text-paper-300;
+}
+
+/* Actions */
+@utility action-link {
+  @apply inline-flex min-h-11 items-center gap-1.5 rounded px-1 text-sm font-bold text-accent-700 no-underline underline-offset-4 transition-colors duration-200 hover:text-accent-900 hover:underline dark:text-accent-300 dark:hover:text-accent-100;
+}
+
+/* Rendered Markdown (Preflight strips list bullets, heading scale and link styling). */
+@layer components {
+  .prose-site {
+    @apply text-base leading-7 text-ink-700 dark:text-paper-300;
+  }
+  .prose-site > * + * {
+    @apply mt-4;
+  }
+  .prose-site :where(h2, h3, h4) {
+    @apply mt-8 mb-2 font-heading font-bold text-ink-950 dark:text-paper-50;
+  }
+  .prose-site h2 {
+    @apply text-2xl;
+  }
+  .prose-site h3 {
+    @apply text-xl;
+  }
+  .prose-site ul {
+    @apply list-disc pl-6 marker:text-accent-500;
+  }
+  .prose-site ol {
+    @apply list-decimal pl-6 marker:text-accent-600;
+  }
+  .prose-site li + li {
+    @apply mt-1;
+  }
+  .prose-site a {
+    @apply text-accent-700 underline underline-offset-4 hover:text-accent-900 dark:text-accent-300 dark:hover:text-accent-100;
+  }
+  .prose-site :where(code) {
+    @apply rounded bg-paper-200 px-1 py-0.5 font-mono text-[0.9em] dark:bg-ink-800;
+  }
+  .prose-site blockquote {
+    @apply border-l-2 border-accent-500 pl-4 text-ink-600 dark:text-paper-400;
+  }
+}
+
+/* Accent marks, all drawn from the hero's magma scale. */
+@utility heading-bar {
+  @apply relative pb-2;
+  &::after {
+    content: "";
+    background: var(--gradient-magma);
+    @apply absolute bottom-0 left-0 h-[3px] w-10 rounded-full;
+  }
+}
+@utility timeline {
+  @apply relative ml-1.5 border-l border-paper-300 pl-6 dark:border-ink-700;
+}
+@utility timeline-item {
+  @apply relative pb-6;
+  &::before {
+    content: "";
+    @apply absolute top-1.5 -left-[1.9rem] size-3 rounded-full border-2 bg-paper-50 dark:bg-ink-950;
+    border-color: var(--color-magma-orange);
+  }
+  &:nth-child(3n + 2)::before {
+    border-color: var(--color-magma-rose);
+  }
+  &:nth-child(3n)::before {
+    border-color: var(--color-magma-magenta);
+  }
+}
+@utility nav-dot {
+  @apply relative;
+  &[aria-current="page"]::after {
+    content: "";
+    background: var(--gradient-magma);
+    @apply absolute bottom-1 left-1/2 h-[3px] w-5 -translate-x-1/2 rounded-full;
+  }
+}
+
+/* KaTeX: long formulas scroll sideways instead of widening the page. */
+.katex-display {
+  @apply overflow-x-auto overflow-y-hidden py-1;
+}
