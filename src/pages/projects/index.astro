@@ -21,7 +21,7 @@ const filterItems = projects.map((p) => ({ id: p.id, data: { category: p.data.ca
     <h1 class="page-title">projects</h1>
     <p class="page-description">Research and software projects from my studies and current work.</p>
   </header>
-  <div class="mb-6">
+  <div class="mb-6" data-needs-js>
     <ProjectFilter
       client:load
       items={filterItems}
