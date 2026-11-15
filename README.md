@@ -1,6 +1,6 @@
 # markbujehein.github.io
 
-Source for the personal academic website of **Mark B.H. Sørensen**, published at
+Source for the personal academic website of **Mark Buje Hein**, published at
 <https://markbujehein.github.io>. A static site built with [Astro](https://astro.build/) 7, TypeScript 7 and
 Tailwind CSS 4, with Preact islands and view transitions.
 
