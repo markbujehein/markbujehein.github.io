@@ -143,7 +143,7 @@
 /* Rendered Markdown: Tailwind Typography, themed with the site palette. */
 @layer components {
   .prose-site {
-    @apply prose max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-[-0.01em];
+    @apply prose max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-[-0.01em] prose-code:before:content-none prose-code:after:content-none;
     --tw-prose-body: var(--color-ink-700);
     --tw-prose-headings: var(--color-ink-950);
     --tw-prose-lead: var(--color-ink-600);

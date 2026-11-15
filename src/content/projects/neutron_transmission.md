@@ -12,5 +12,13 @@ My MSc thesis at the University of Copenhagen is titled
 I derived energy-dependent total neutron cross sections from VESUVIO transmission data, calibrated against the
 free-atom limit, and compared the results with cross sections calculated in NCrystal.
 
+The cross section follows from the transmission $$T$$ of a sample with number density $$n$$ and thickness $$d$$:
+
+$$
+T(E) = e^{-n\,d\,\sigma_\mathrm{tot}(E)}
+\qquad\Longrightarrow\qquad
+\sigma_\mathrm{tot}(E) = -\frac{\ln T(E)}{n\,d}.
+$$
+
 The thesis was supervised by Assoc. Prof. Heloisa N. Bordallo (Niels Bohr Institute) and
 Dr. Svemir Rudić (ISIS Neutron and Muon Source). A first-author manuscript based on it is currently in preparation.

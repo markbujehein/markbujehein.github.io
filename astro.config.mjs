@@ -2,7 +2,9 @@
 import { defineConfig, fontProviders } from "astro/config";
 
 import { unified } from "@astrojs/markdown-remark";
+import mdx from "@astrojs/mdx";
 import preact from "@astrojs/preact";
+import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { rehypePlugins, remarkPlugins } from "./src/utils/markdown-plugins";
 
@@ -35,7 +37,7 @@ export default defineConfig({
   // KaTeX math in Markdown: $inline$ and $$ blocks $$, rendered at build time.
   markdown: { processor: unified({ remarkPlugins, rehypePlugins }) },
 
-  integrations: [preact()],
+  integrations: [preact(), mdx(), sitemap()],
 
   vite: {
     plugins: [tailwindcss()],

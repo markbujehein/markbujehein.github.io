@@ -14,6 +14,9 @@ During my MSc I carried out six beamtimes at four large-scale facilities:
 - **Paul Scherrer Institute:** CAMEA (cold-neutron multiplexing). A four-day experiment measured magnon dispersion in antiferromagnetic MnWO4 and used multiplexing of the polychromatic incoming beam to capture more information in shorter time, easing the low counting statistics of neutron scattering.
 - **Diamond Light Source:** VerSoX (soft X-ray spectroscopy).
 
+Diffraction and small-angle scattering are analysed through the momentum transfer $$Q = 4\pi\sin\theta/\lambda$$,
+with Bragg peaks where $$n\lambda = 2d\sin\theta$$ holds.
+
 My tasks included sample preparation, gas loading and in-situ data analysis. I was trusted to support experiments
 independently for my thesis supervisor and departmental researchers, and I wrote beamtime proposals and
 prepared scientific posters and presentations.

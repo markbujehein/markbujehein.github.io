@@ -20,7 +20,8 @@ The site presents a profile, news, a CV with PDF, and research and software proj
 | Path | Purpose |
 |---|---|
 | `src/` | The Astro site: pages, components, content collections, styles, utilities and their tests |
-| `public/` | Static files (favicon, `pdf/cv.pdf`) |
+| `public/` | Static files (favicon, `pdf/cv.pdf`, exported notebooks in `notebooks/`) |
+| `notebooks/` | marimo notebook sources; `pnpm run notebooks` exports them to `public/notebooks/` (needs `uv`) |
 | `tools/` | `import_site_data.py` (content import) and `check_output.py` (post-build checks) |
 | `schema/`, `content/` | Import schema and the importer's current output (Pelican format, see below) |
 | `tests/` | Importer tests (pytest) |

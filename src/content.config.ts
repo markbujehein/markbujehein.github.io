@@ -7,7 +7,7 @@ const text = z.string().transform(decodeEntities);
 const section = { order: z.number().int(), title: text };
 
 const projects = defineCollection({
-  loader: glob({ pattern: "*.md", base: "./src/content/projects" }),
+  loader: glob({ pattern: "*.{md,mdx}", base: "./src/content/projects" }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
