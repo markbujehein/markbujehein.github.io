@@ -1,6 +1,5 @@
 ---
 interface Props {
-  name: string;
   headline: string;
   detail: string;
   role?: string;
@@ -12,21 +11,21 @@ interface Props {
   projectsHref: string;
 }
 
-const { name, headline, detail, role, start, location, contact, linkedin, cvHref, projectsHref } =
+const { headline, detail, role, start, location, contact, linkedin, cvHref, projectsHref } =
   Astro.props;
 
 // Ring radius, stroke, colour and parallax depth (viewBox units). Inner rings move most.
 const rings = [
-  { r: 64, w: 9, c: "#fcfdbf", depth: 30, grow: -0.05 },
-  { r: 112, w: 14, c: "#fe9f6d", depth: 24, grow: -0.03 },
-  { r: 151, w: 7, c: "#de4968", depth: 18, grow: -0.01 },
-  { r: 203, w: 12, c: "#fe9f6d", depth: 13, grow: 0.01 },
-  { r: 238, w: 8, c: "#8c2981", depth: 9, grow: 0.03 },
-  { r: 281, w: 5, c: "#de4968", depth: 5, grow: 0.05 },
+  { r: 64, w: 9, c: "#fcfdbf", depth: 30, grow: -0.05, n: 1, T: 9 },
+  { r: 112, w: 14, c: "#fe9f6d", depth: 24, grow: -0.03, n: 2, T: 14 },
+  { r: 151, w: 7, c: "#de4968", depth: 18, grow: -0.01, n: 2, T: 19 },
+  { r: 203, w: 12, c: "#fe9f6d", depth: 13, grow: 0.01, n: 3, T: 26 },
+  { r: 238, w: 8, c: "#8c2981", depth: 9, grow: 0.03, n: 3, T: 34 },
+  { r: 281, w: 5, c: "#de4968", depth: 5, grow: 0.05, n: 4, T: 44 },
 ];
 ---
 
-<section class="hero" aria-labelledby="hero-name" data-glow="init">
+<section class="hero" aria-labelledby="hero-headline" data-glow="init">
   <!-- Resting hero is the base; this layer sends a glow pulse out from the ring centre. -->
   <div class="hero-dawn" aria-hidden="true"></div>
   <!-- Detector-pixel layer: transparent, only draws pixels the pointer has just passed. Rings and dawn are untouched. -->
@@ -34,7 +33,7 @@ const rings = [
   <div class="hero-inner">
     <svg class="hero-art" data-hero-art viewBox="0 0 600 600" aria-hidden="true" focusable="false">
       <defs>
-        <filter id="hero-grain" x="0" y="0" width="100%" height="100%">
+        <filter id="hero-grain" x="-6%" y="-6%" width="112%" height="112%">
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.9"
@@ -72,14 +71,54 @@ const rings = [
           ))
         }
       </g>
-      <circle cx="300" cy="300" r="22" style="fill: var(--color-tyrian-folio)"></circle>
+      <!-- Electrons: dots orbiting on each ring, drawn outside the grain filter so they stay crisp. -->
+      {
+        rings.map((ring, i) => (
+          <g class="shift" style={`--depth:${ring.depth}; --grow:${ring.grow}`}>
+            <g class="track" style={`--i:${i}`}>
+              <g
+                class="orbit"
+                style={`--i:${i}; --T:${ring.T}s; --dir:${i % 2 ? "reverse" : "normal"}; --a0:${i * 47}deg; --c:${ring.c}`}
+              >
+                {Array.from({ length: ring.n }, (_, k) => {
+                  const a = (k / ring.n) * 2 * Math.PI;
+                  const [ux, uy] = [Math.cos(a), Math.sin(a)];
+                  const [cx, cy] = [300 + ring.r * ux, 300 + ring.r * uy];
+                  const ejected = i < 3 && k === 0; // inner shells are the likeliest to lose an electron
+                  return (
+                    <g
+                      class={`e ${ejected ? "e-out" : "e-hop"}`}
+                      style={`--ux:${ux.toFixed(3)}; --uy:${uy.toFixed(3)}`}
+                    >
+                      <circle class="flash flash-a" cx={cx} cy={cy} r="5" />
+                      {!ejected && <circle class="flash flash-b" cx={cx} cy={cy} r="5" />}
+                      <circle class="electron" cx={cx} cy={cy} r="4.5" />
+                      <circle class="hit" data-tip="electron" cx={cx} cy={cy} r="12" />
+                    </g>
+                  );
+                })}
+              </g>
+            </g>
+          </g>
+        ))
+      }
+      <!-- Every burst starts with a particle arriving from the upper left (a neutron or a photon: the sketch covers both). -->
+      <g class="particle">
+        <circle class="p-halo" cx="300" cy="300" r="11"></circle>
+        <circle class="p-head" cx="300" cy="300" r="4.5"></circle>
+      </g>
+      <circle
+        class="nucleus"
+        data-tip="nucleus"
+        cx="300"
+        cy="300"
+        r="22"
+        style="fill: var(--color-tyrian-folio)"></circle>
+      <circle class="nucleus-flash" cx="300" cy="300" r="22"></circle>
     </svg>
 
     <div class="hero-copy">
-      <h1 id="hero-name" class="hero-name">
-        {name}
-      </h1>
-      <p class="hero-headline">{headline}</p>
+      <h1 id="hero-headline" class="hero-headline">{headline}</h1>
       <p class="hero-detail">{detail}</p>
       {role && <p class="hero-role">{role}</p>}
       {
@@ -104,6 +143,11 @@ const rings = [
       {contact && <p class="hero-contact">{contact}</p>}
     </div>
   </div>
+  <div class="hero-tip" role="tooltip" hidden></div>
+  <button type="button" class="hero-pause" aria-label="Pause animation" aria-pressed="false">
+    <span class="i-pause icon-[lucide--pause] size-4" aria-hidden="true"></span>
+    <span class="i-play icon-[lucide--play] size-4" aria-hidden="true"></span>
+  </button>
 </section>
 
 <style>
@@ -134,6 +178,7 @@ const rings = [
     initial-value: 0;
   }
   .hero {
+    --t0: 2.4s; /* the first burst waits for the rings' entrance and the particle's flight; every burst animation shares it */
     --pulse: 110 255 170; /* radioactive phosphor */
     --pulse-edge: 140 41 129; /* magma magenta, the trailing edge */
     --cx: calc(
@@ -160,7 +205,7 @@ const rings = [
         rgb(var(--pulse-edge) / 0.3) var(--r),
         transparent calc(var(--r) + 5rem)
       );
-    animation: hero-pulse 10s cubic-bezier(0.3, 0.3, 0.5, 1) infinite;
+    animation: hero-pulse 10s cubic-bezier(0.3, 0.3, 0.5, 1) var(--t0) infinite;
   }
   @keyframes hero-pulse {
     0% {
@@ -239,12 +284,272 @@ const rings = [
       scale(calc(1 + var(--p) * var(--grow) * 2));
   }
 
+  .orbit {
+    transform-origin: 300px 300px;
+    transform: rotate(var(--a0));
+    animation: orbit var(--T) linear infinite var(--dir);
+  }
+  /* The electrons ride on their ring: same entrance, same swell, same delays as .ring below. */
+  .track {
+    transform-origin: 300px 300px;
+    animation:
+      ring-in 1.1s ease-out both,
+      ring-kick 10s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 140ms), calc(var(--t0) + 0.25s + var(--i) * 0.25s);
+  }
+  @keyframes orbit {
+    from {
+      transform: rotate(var(--a0));
+    }
+    to {
+      transform: rotate(calc(var(--a0) + 360deg));
+    }
+  }
+  /* The burst strikes each electron as the glow front reaches its ring (same 10 s clock as the pulse).
+     Every electron radiates briefly when kicked (flash-a); the three inner-shell ones are ejected (e-out); the rest
+     hop to a larger orbit and drop back, emitting a photon in their ring's colour (e-hop, flash-b). */
+  .e,
+  .flash {
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-delay: calc(var(--t0) + 0.35s + var(--i) * 0.25s);
+  }
+  .e-hop {
+    animation-name: e-hop;
+    animation-timing-function: ease-in-out;
+  }
+  .e-out {
+    animation-name: e-out;
+    animation-timing-function: ease-in;
+  }
+  .flash {
+    fill: none;
+    stroke-width: 1.5;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation-timing-function: ease-out;
+    pointer-events: none;
+  }
+  .flash-a {
+    stroke: #fff7d6;
+    animation-name: flash-a;
+  }
+  .flash-b {
+    stroke: var(--c);
+    stroke-width: 2;
+    animation-name: flash-b;
+  }
+  @keyframes e-hop {
+    0%,
+    9%,
+    100% {
+      transform: translate(0, 0);
+    }
+    3%,
+    6% {
+      transform: translate(calc(var(--ux) * 10px), calc(var(--uy) * 10px));
+    }
+  }
+  @keyframes e-out {
+    0% {
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+    }
+    10% {
+      opacity: 1;
+    }
+    14% {
+      transform: translate(calc(var(--ux) * 480px), calc(var(--uy) * 480px));
+      opacity: 0;
+    }
+    15%,
+    84% {
+      transform: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+    100% {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  @keyframes flash-a {
+    0% {
+      opacity: 0.9;
+      scale: 1;
+    }
+    5%,
+    100% {
+      opacity: 0;
+      scale: 3.2;
+    }
+  }
+  @keyframes flash-b {
+    0%,
+    8% {
+      opacity: 0;
+      scale: 1;
+    }
+    9% {
+      opacity: 0.85;
+      scale: 1;
+    }
+    18%,
+    100% {
+      opacity: 0;
+      scale: 4.5;
+    }
+  }
+  .hero[data-paused] *,
+  .hero[data-held] * {
+    animation-play-state: paused !important; /* a tooltip is open */
+  }
+  /* The particle arrives at the nucleus exactly when the burst starts (t0); it flies in from above-left, outside the hero. */
+  .hero-art {
+    overflow: visible;
+  }
+  .particle {
+    transform-origin: 300px 300px;
+    opacity: 0;
+    animation: particle-in 10s linear infinite;
+    animation-delay: calc(var(--t0) - 1.1s);
+  }
+  @keyframes particle-in {
+    0% {
+      transform: translate(-380px, -380px) scale(0.12); /* far away: small and faint, coming from behind the rings */
+      opacity: 0;
+    }
+    3% {
+      opacity: 1;
+    }
+    11% {
+      transform: translate(0, 0) scale(1.7); /* arrives: close, so large */
+      opacity: 1;
+    }
+    11.5%,
+    100% {
+      transform: translate(0, 0) scale(1.7);
+      opacity: 0;
+    }
+  }
+  .p-halo {
+    fill: #fff7d6;
+    opacity: 0.25;
+  }
+  .p-head {
+    fill: #fff;
+  }
+  .nucleus-flash {
+    fill: none;
+    stroke: #fff7d6;
+    stroke-width: 2;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    pointer-events: none;
+    animation: nucleus-flash 10s ease-out var(--t0) infinite;
+  }
+  @keyframes nucleus-flash {
+    0% {
+      opacity: 0.9;
+      scale: 1;
+    }
+    7%,
+    100% {
+      opacity: 0;
+      scale: 2.6;
+    }
+  }
+  .hit {
+    fill: transparent;
+    pointer-events: all; /* the ring art is click-through; only the dots and the nucleus answer the pointer */
+  }
+  .nucleus {
+    pointer-events: all;
+  }
+  .hit,
+  .nucleus {
+    cursor: pointer;
+  }
+  .hero-tip {
+    position: fixed;
+    z-index: 30;
+    box-sizing: border-box;
+    width: min(20rem, calc(100vw - 2.5rem));
+    aspect-ratio: 3 / 4;
+    overflow: auto;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgb(244 241 250 / 0.3);
+    border-radius: 6px;
+    background: rgb(20 9 46 / 0.96);
+    color: var(--hero-text);
+    font-size: 0.85rem;
+    line-height: 1.45;
+    pointer-events: none;
+  }
+  .hero-pause {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid rgb(244 241 250 / 0.25);
+    border-radius: 6px;
+    background: rgb(20 9 46 / 0.55);
+    color: rgb(244 241 250 / 0.75);
+    cursor: pointer;
+  }
+  .hero-pause:hover,
+  .hero-pause:focus-visible {
+    color: #fff;
+    border-color: rgb(244 241 250 / 0.6);
+  }
+  .hero-pause .i-play,
+  .hero-pause[aria-pressed="true"] .i-pause {
+    display: none;
+  }
+  .hero-pause[aria-pressed="true"] .i-play {
+    display: block;
+  }
+  .hero-tip[hidden] {
+    display: none;
+  }
+  .hero-tip :global(h2),
+  .hero-tip :global(ul) {
+    margin: 0;
+  }
+  .hero-tip :global(h2) {
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--hero-accent);
+  }
+  .hero-tip :global(ul) {
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+  .hero-tip :global(li) + :global(li) {
+    margin-top: 0.3rem;
+  }
+
+  .electron {
+    fill: #fff7d6;
+    stroke: var(--color-tyrian-folio); /* dark outline lifts the dot off any ring colour */
+    stroke-width: 2.5;
+  }
+
   .ring {
     transform-origin: 300px 300px;
     animation:
       ring-in 1.1s ease-out both,
       ring-kick 10s ease-in-out infinite;
-    animation-delay: calc(var(--i) * 140ms), calc(0.25s + var(--i) * 0.25s);
+    animation-delay: calc(var(--i) * 140ms), calc(var(--t0) + 0.25s + var(--i) * 0.25s);
   }
 
   /* The burst shoves the rings: each swells a touch just as the glow front reaches it (inner ring first, outer last,
@@ -277,14 +582,17 @@ const rings = [
     max-width: 30rem;
   }
 
-  .hero-name {
-    margin: 0 0 1.5rem;
-    font-size: 1.05rem;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    color: rgb(244 241 250 / 0.82);
+  /* Fluorescence: the gamma burst makes the text glow green as the front passes (--fl is set per block by the script). */
+  .hero-copy > :global(*) {
+    text-shadow:
+      0 0 calc(var(--fl, 0) * 10px) rgb(90 255 160 / var(--fl, 0)),
+      0 0 calc(var(--fl, 0) * 28px) rgb(60 255 140 / calc(var(--fl, 0) * 0.8)),
+      0 0 calc(var(--fl, 0) * 60px) rgb(40 255 120 / calc(var(--fl, 0) * 0.4));
   }
-
+  .hero-copy .hero-headline,
+  .hero-copy .hero-detail {
+    color: color-mix(in srgb, var(--hero-text), #7dffb5 calc(var(--fl, 0) * 70%));
+  }
   .hero-headline {
     margin: 0 0 0.75rem;
     font-family: var(--font-serif);
@@ -359,7 +667,13 @@ const rings = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ring {
+    .ring,
+    .track,
+    .orbit,
+    .e,
+    .flash,
+    .particle,
+    .nucleus-flash {
       animation: none;
     }
   }
@@ -386,7 +700,103 @@ const rings = [
 </style>
 
 <script>
-  import { startHeroGlow, type GlowRing } from "./heroGlow";
+  // Secret tooltips: hover (or tap) the nucleus or an electron.
+  const TIPS: Record<string, { title: string; items: string[] }> = {
+    nucleus: {
+      title: "At the nucleus",
+      items: [
+        "Neutron in: radiative capture (n,γ) forms an excited compound nucleus at roughly the neutron separation energy, ~6–8 MeV. It de-excites within ~10⁻¹⁶–10⁻¹⁴ s by emitting a prompt gamma cascade (the basis of prompt-gamma activation analysis).",
+        "Photon in: from ~8 MeV, (γ,n) can knock out a neutron, peaking near 15–20 MeV (the giant dipole resonance). Below that, mostly inelastic scattering, so again gammas come out.",
+        "Either way, the nucleus emits MeV-range gammas.",
+      ],
+    },
+    electron: {
+      title: "What the atomic electrons see",
+      items: [
+        "MeV gammas rarely interact with bound electrons; they mostly pass straight through.",
+        "Internal conversion: the nucleus can hand its de-excitation energy directly to an inner electron (usually K) and eject it.",
+        "The vacancy is filled from L, then M, and so on, each step emitting a characteristic X-ray (Kα, Lα, Mα) or an Auger electron. The vacancy moves outward and the photon energies drop at each step (hν = ΔE).",
+      ],
+    },
+  };
+
+  const setupTips = () => {
+    for (const hero of document.querySelectorAll<HTMLElement>(".hero:not([data-tips])")) {
+      hero.dataset.tips = "";
+      const tip = hero.querySelector<HTMLElement>(".hero-tip");
+      if (!tip) continue;
+      let shown = "";
+      let current: Element | null = null;
+      const GAP = 14;
+      const MARGIN = 20; // keep clear of the window border
+      const top = () =>
+        (document.querySelector("header")?.getBoundingClientRect().bottom ?? 0) + 12; // below the sticky navbar
+      const place = (target: Element) => {
+        const r = target.getBoundingClientRect();
+        const { width, height } = tip.getBoundingClientRect();
+        let x = r.left - GAP - width; // left of the item
+        if (x < MARGIN) x = Math.min(r.right + GAP, innerWidth - width - MARGIN); // no room on the left: right side
+        const y = r.top + r.height / 2 - height / 2;
+        tip.style.left = `${Math.max(MARGIN, x)}px`;
+        tip.style.top = `${Math.max(top(), Math.min(y, innerHeight - height - MARGIN))}px`;
+      };
+      const hide = () => {
+        tip.hidden = true;
+        shown = "";
+        current = null;
+        delete hero.dataset.paused; // the animation resumes
+      };
+      const show = (target: Element, key: string) => {
+        const content = TIPS[key];
+        if (!content) return;
+        if (shown !== key) {
+          const h = document.createElement("h2");
+          h.textContent = content.title;
+          const ul = document.createElement("ul");
+          for (const text of content.items) {
+            const li = document.createElement("li");
+            li.textContent = text;
+            ul.append(li);
+          }
+          tip.replaceChildren(h, ul);
+          shown = key;
+        }
+        current = target;
+        hero.dataset.paused = ""; // freeze every animation while a tooltip is open
+        tip.hidden = false;
+        place(target);
+      };
+      // Click only: press on the nucleus or an electron opens it (and pauses); press on it again, anywhere else, or Esc closes.
+      const onPress = (e: PointerEvent) => {
+        if (!hero.isConnected) {
+          document.removeEventListener("pointerdown", onPress);
+          document.removeEventListener("keydown", onKey);
+          removeEventListener("scroll", hide);
+          return;
+        }
+        const target = (e.target as Element).closest?.("[data-tip]");
+        if (!target || !hero.contains(target)) return hide();
+        if (target === current) return hide();
+        show(target, target.getAttribute("data-tip") ?? "");
+      };
+      const onKey = (e: KeyboardEvent) => e.key === "Escape" && hide();
+      document.addEventListener("pointerdown", onPress);
+      document.addEventListener("keydown", onKey);
+      const pause = hero.querySelector<HTMLButtonElement>(".hero-pause");
+      pause?.addEventListener("click", () => {
+        const held = hero.toggleAttribute("data-held");
+        pause.setAttribute("aria-pressed", String(held));
+        pause.setAttribute("aria-label", held ? "Resume animation" : "Pause animation");
+      });
+      addEventListener("scroll", hide, { passive: true }); // the item would move away from its tooltip
+    }
+  };
+  setupTips();
+  document.addEventListener("astro:page-load", setupTips);
+</script>
+
+<script>
+  import { startFluorescence, startHeroGlow, type GlowRing } from "./heroGlow";
 
   // WebGL glow behind the rings. Any failure leaves the CSS dawn layer as the whole effect.
   const startGlows = () => {
@@ -396,6 +806,7 @@ const rings = [
       if (!canvas || !art) continue;
       try {
         startHeroGlow(canvas, art, JSON.parse(canvas.dataset.rings ?? "[]") as GlowRing[], hero);
+        startFluorescence(hero, art);
       } catch {
         hero.dataset.glow = "fallback";
       }
