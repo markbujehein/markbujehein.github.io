@@ -3,7 +3,8 @@
     python tools/import_site_data.py --source site.yml [--out .] [--denylist denylist.txt] [--check] [--pdf]
 
 The export is public by definition. This script validates it, runs the safety gates and renders
-home.md, news.md, cv.yml, project pages and the BibTeX file. It never invents or rewrites values.
+src/content/home/index.md, one news file per item, src/data/cv.yml and one page per project
+(publications are validated but not rendered: the site has no publications page). It never invents or rewrites values.
 Findings are reported as `json.path: rule-id` only; values are never printed.
 """
 import argparse
@@ -25,7 +26,8 @@ from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = ROOT / "schema" / "site-export.schema.json"
-MANIFEST = Path("content/.generated-manifest.json")
+MANIFEST = Path("src/content/.generated-manifest.json")
+CATEGORIES = ("research", "software")  # must match the `projects` collection in src/content.config.ts
 HEADER = "# GENERATED from the source export by tools/import_site_data.py. Do not edit by hand.\n"
 
 # The only address allowed in public output, in its obfuscated form.
@@ -96,7 +98,7 @@ def gate(data, denylist=()):
     return findings
 
 
-def semantic(data, out):
+def semantic(data):
     findings = []
     slugs = [p["slug"] for p in data["projects"]]
     findings += [f"projects[{i}].slug: duplicate" for i, s in enumerate(slugs) if slugs.index(s) != i]
@@ -107,24 +109,18 @@ def semantic(data, out):
             dt.date.fromisoformat(n["date"] if len(n["date"]) == 10 else n["date"] + "-01")
         except ValueError:
             findings.append(f"news[{i}].date: invalid-date")
-    cats = front_matter(out / "content/pages/projects.md").get("display_categories", [])
-    findings += [f"projects[{i}].category: not-in-display_categories" for i, p in enumerate(data["projects"]) if p["category"] not in cats]
+    findings += [f"projects[{i}].category: unknown-category" for i, p in enumerate(data["projects"]) if p["category"] not in CATEGORIES]
     return findings
 
 
-def front_matter(path):
-    text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
-    return yaml.safe_load(text.split("\n---\n", 1)[0].removeprefix("---\n")) or {}
-
-
-def validate(source, out, denylist=()):
+def validate(source, denylist=()):
     data, findings = load(source)
     if not isinstance(data, dict):
         raise ExportError(["$: not-a-mapping"])
     schema_errors = sorted(Draft202012Validator(json.loads(SCHEMA.read_text())).iter_errors(data), key=lambda e: list(map(str, e.absolute_path)))
     findings += [f"{'.'.join(map(str, e.absolute_path)) or '$'}: schema-{e.validator}" for e in schema_errors]
     if not schema_errors:  # semantic checks assume a schema-valid document
-        findings += gate(data, denylist) + semantic(data, out)
+        findings += gate(data, denylist) + semantic(data)
     if findings:
         raise ExportError(sorted(set(findings)))
     return data
@@ -146,10 +142,7 @@ def block(text, indent):
 
 def render_home(d):
     p = d["profile"]
-    address = "".join(f"<p>{esc(x)}</p>" for x in (p.get("contact_line"), p.get("location")) if x)
-    out = ["---", "Title: Home", "Template: about", "URL: ''", "save_as: index.html",
-           f"subtitle: {q_plain(p['subtitle'])}", "status: published", "", "profile:", "  align: right",
-           "  image: images/profile.jpg", "  image_circular: 1", f"  address: {q(address, ensure_ascii=False)}"]
+    out = ["---", f"subtitle: {q_plain(p['subtitle'])}"]
     if "seeking" in p:
         out.append("hero:")
         out += [f"  {k}: {q_plain(v)}" for k, v in p["seeking"].items()]
@@ -157,31 +150,31 @@ def render_home(d):
             out.append(f"  contact: {q_plain(p['contact_line'])}")
         if p.get("linkedin"):
             out.append(f"  linkedin: {q_plain(p['linkedin'])}")
-    selected = any(x.get("selected") for x in d["publications"])
-    out += ["", "news: true", "latest_posts: false", f"selected_papers: {str(selected).lower()}", "talks: false", "---", ""]
-    return "\n".join(out) + "\n" + p["bio_markdown"].strip() + "\n"
+    return "\n".join(out + ["---", ""]) + "\n" + p["bio_markdown"].strip() + "\n"
 
 
-def render_news(d):
-    items = sorted(d["news"], key=lambda n: n["date"], reverse=True)  # the site never sorts; YYYY-MM sorts before YYYY-MM-DD
-    out = ["---", "title: news", "template: news_archive", "nav: false", "summary: An archive of announcements.",
-           "status: published", ""]
-    out.append("entries:" if items else "entries: []")
-    for n in items:
-        month_only = len(n["date"]) == 7  # the source states a month only; the site then shows "Oct 2026", not an invented day
-        out += [f"  - date: {n['date'] + '-01' if month_only else n['date']}"]
-        out += ["    month_only: true"] if month_only else []
-        out += ["    content: |", block(n["content"], 6), ""]
-    return "\n".join(out) + "---\n"
+def render_news(n):
+    month_only = len(n["date"]) == 7  # the source states a month only; the site then shows "Oct 2026", not an invented day
+    head = ["---", f"date: {n['date'] + '-01' if month_only else n['date']}"] + (["monthOnly: true"] if month_only else []) + ["---", ""]
+    return "\n".join(head) + "\n" + n["content"].strip() + "\n"
+
+
+def slug(title):
+    return re.sub(r"[^a-z0-9]+", "-", title.lower().replace("&", "and")).strip("-")
 
 
 def render_cv(d):
     cv = d["cv"]
-    out = [HEADER.rstrip(), "- title: General Information", "  type: map", "  contents:"]
+    out = [HEADER.rstrip(), "- id: general-information", "  order: 0", "  title: General Information", "  type: map", "  contents:"]
+    seen = {"general-information"}
     for g in cv["general"]:
         out += [f"    - name: {q_plain(g['name'])}", f"      value: {q_plain(g['value'])}"]
-    for s in cv["sections"]:
-        out += ["", f"- title: {q_plain(s['title'])}", f"  type: {s['type']}", "  contents:"]
+    for i, s in enumerate(cv["sections"], start=1):
+        sid = base = slug(s["title"])
+        while sid in seen:  # ids must be unique within the collection
+            sid = f"{base}-{i}"
+        seen.add(sid)
+        out += ["", f"- id: {sid}", f"  order: {i}", f"  title: {q_plain(s['title'])}", f"  type: {s['type']}", "  contents:"]
         for e in s["entries"]:
             if s["type"] == "list":
                 out.append(f"    - {q_plain(e)}")
@@ -200,33 +193,19 @@ def render_cv(d):
 
 
 def render_project(p):
-    return "\n".join(["---", f"title: {q_plain(p['title'])}", "template: page", f"summary: {q_plain(p['summary'])}", "img:",
+    return "\n".join(["---", f"title: {q_plain(p['title'])}", f"summary: {q_plain(p['summary'])}",
                       f"importance: {p['importance']}", f"category: {p['category']}", "---", "", p["body_markdown"].strip(), ""])
 
 
-def render_bib(d):
-    out = ["---", "---", ""]
-    if not d["publications"]:
-        return "\n".join(out) + "@comment{No publications yet.}\n"
-    for p in d["publications"]:
-        fields = {"title": p["title"], "author": " and ".join(p["authors"]), "year": p["year"]}
-        fields.update({k: p[k] for k in ("journal", "booktitle", "school", "doi") if k in p})
-        fields.update(p.get("links", {}))
-        if p.get("selected"):
-            fields["selected"] = "true"
-        body = ",\n".join(f"  {k} = {{{esc(v)}}}" for k, v in fields.items())
-        out.append(f"@{p['type']}{{{p['key']},\n{body}\n}}\n")
-    return "\n".join(out)
-
-
 def generated_files(d):
-    files = {
-        "content/pages/home.md": render_home(d),
-        "content/pages/news.md": render_news(d),
-        "content/data/cv.yml": render_cv(d),
-        "content/pages/publications.bib": render_bib(d),
-    }
-    files.update({f"content/projects/{p['slug']}.md": render_project(p) for p in d["projects"]})
+    files = {"src/content/home/index.md": render_home(d), "src/data/cv.yml": render_cv(d)}
+    for n in sorted(d["news"], key=lambda n: n["date"], reverse=True):
+        name, k = n["date"], 1
+        while f"src/content/news/{name}.md" in files:  # two items on one date
+            k += 1
+            name = f"{n['date']}-{k}"
+        files[f"src/content/news/{name}.md"] = render_news(n)
+    files.update({f"src/content/projects/{p['slug']}.md": render_project(p) for p in d["projects"]})
     return files
 
 
@@ -238,6 +217,9 @@ def write(path, text):
     return True
 
 
+GENERATED_DIRS = ("src/content/news/", "src/content/projects/")  # the manifest tracks these; home and cv have fixed names
+
+
 def apply(d, out):
     files = generated_files(d)
     manifest_path = out / MANIFEST
@@ -246,12 +228,9 @@ def apply(d, out):
         write(out / rel, text)
     # Delete only files this tool generated earlier (listed in the manifest), never hand-written ones.
     for rel in old:
-        if rel not in files and re.fullmatch(r"content/projects/[a-z0-9][a-z0-9_-]*\.md", rel):
+        if rel not in files and re.fullmatch(r"src/content/(news|projects)/[a-z0-9][a-z0-9_.-]*\.md", rel):
             (out / rel).unlink(missing_ok=True)
-    pub = out / "content/pages/publications.md"
-    status = "published" if d["publications"] else "skip"
-    write(pub, re.sub(r"(?m)^status: .*$", f"status: {status}", pub.read_text(encoding="utf-8").replace("\r\n", "\n"), count=1))
-    write(manifest_path, json.dumps(sorted(r for r in files if r.startswith("content/projects/")), indent=2) + "\n")
+    write(manifest_path, json.dumps(sorted(r for r in files if r.startswith(GENERATED_DIRS)), indent=2) + "\n")
 
 
 TEX_ESC = {"\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#", "_": r"\_", "{": r"\{", "}": r"\}",
@@ -338,7 +317,7 @@ def build_pdf(d, out):
             r = subprocess.run([exe, "-interaction=nonstopmode", "-halt-on-error", "cv.tex"], cwd=t, capture_output=True, text=True, env=env)
             if r.returncode:
                 raise SystemExit("lualatex failed:\n" + "\n".join(r.stdout.splitlines()[-15:]))
-        dest = out / "content/pdf/cv.pdf"
+        dest = out / "public/pdf/cv.pdf"
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(t) / "cv.pdf", dest)
     finally:
@@ -351,13 +330,13 @@ def main(argv=None):
     ap.add_argument("--out", default=str(ROOT))
     ap.add_argument("--denylist", help="file with one private term per line (# comments allowed)")
     ap.add_argument("--check", action="store_true", help="validate only, write nothing")
-    ap.add_argument("--pdf", action="store_true", help="also build content/pdf/cv.pdf with lualatex")
+    ap.add_argument("--pdf", action="store_true", help="also build public/pdf/cv.pdf with lualatex")
     a = ap.parse_args(argv)
     deny = []
     if a.denylist:
         deny = [t.strip().lower() for t in Path(a.denylist).read_text(encoding="utf-8").splitlines() if t.strip() and not t.startswith("#")]
     try:
-        data = validate(a.source, Path(a.out), deny)
+        data = validate(a.source, deny)
     except ExportError as e:
         print("Export rejected:", *e.findings, sep="\n  ", file=sys.stderr)
         return 1
