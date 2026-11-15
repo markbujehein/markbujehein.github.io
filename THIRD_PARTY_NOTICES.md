@@ -26,3 +26,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Lucide icons
+
+The site's icons are from Lucide ([lucide-icons/lucide](https://github.com/lucide-icons/lucide)), by Lucide Contributors, ISC licence ([LICENSE](https://github.com/lucide-icons/lucide/blob/main/LICENSE)). They are read at build time from `@iconify-json/lucide` through `@iconify/tailwind4` (MIT), and only the icons used are written into the site's CSS.
+
+## kinu (design reference)
+
+The shared `btn` and `chip` styles, the dialog fade and the CSS-only approach are shaped after [kinu](https://github.com/developit/kinu) by Jason Miller, which declares MIT in its `package.json`. No kinu code is copied; the components in `src/styles/global.css` are written for this site.

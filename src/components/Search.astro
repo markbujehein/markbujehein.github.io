@@ -10,25 +10,13 @@
   aria-label="Search (press / or Ctrl+K)"
   class="flex h-11 w-11 cursor-pointer items-center justify-center rounded border border-sunlit-vellum-darker text-silverpoint hover:text-arcane-intellect dark:border-midnight-codex-lighter dark:text-lunar-vellum-darker dark:hover:text-arcane-torrent"
 >
-  <svg
-    viewBox="0 0 24 24"
-    width="20"
-    height="20"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    aria-hidden="true"
-  >
-    <circle cx="11" cy="11" r="7"></circle>
-    <path d="m20 20-3.5-3.5"></path>
-  </svg>
+  <span class="icon-[lucide--search] size-5" aria-hidden="true"></span>
 </button>
 
 <dialog
   id="search-dialog"
   aria-label="Search"
-  class="mx-auto mt-[10vh] mb-auto w-[min(40rem,calc(100vw-2rem))] rounded-md border border-sunlit-vellum-darker bg-sunlit-vellum p-0 text-lampblack-ink-lighter backdrop:bg-lampblack-ink/60 dark:border-midnight-codex-lighter dark:bg-midnight-codex dark:text-lunar-vellum-darker"
+  class="mx-auto mt-[10vh] mb-auto w-[min(40rem,calc(100vw-2rem))] rounded-md border border-sunlit-vellum-darker bg-sunlit-vellum p-0 text-lampblack-ink-lighter backdrop:bg-lampblack-ink/60 backdrop:backdrop-blur-sm dark:border-midnight-codex-lighter dark:bg-midnight-codex dark:text-lunar-vellum-darker"
 >
   <input
     id="search-input"
