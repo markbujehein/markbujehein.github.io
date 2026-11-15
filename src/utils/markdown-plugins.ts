@@ -1,6 +1,7 @@
 import type { RehypePlugin, RehypePlugins, RemarkPlugins } from "@astrojs/markdown-remark";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
+import { remarkCitations } from "./remark-citations";
 
 // rehype-katex only records a warning on bad TeX and renders a red error span. Fail instead.
 const failOnBadMath: RehypePlugin = () => (_tree, file) => {
@@ -29,5 +30,5 @@ const wrapTables: RehypePlugin = () => (tree) => {
 
 // Shared by astro.config.mjs and the markdown tests, so the test checks the real pipeline.
 // Inline math needs $$...$$, so prices like "$5 and $10" stay text.
-export const remarkPlugins: RemarkPlugins = [[remarkMath, { singleDollarTextMath: false }]];
+export const remarkPlugins: RemarkPlugins = [[remarkMath, { singleDollarTextMath: false }], remarkCitations];
 export const rehypePlugins: RehypePlugins = [rehypeKatex, failOnBadMath, wrapTables];

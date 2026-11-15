@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { definition } from "../utils/terms";
 
 interface Props {
   /** The term as written in the glossary, e.g. "INS". Without a glossary entry it renders as plain text. */
@@ -19,7 +20,7 @@ const id = `tip-${t.toLowerCase()}-${Math.random().toString(36).slice(2, 7)}`;
       </a>
       <span class="keyword-tip" role="tooltip" id={id}>
         <strong class="block text-ink-950 dark:text-paper-50">{entry.data.name}</strong>
-        {entry.data.summary}
+        {definition(entry.body ?? "")}
       </span>
     </span>
   ) : (

@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import DetailShell from "../../components/DetailShell.astro";
 import ProjectList from "../../components/ProjectList.astro";
 import Base from "../../layouts/Base.astro";
+import { definition } from "../../utils/terms";
 
 export async function getStaticPaths() {
   const skills = await getCollection("skills");
@@ -18,10 +19,10 @@ const { skill, examples } = Astro.props;
 const { Content } = await render(skill);
 ---
 
-<Base title={`${skill.data.term}: ${skill.data.name}`} description={skill.data.summary}>
+<Base title={`${skill.data.term}: ${skill.data.name}`} description={definition(skill.body ?? "")}>
   <DetailShell
     title={`${skill.data.term}`}
-    summary={`${skill.data.name}. ${skill.data.summary}`}
+    summary={skill.data.name}
     crumbs={[{ label: "Home", href: "/" }, { label: skill.data.term }]}
   >
     <Content />

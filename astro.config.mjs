@@ -35,7 +35,17 @@ export default defineConfig({
   prefetch: { prefetchAll: true, defaultStrategy: "viewport" },
 
   // KaTeX math in Markdown: $inline$ and $$ blocks $$, rendered at build time.
-  markdown: { processor: unified({ remarkPlugins, rehypePlugins }) },
+  markdown: {
+    processor: unified({
+      remarkPlugins,
+      rehypePlugins,
+      // Footnotes are the site's reference list: a visible "References" heading instead of the hidden "Footnotes".
+      remarkRehype: {
+        footnoteLabel: "References",
+        footnoteLabelProperties: { className: ["references-title"] },
+      },
+    }),
+  },
 
   integrations: [preact(), mdx(), sitemap()],
 
