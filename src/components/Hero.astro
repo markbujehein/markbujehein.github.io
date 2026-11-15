@@ -47,7 +47,7 @@ const rings = [
         <radialGradient id="hero-glow" cx="50%" cy="50%" r="50%">
           <stop offset="0" stop-color="#8c2981" stop-opacity=".55"></stop>
           <stop offset=".6" stop-color="#3b0f70" stop-opacity=".25"></stop>
-          <stop offset="1" stop-color="#14092e" stop-opacity="0"></stop>
+          <stop offset="1" style="stop-color: var(--color-tyrian-folio)" stop-opacity="0"></stop>
         </radialGradient>
       </defs>
       <circle cx="300" cy="300" r="300" fill="url(#hero-glow)"></circle>
@@ -68,7 +68,7 @@ const rings = [
           ))
         }
       </g>
-      <circle cx="300" cy="300" r="22" fill="#14092e"></circle>
+      <circle cx="300" cy="300" r="22" style="fill: var(--color-tyrian-folio)"></circle>
     </svg>
 
     <div class="hero-copy">
@@ -104,9 +104,9 @@ const rings = [
 
 <style>
   .hero {
-    --hero-bg: #14092e;
-    --hero-text: #f4f1fa;
-    --hero-accent: #fe9f6d;
+    --hero-bg: var(--color-tyrian-folio);
+    --hero-text: var(--color-lunar-vellum);
+    --hero-accent: var(--color-gravity-gun);
     /* Set by the script below: how far the hero has scrolled out of view, 0 (top of page) to 1 (gone). */
     --p: 0;
     position: relative; /* the rings are placed against the viewport edge, not the text column */
@@ -239,8 +239,8 @@ const rings = [
     color: var(--hero-bg);
   }
   .hero-btn-primary:hover {
-    background: #ffb287;
-    border-color: #ffb287;
+    background: var(--color-arcane-torrent);
+    border-color: var(--color-arcane-torrent);
   }
 
   .hero-contact {

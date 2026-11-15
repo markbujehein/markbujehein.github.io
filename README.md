@@ -31,6 +31,8 @@ The site presents a profile, news, a CV with PDF, and research and software proj
 
 Contrast is against the background; every pair passes WCAG AA (4.5:1).
 
+**Hero background: Tyrian Folio `#14092E`.** One colour for the hero panel in both dark and bright mode; not a page colour. Lunar Vellum on it is 15.29:1, Gravity Gun 7.26:1, Arcane Torrent 7.06:1.
+
 ### Shade steps
 
 Each colour has one lighter and one darker step (OKLCH lightness ±0.07, same hue). Illuminated Leaf is white, so both of its steps are darker.

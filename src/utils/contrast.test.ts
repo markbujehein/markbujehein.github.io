@@ -17,18 +17,28 @@ test("contrastRatio matches the WCAG reference values", () => {
 });
 
 const light: [string, string][] = [
-  ["ink-950", "paper-50"], // headings
-  ["ink-700", "paper-50"], // body
-  ["ink-600", "paper-50"], // muted
-  ["accent-700", "paper-50"], // accent text and links
-  ["ink-700", "paper-100"], // text on tinted panels
+  ["lampblack-ink", "sunlit-vellum"], // headings
+  ["lampblack-ink-lighter", "sunlit-vellum"], // body
+  ["silverpoint", "sunlit-vellum"], // muted
+  ["spice-melange", "sunlit-vellum"], // links
+  ["oracle-core", "sunlit-vellum"], // keywords
+  ["arcane-intellect", "sunlit-vellum"], // hover and focus
+  ["lampblack-ink-lighter", "illuminated-leaf"], // text on cards
+  ["silverpoint", "illuminated-leaf"],
+  ["spice-melange", "illuminated-leaf"],
+  ["oracle-core", "illuminated-leaf"],
 ];
 const dark: [string, string][] = [
-  ["paper-50", "ink-950"],
-  ["paper-300", "ink-950"], // body
-  ["paper-400", "ink-950"], // muted
-  ["accent-300", "ink-950"], // accent text and links
-  ["paper-300", "ink-900"], // text on cards
+  ["lunar-vellum", "iron-gall"], // headings
+  ["lunar-vellum-darker", "iron-gall"], // body
+  ["marginalia", "iron-gall"], // muted
+  ["gravity-gun", "iron-gall"], // links
+  ["athena-core", "iron-gall"], // keywords
+  ["arcane-torrent", "iron-gall"], // hover and focus
+  ["lunar-vellum-darker", "midnight-codex"], // text on cards
+  ["marginalia", "midnight-codex"],
+  ["gravity-gun", "midnight-codex"],
+  ["athena-core", "midnight-codex"],
 ];
 
 test.each(light)("light theme: %s on %s is at least 4.5:1", (fg, bg) => {
@@ -37,20 +47,22 @@ test.each(light)("light theme: %s on %s is at least 4.5:1", (fg, bg) => {
 test.each(dark)("dark theme: %s on %s is at least 4.5:1", (fg, bg) => {
   expect(contrastRatio(token(fg), token(bg))).toBeGreaterThanOrEqual(4.5);
 });
-test("hero accent on the hero background is at least 4.5:1", () => {
-  expect(contrastRatio("#fe9f6d", "#14092e")).toBeGreaterThanOrEqual(4.5);
+test.each([
+  ["lunar-vellum", "tyrian-folio"], // hero text
+  ["gravity-gun", "tyrian-folio"], // hero accent
+  ["arcane-torrent", "tyrian-folio"], // hero button hover
+])("hero: %s on %s is at least 4.5:1", (fg, bg) => {
+  expect(contrastRatio(token(fg), token(bg))).toBeGreaterThanOrEqual(4.5);
 });
 
-test("selected filter chip: ink-950 on accent-400 is at least 4.5:1", () => {
-  expect(contrastRatio(token("ink-950"), token("accent-400"))).toBeGreaterThanOrEqual(4.5);
-});
-
-// Keyword colour (teal, the split-complement of the orange accent): text steps per theme.
-test("keyword colour: light azure key-light-600 on paper and key-300 on ink are at least 4.5:1", () => {
-  for (const bg of ["paper-50", "paper-100"]) {
-    expect(contrastRatio(token("key-light-600"), token(bg))).toBeGreaterThanOrEqual(4.5);
-  }
-  for (const bg of ["ink-950", "ink-900"]) {
-    expect(contrastRatio(token("key-300"), token(bg))).toBeGreaterThanOrEqual(4.5);
-  }
+// Filled buttons and the selected filter chip: label on fill.
+test.each([
+  ["sunlit-vellum", "spice-melange"],
+  ["sunlit-vellum", "arcane-intellect"],
+  ["iron-gall", "gravity-gun"],
+  ["iron-gall", "arcane-torrent"],
+  ["tyrian-folio", "gravity-gun"], // hero button
+  ["tyrian-folio", "arcane-torrent"],
+])("button label: %s on %s is at least 4.5:1", (fg, bg) => {
+  expect(contrastRatio(token(fg), token(bg))).toBeGreaterThanOrEqual(4.5);
 });

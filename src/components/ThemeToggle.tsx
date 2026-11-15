@@ -30,7 +30,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       aria-pressed={theme === "dark"}
       aria-label="Dark theme"
-      class="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded border border-paper-300 text-ink-600 transition-colors hover:text-accent-700 focus-visible:ring-2 focus-visible:ring-accent-500 dark:border-ink-700 dark:text-paper-300 dark:hover:text-accent-300"
+      class="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded border border-sunlit-vellum-darker text-silverpoint transition-colors hover:text-arcane-intellect focus-visible:ring-2 focus-visible:ring-arcane-intellect dark:border-midnight-codex-lighter dark:text-lunar-vellum-darker dark:hover:text-arcane-torrent"
     >
       {/* Both icons are in the markup and CSS picks one from data-theme, so the first paint is right before any script runs. */}
       <svg
