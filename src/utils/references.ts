@@ -12,7 +12,20 @@ export type Reference = {
 export type Part = { text: string } | { italic: string } | { link: string; href: string };
 
 // IEEE abbreviates only these months; March to July stay in full.
-const MONTHS = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+const MONTHS = [
+  "Jan.",
+  "Feb.",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "Aug.",
+  "Sept.",
+  "Oct.",
+  "Nov.",
+  "Dec.",
+];
 
 export function ieeeDate(iso: string): string {
   const [year, month, day] = iso.split("-").map(Number);
@@ -22,9 +35,11 @@ export function ieeeDate(iso: string): string {
 /** Throws with the key and the problem, so a bad record fails the build instead of printing nonsense. */
 export function assertReference(key: string, ref: unknown): asserts ref is Reference {
   const r = ref as Record<string, unknown>;
-  if (r?.type !== "encyclopedia") throw new Error(`Reference "${key}": unknown type "${String(r?.type)}"`);
+  if (r?.type !== "encyclopedia")
+    throw new Error(`Reference "${key}": unknown type "${String(r?.type)}"`);
   for (const field of ["author", "title", "site", "url", "accessed"]) {
-    if (typeof r[field] !== "string" || !r[field]) throw new Error(`Reference "${key}": missing "${field}"`);
+    if (typeof r[field] !== "string" || !r[field])
+      throw new Error(`Reference "${key}": missing "${field}"`);
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.accessed as string)) {
     throw new Error(`Reference "${key}": "accessed" must be YYYY-MM-DD`);

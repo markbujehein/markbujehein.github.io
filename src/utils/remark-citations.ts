@@ -41,13 +41,18 @@ export const remarkCitations: RemarkPlugin<[{ references?: Record<string, Refere
         for (const m of child.value.matchAll(CITE)) {
           const key = m[1];
           if (!refs[key]) {
-            throw new Error(`Unknown citation key "${key}" in ${file.path ?? "a markdown file"}: add it to src/data/references.json`);
+            throw new Error(
+              `Unknown citation key "${key}" in ${file.path ?? "a markdown file"}: add it to src/data/references.json`,
+            );
           }
           if (!order.includes(key)) order.push(key);
           if (m.index > last) out.push({ type: "text", value: child.value.slice(last, m.index) });
           out.push({
             type: "cite",
-            data: { hName: "a", hProperties: { className: ["cite"], href: `#ref-${order.indexOf(key) + 1}` } },
+            data: {
+              hName: "a",
+              hProperties: { className: ["cite"], href: `#ref-${order.indexOf(key) + 1}` },
+            },
             children: [{ type: "text", value: `[${order.indexOf(key) + 1}]` }],
           });
           last = m.index + m[0].length;

@@ -30,5 +30,8 @@ const wrapTables: RehypePlugin = () => (tree) => {
 
 // Shared by astro.config.mjs and the markdown tests, so the test checks the real pipeline.
 // Inline math needs $$...$$, so prices like "$5 and $10" stay text.
-export const remarkPlugins: RemarkPlugins = [[remarkMath, { singleDollarTextMath: false }], remarkCitations];
+export const remarkPlugins: RemarkPlugins = [
+  [remarkMath, { singleDollarTextMath: false }],
+  remarkCitations,
+];
 export const rehypePlugins: RehypePlugins = [rehypeKatex, failOnBadMath, wrapTables];

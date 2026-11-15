@@ -14,7 +14,9 @@ const entry = (title: string): Reference => ({
 const references = { a: entry("Alpha"), b: entry("Beta") };
 
 const render = async (md: string) => {
-  const processor = await createMarkdownProcessor({ remarkPlugins: [[remarkCitations, { references }]] });
+  const processor = await createMarkdownProcessor({
+    remarkPlugins: [[remarkCitations, { references }]],
+  });
   return (await processor.render(md)).code;
 };
 

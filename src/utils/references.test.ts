@@ -40,5 +40,7 @@ test("the site name is italic and the URL is a link to the full address", () => 
 test("a malformed reference is rejected with its key and the missing field", () => {
   expect(() => assertReference("bad", { type: "encyclopedia", author: "X" })).toThrow(/bad.*title/);
   expect(() => assertReference("odd", { type: "pamphlet" })).toThrow(/odd.*pamphlet/);
-  expect(() => assertReference("date", { ...sciencedirect, accessed: "yesterday" })).toThrow(/date.*accessed/);
+  expect(() => assertReference("date", { ...sciencedirect, accessed: "yesterday" })).toThrow(
+    /date.*accessed/,
+  );
 });
