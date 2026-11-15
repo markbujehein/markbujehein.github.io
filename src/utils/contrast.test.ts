@@ -44,3 +44,13 @@ test("hero accent on the hero background is at least 4.5:1", () => {
 test("selected filter chip: ink-950 on accent-400 is at least 4.5:1", () => {
   expect(contrastRatio(token("ink-950"), token("accent-400"))).toBeGreaterThanOrEqual(4.5);
 });
+
+// Keyword colour (teal, the split-complement of the orange accent): text steps per theme.
+test("keyword colour: light azure key-light-600 on paper and key-300 on ink are at least 4.5:1", () => {
+  for (const bg of ["paper-50", "paper-100"]) {
+    expect(contrastRatio(token("key-light-600"), token(bg))).toBeGreaterThanOrEqual(4.5);
+  }
+  for (const bg of ["ink-950", "ink-900"]) {
+    expect(contrastRatio(token("key-300"), token(bg))).toBeGreaterThanOrEqual(4.5);
+  }
+});

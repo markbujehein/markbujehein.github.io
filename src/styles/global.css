@@ -43,6 +43,25 @@
   --color-accent-900: #5e270c;
   --color-accent-950: #331204;
 
+  /* Keyword teal: split-complement of the orange accent (OKLCH hue 198 vs 48), chosen over the pure
+     complement (azure, 228) because the indigo background is already blue. Orange is structure,
+     teal marks what you can interact with. Text steps: 600 on paper, 300 on ink. */
+  --color-key-50: #dafdfe;
+  --color-key-100: #c3f2f3;
+  --color-key-200: #a6e1e2;
+  --color-key-300: #71c8cb;
+  --color-key-400: #34abaf;
+  --color-key-500: #088285;
+  --color-key-600: #076b6e;
+  --color-key-700: #005355;
+  --color-key-800: #013b3d;
+  --color-key-900: #012526;
+  --color-key-950: #011111;
+  /* Light-mode keyword colour: azure, the true complement (hue 228). Teal above is for dark mode. */
+  --color-key-light-400: #49a4ca;
+  --color-key-light-500: #067da2;
+  --color-key-light-600: #066786;
+
   /* The hero's ring colours, a magma scale. Used for small accent marks, not for text. */
   --color-magma-yellow: #fcfdbf;
   --color-magma-orange: #fe9f6d;
@@ -218,4 +237,26 @@
 /* KaTeX: long formulas scroll sideways instead of widening the page. */
 .katex-display {
   @apply overflow-x-auto overflow-y-hidden py-1;
+}
+
+/* Keyword: a technical term that explains itself on hover or focus and links to examples.
+   Works without JavaScript; the tooltip is CSS only. */
+@utility keyword {
+  @apply font-semibold text-key-light-600 underline decoration-key-light-400 decoration-dotted underline-offset-4 hover:decoration-solid dark:text-key-300 dark:decoration-key-500;
+}
+@layer components {
+  .keyword-wrap {
+    @apply relative;
+  }
+  .keyword-tip {
+    @apply invisible absolute top-full left-0 z-30 w-64 rounded-md border border-l-2 border-paper-300 border-l-key-light-500 bg-paper-50 p-3 text-sm leading-5 font-normal text-ink-700 opacity-0 transition-opacity duration-150 dark:border-ink-700 dark:border-l-key-400 dark:bg-ink-900 dark:text-paper-300;
+  }
+  /* The tip is a child of the wrapper, so moving the pointer onto it keeps it open (WCAG 1.4.13). */
+  .keyword-wrap:hover .keyword-tip,
+  .keyword-wrap:focus-within .keyword-tip {
+    @apply visible opacity-100;
+  }
+  .keyword-wrap[data-dismissed] .keyword-tip {
+    @apply invisible opacity-0;
+  }
 }

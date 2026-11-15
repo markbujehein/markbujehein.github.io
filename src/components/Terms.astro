@@ -1,0 +1,15 @@
+---
+import { getCollection } from "astro:content";
+import { markTerms } from "../utils/terms";
+import Term from "./Term.astro";
+
+interface Props {
+  /** Plain text; every glossary term in it becomes a <Term>. */
+  text: string;
+}
+
+const terms = (await getCollection("skills")).map((s) => s.data.term);
+const segments = markTerms(Astro.props.text, terms);
+---
+
+{segments.map((s) => ("term" in s ? <Term t={s.term} /> : s.text))}
