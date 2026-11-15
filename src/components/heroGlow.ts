@@ -13,6 +13,9 @@ export interface GlowRing {
 
 const MAX_RINGS = 8;
 const MAX_TRAIL = 14;
+const MAX_BURN = 24;
+const BURN_LIFE = 2.6; // seconds a flash or an ejected electron keeps its pixels hot
+const BURN_SAMPLE_MS = 33;
 const MAX_DPR = 1.5;
 const TRAIL_LIFE = 1.4; // seconds a pointer position keeps firing pixels
 const MIN_STEP = 8; // css px the pointer must travel to leave a new trail point
@@ -28,7 +31,8 @@ uniform float uPitch;   // pixel lattice pitch, device px
 uniform float uP;       // hero scroll progress 0..1
 uniform vec3 uWave;     // glow pulse: front radius (device px), opacity, ignition at the centre (read from the CSS animation)
 uniform float uRem;     // 1rem in device px
-uniform vec3 uTrail[${MAX_TRAIL}];  // pointer x, y (device px), age (s; < 0 = unused)
+uniform vec3 uBurn[${MAX_BURN}];   // burn-in sources: x, y (device px), age (s; < 0 = unused)
+  uniform vec3 uTrail[${MAX_TRAIL}];  // pointer x, y (device px), age (s; < 0 = unused)
 uniform vec4 uRing[${MAX_RINGS}];   // radius, width, depth, grow
 uniform vec3 uCol[${MAX_RINGS}];
 
@@ -50,6 +54,16 @@ void main() {
   }
   // only some pixels fire, the most sensitive ones first
   float fire = step(r1, reach * 0.8) * reach;
+
+  // burn-in: pixels near a recent photon flash or ejected electron stay hot, then cool off slowly
+  float heat = 0.0;
+  for (int i = 0; i < ${MAX_BURN}; i++) {
+    vec3 b = uBurn[i];
+    if (b.z < 0.0) continue;
+    vec2 d = (centre - b.xy) / (uScale * 20.0);
+    heat = max(heat, exp(-dot(d, d)) * exp(-b.z / ${BURN_LIFE.toFixed(2)}));
+  }
+  float burn = step(r1 * 0.75, heat) * heat; // the most sensitive pixels burn in first
 
   // ring colour at this pixel (wide halo weights, so off-ring pixels still pick up the nearest ring)
   vec2 q = (centre - uCentre) / uScale;
@@ -87,7 +101,9 @@ void main() {
   vec3 flash = vec3(0.99, 0.99, 0.75);
   vec3 col = mix(baseCol, mix(tint, flash, smoothstep(0.35, 0.9, fire)), smoothstep(0.0, 0.25, fire));
   col = mix(col, waveCol, smoothstep(0.0, 0.3, waveFire) * step(fire, waveFire));
-  float lit = max(fire, waveFire);
+  vec3 hot = mix(vec3(0.87, 0.29, 0.41), vec3(0.99, 0.99, 0.75), smoothstep(0.2, 0.9, burn));
+  col = mix(col, hot, smoothstep(0.0, 0.25, burn) * step(max(fire, waveFire), burn));
+  float lit = max(max(fire, waveFire), burn);
   float alpha = max(base, lit * mix(0.5, 1.0, onRing));   // fired pixels are fainter in the gaps between rings
   float radius = max(0.17, (0.2 + 0.22 * lit) * mix(0.8, 1.0, onRing));
 
@@ -153,6 +169,13 @@ export function startHeroGlow(
   // pointer path: a small ring buffer of (x, y, time-stamp)
   const trail: { x: number; y: number; t: number }[] = [];
   const trailData = new Float32Array(MAX_TRAIL * 3);
+  // burn-in sources: the strike flashes, the nucleus flash and the ejected electrons, sampled from the CSS animations
+  const burn: { x: number; y: number; t: number }[] = [];
+  const burnData = new Float32Array(MAX_BURN * 3);
+  const flashes = [...hero.querySelectorAll<SVGElement>(".flash, .nucleus-flash")];
+  const ejected = [...hero.querySelectorAll<SVGElement>(".e-out")]; // the groups: their animation says when the electron really flies
+  const lastBurn = new Map<Element, { x: number; y: number; t: number }>();
+  let lastSample = 0;
   let dpr = 1;
   const dawn = hero.querySelector(".hero-dawn");
   const wave = { r: 0, on: 0, core: 0 };
@@ -163,6 +186,34 @@ export function startHeroGlow(
     wave.r = (parseFloat(cs.getPropertyValue("--r")) || 0) * dpr;
     wave.on = parseFloat(cs.opacity) || 0;
     wave.core = (parseFloat(cs.getPropertyValue("--core")) || 0) * wave.on * 0.6;
+  };
+
+  const sampleBurn = (now: number) => {
+    if (now - lastSample < BURN_SAMPLE_MS) return;
+    lastSample = now;
+    if (hero.hasAttribute("data-paused") || hero.hasAttribute("data-held")) return;
+    const h = hero.getBoundingClientRect();
+    // A burn point is written once, at the spot where something happened, and then never moves: it is static on the pixels.
+    const add = (el: Element, at: Element, once: boolean) => {
+      const r = at.getBoundingClientRect();
+      const x = (r.left + r.width / 2 - h.left) * dpr;
+      const y = canvas.height - (r.top + r.height / 2 - h.top) * dpr;
+      const prev = lastBurn.get(el);
+      if (prev && (once ? now - prev.t < 5000 : Math.hypot(x - prev.x, y - prev.y) < 10 * dpr))
+        return;
+      lastBurn.set(el, { x, y, t: now });
+      burn.push({ x, y, t: now });
+    };
+    // a flash burns where it fires, once per burst
+    for (const el of flashes)
+      if ((parseFloat(getComputedStyle(el).opacity) || 0) > 0.4) add(el, el, true);
+    // an ejected electron burns along its flight only (not before it is struck, and not while it is gone)
+    for (const el of ejected) {
+      const a = el.getAnimations().find((x) => (x as CSSAnimation).animationName === "e-out");
+      const prog = Number(a?.effect?.getComputedTiming().progress ?? -1);
+      if (prog > 0.1 && prog < 0.145) add(el, el.querySelector(".electron")!, false);
+    }
+    while (burn.length > MAX_BURN) burn.shift();
   };
 
   const resize = () => {
@@ -184,11 +235,17 @@ export function startHeroGlow(
   const draw = (now: number) => {
     while (trail.length && now - trail[0].t > TRAIL_LIFE * 1.5 * 1000) trail.shift();
     readWave();
-    dirty = trail.length > 0 || wave.on > 0.01; // one more draw after trail and pulse end clears the canvas
+    while (burn.length && now - burn[0].t > BURN_LIFE * 1.5 * 1000) burn.shift();
+    dirty = trail.length > 0 || burn.length > 0 || wave.on > 0.01; // one more draw after trail and pulse end clears the canvas
     for (let i = 0; i < MAX_TRAIL; i++) {
       const p = trail[trail.length - 1 - i];
       trailData.set(p ? [p.x, p.y, (now - p.t) / 1000] : [0, 0, -1], i * 3);
     }
+    for (let i = 0; i < MAX_BURN; i++) {
+      const b = burn[burn.length - 1 - i];
+      burnData.set(b ? [b.x, b.y, (now - b.t) / 1000] : [0, 0, -1], i * 3);
+    }
+    gl.uniform3fv(u("uBurn"), burnData);
     gl.uniform3fv(u("uTrail"), trailData);
     gl.uniform1f(u("uP"), parseFloat(hero.style.getPropertyValue("--p")) || 0);
     gl.uniform3f(u("uWave"), wave.r, wave.on, wave.core);
@@ -212,12 +269,13 @@ export function startHeroGlow(
     if (stopped || !canvas.isConnected) return;
     // idle (no live trail, no pulse, canvas already clear): nothing to draw, so just keep watching
     readWave();
+    if (wave.on > 0.01 || burn.length) sampleBurn(now); // the strikes happen while the pulse passes
     // the pulse alone needs only 30 fps; pointer trails get the full rate
     const gap = trail.length ? FRAME_MS : 2 * FRAME_MS;
     if (
       visible &&
       !document.hidden &&
-      (trail.length || dirty || wave.on > 0.01) &&
+      (trail.length || burn.length || dirty || wave.on > 0.01) &&
       now - last >= gap - 2
     ) {
       last = now;
@@ -266,6 +324,68 @@ export function startHeroGlow(
     ro.disconnect();
     hero.removeEventListener("pointermove", onMove);
     removeEventListener("scroll", onScroll);
+  }
+  return stop;
+}
+
+/** The gamma burst makes the hero text fluoresce: as the pulse front passes a text block it gets a green glow (--fl, 0..1). */
+export function startFluorescence(hero: HTMLElement, art: Element) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};
+  const dawn = hero.querySelector(".hero-dawn");
+  const targets = [...hero.querySelectorAll<HTMLElement>(".hero-copy > *")];
+  if (!dawn || !targets.length) return () => {};
+  let raf = 0;
+  let lit = false;
+  const range = document.createRange();
+  const loop = () => {
+    raf = requestAnimationFrame(loop);
+    if (!hero.isConnected) return stop();
+    const cs = getComputedStyle(dawn);
+    const on = parseFloat(cs.opacity) || 0;
+    if (on < 0.01 && !lit) return;
+    const R = parseFloat(cs.getPropertyValue("--r")) || 0;
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const a = art.getBoundingClientRect();
+    const cx = a.left + a.width / 2;
+    const cy = a.top + a.height / 2;
+    let any = false;
+    for (const el of targets) {
+      // the extent of the actual text (not the wider block box), so the glow starts where the letters start
+      range.selectNodeContents(el);
+      const r = [...range.getClientRects()].reduce(
+        (u, q) => ({
+          left: Math.min(u.left, q.left),
+          right: Math.max(u.right, q.right),
+          top: Math.min(u.top, q.top),
+          bottom: Math.max(u.bottom, q.bottom),
+        }),
+        { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity },
+      );
+      if (!Number.isFinite(r.left)) continue;
+      // the block's nearest and farthest points from the nucleus: the burst reaches the block at dNear and has
+      // passed it entirely at dFar. The glow is on while the front is inside the block, then lingers and fades.
+      const dNear = Math.hypot(
+        Math.max(r.left - cx, 0, cx - r.right),
+        Math.max(r.top - cy, 0, cy - r.bottom),
+      );
+      const dFar = Math.hypot(
+        Math.max(cx - r.left, r.right - cx),
+        Math.max(cy - r.top, r.bottom - cy),
+      );
+      // on once the front has irradiated almost all of the text, until it is well past the far end, then fades out
+      const dStart = dNear + 0.92 * (dFar - dNear); // the burst has passed almost all of the text
+      const arrive = Math.min(Math.max((R - dStart) / (1.5 * rem), 0), 1);
+      const hold = Math.exp(-Math.max(R - dFar - 8 * rem, 0) / (14 * rem));
+      const f = Math.min(on * 4, 1) * arrive * hold;
+      el.style.setProperty("--fl", f.toFixed(3));
+      any ||= f > 0.004;
+    }
+    lit = any;
+  };
+  raf = requestAnimationFrame(loop);
+  function stop() {
+    cancelAnimationFrame(raf);
+    for (const el of targets) el.style.removeProperty("--fl");
   }
   return stop;
 }
