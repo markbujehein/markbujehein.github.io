@@ -17,28 +17,43 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run format:check
       - uses: astral-sh/ruff-action@v3
         with:
-          args: check --select E9,F --ignore F401,F403,F405 py_code tools tasks.py pelicanconf.py publishconf.py
+          args: check --select E9,F --ignore F401,F403,F405 tools
       - name: YAML lint
         run: |
           pip install yamllint
           yamllint -d '{extends: relaxed, rules: {line-length: disable, trailing-spaces: disable, new-line-at-end-of-file: disable}}' \
-            content/config.yml content/data/cv.yml
+            content/config.yml content/data/cv.yml src/data/cv.yml
 
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - name: Type check and unit tests
+        run: |
+          pnpm run check
+          pnpm test
+      - name: Build
+        run: pnpm exec astro build
+      - name: Check output (internal links, HTML, placeholder leaks)
+        run: python -I tools/check_output.py dist https://markbujehein.github.io
       - uses: prefix-dev/setup-pixi@v0.11.2
         with:
-          # Set to true once pixi.lock is committed.
-          locked: false
-          cache: false # becomes `cache: true` once pixi.lock exists
-      - name: Unit tests
+          locked: false # set to true once pixi.lock is committed
+          cache: false # set to true once pixi.lock is committed
+      - name: Importer tests
         run: pixi run test
-      - name: Build (production settings, warnings are fatal)
-        run: pixi run publish --fatal warnings
-      - name: Check output (internal links, HTML, placeholder leaks)
-        run: python -I tools/check_output.py output https://markbujehein.github.io
