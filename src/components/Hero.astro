@@ -109,14 +109,14 @@ const rings = [
     --hero-accent: #fe9f6d;
     /* Set by the script below: how far the hero has scrolled out of view, 0 (top of page) to 1 (gone). */
     --p: 0;
-    overflow: hidden; /* the background runs edge to edge; the rings are clipped at the viewport */
+    position: relative; /* the rings are placed against the viewport edge, not the text column */
+    overflow: hidden; /* clips only at the viewport edge, so the page never scrolls sideways */
     background: var(--hero-bg);
     color: var(--hero-text);
   }
 
   /* Text, buttons and ring art live in the same centred column as the rest of the page (Base.astro: max-w-5xl). */
   .hero-inner {
-    position: relative;
     max-width: 64rem;
     margin: 0 auto;
     padding: 3.5rem 1rem;
