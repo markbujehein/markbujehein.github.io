@@ -26,9 +26,13 @@ const rings = [
 ];
 ---
 
-<section class="hero" aria-labelledby="hero-name">
+<section class="hero" aria-labelledby="hero-name" data-glow="init">
+  <!-- Resting hero is the base; this layer sends a glow pulse out from the ring centre. -->
+  <div class="hero-dawn" aria-hidden="true"></div>
+  <!-- Detector-pixel layer: transparent, only draws pixels the pointer has just passed. Rings and dawn are untouched. -->
+  <canvas class="hero-glow" aria-hidden="true" data-rings={JSON.stringify(rings)}></canvas>
   <div class="hero-inner">
-    <svg class="hero-art" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
+    <svg class="hero-art" data-hero-art viewBox="0 0 600 600" aria-hidden="true" focusable="false">
       <defs>
         <filter id="hero-grain" x="0" y="0" width="100%" height="100%">
           <feTurbulence
@@ -115,6 +119,94 @@ const rings = [
     color: var(--hero-text);
   }
 
+  /* Day/night, as a pulse: the dark hero is the base; a second layer lights up at the ring centre, the glow
+     travels outwards past the outer ring and fades, then the hero rests before the next one. The "two stacked
+     layers" idea is from Preline's day/night hero block. Phosphor green is a hero-only choice (--pulse below).
+     It stays pale and low-alpha, so the text keeps its contrast; reduced motion leaves the resting hero. */
+  @property --r {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0rem;
+  }
+  @property --core {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+  }
+  .hero {
+    --pulse: 110 255 170; /* radioactive phosphor */
+    --pulse-edge: 140 41 129; /* magma magenta, the trailing edge */
+    --cx: calc(
+      100% - 3rem
+    ); /* ring centre: the SVG sits 13rem past the right edge and is 32rem wide */
+    --cy: 50%;
+  }
+  .hero-dawn {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background:
+      radial-gradient(
+        circle at var(--cx) var(--cy),
+        rgb(var(--pulse) / calc(var(--core) * 0.4)) 0,
+        transparent 15rem
+      ),
+      radial-gradient(
+        circle at var(--cx) var(--cy),
+        transparent calc(var(--r) - 17rem),
+        rgb(var(--pulse) / 0.14) calc(var(--r) - 8rem),
+        rgb(var(--pulse) / 0.34) calc(var(--r) - 1.5rem),
+        rgb(var(--pulse-edge) / 0.3) var(--r),
+        transparent calc(var(--r) + 5rem)
+      );
+    animation: hero-pulse 10s cubic-bezier(0.3, 0.3, 0.5, 1) infinite;
+  }
+  @keyframes hero-pulse {
+    0% {
+      --r: 0rem;
+      --core: 0;
+      opacity: 0;
+    }
+    4% {
+      --core: 1;
+      opacity: 1;
+    }
+    22% {
+      --core: 0;
+    }
+    65% {
+      opacity: 0.6;
+    }
+    85%,
+    100% {
+      --r: 80rem;
+      --core: 0;
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-dawn {
+      animation: none;
+    }
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .hero[data-glow="running"] .hero-glow {
+    opacity: 1;
+  }
+  .hero[data-glow="fallback"] .hero-glow {
+    display: none;
+  }
+
   /* Text, buttons and ring art live in the same centred column as the rest of the page (Base.astro: max-w-5xl). */
   .hero-inner {
     max-width: 64rem;
@@ -149,8 +241,25 @@ const rings = [
 
   .ring {
     transform-origin: 300px 300px;
-    animation: ring-in 1.1s ease-out both;
-    animation-delay: calc(var(--i) * 140ms);
+    animation:
+      ring-in 1.1s ease-out both,
+      ring-kick 10s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 140ms), calc(0.25s + var(--i) * 0.25s);
+  }
+
+  /* The burst shoves the rings: each swells a touch just as the glow front reaches it (inner ring first, outer last,
+     outer rings a little less), then settles. Same 10s period as the pulse, offset by the ring's distance. */
+  @keyframes ring-kick {
+    0% {
+      scale: 1;
+    }
+    5% {
+      scale: calc(1.05 - var(--i) * 0.007);
+    }
+    16%,
+    100% {
+      scale: 1;
+    }
   }
 
   @keyframes ring-in {
@@ -260,6 +369,10 @@ const rings = [
       padding-top: 2rem;
       padding-bottom: 12.5rem;
     }
+    .hero {
+      --cx: 50%; /* the rings sit centred on the bottom edge on small screens */
+      --cy: 100%;
+    }
     .hero-art {
       top: auto;
       bottom: -13rem;
@@ -271,6 +384,26 @@ const rings = [
     }
   }
 </style>
+
+<script>
+  import { startHeroGlow, type GlowRing } from "./heroGlow";
+
+  // WebGL glow behind the rings. Any failure leaves the CSS dawn layer as the whole effect.
+  const startGlows = () => {
+    for (const hero of document.querySelectorAll<HTMLElement>(".hero[data-glow='init']")) {
+      const canvas = hero.querySelector<HTMLCanvasElement>(".hero-glow");
+      const art = hero.querySelector("[data-hero-art]");
+      if (!canvas || !art) continue;
+      try {
+        startHeroGlow(canvas, art, JSON.parse(canvas.dataset.rings ?? "[]") as GlowRing[], hero);
+      } catch {
+        hero.dataset.glow = "fallback";
+      }
+    }
+  };
+  startGlows();
+  document.addEventListener("astro:page-load", startGlows);
+</script>
 
 <script>
   // Scroll-driven rings: write the hero's scroll progress to --p (one write per frame, passive listener).
