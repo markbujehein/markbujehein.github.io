@@ -14,7 +14,7 @@ const { projects, headingLevel: Heading = "h3" } = Astro.props;
   <ul class="grid gap-4 @xl:grid-cols-2 @4xl:grid-cols-3">
     {projects.map((project) => (
       <li
-        class="surface-card-hover interactive relative flex flex-col gap-2"
+        class="surface-card-hover relative flex flex-col gap-2"
         data-project={project.id}
         data-category={project.data.category}
       >

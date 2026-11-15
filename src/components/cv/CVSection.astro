@@ -10,7 +10,7 @@ interface Props {
 const { id, section } = Astro.props;
 ---
 
-<section {id} class="scroll-mt-24">
+<section {id} class="scroll-mt-32 md:scroll-mt-24">
   <h2 class="section-heading heading-bar mb-5">{section.title}</h2>
   {section.type === "map" && (
     <dl class="surface-card grid gap-x-6 gap-y-2 sm:grid-cols-[max-content_1fr]">

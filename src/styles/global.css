@@ -53,11 +53,10 @@
   --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-/* One gradient, the hero rings read left to right. */
+/* One gradient from the hero rings, orange to magenta (the pale yellow vanishes on paper). */
 :root {
   --gradient-magma: linear-gradient(
     90deg,
-    var(--color-magma-yellow),
     var(--color-magma-orange),
     var(--color-magma-rose),
     var(--color-magma-magenta)
@@ -139,9 +138,6 @@
 @utility action-link {
   @apply inline-flex min-h-11 items-center gap-1.5 rounded px-1 text-sm font-bold text-accent-700 no-underline underline-offset-4 transition-colors duration-200 hover:text-accent-900 hover:underline dark:text-accent-300 dark:hover:text-accent-100;
 }
-@utility link-muted {
-  @apply text-ink-600 no-underline underline-offset-4 transition-colors hover:text-ink-900 hover:underline dark:text-paper-400 dark:hover:text-paper-100;
-}
 
 /* Rendered Markdown (Preflight strips list bullets, heading scale and link styling). */
 @layer components {
@@ -206,40 +202,12 @@
     border-color: var(--color-magma-magenta);
   }
 }
-@utility interactive {
-  @apply transition-colors duration-200;
-  border-color: color-mix(in oklab, var(--color-magma-orange) 45%, var(--color-paper-300));
-  &:hover,
-  &:focus-within,
-  &[aria-pressed="true"] {
-    background-color: color-mix(in oklab, var(--color-magma-orange) 14%, transparent);
-  }
-}
 @utility nav-dot {
   @apply relative;
   &[aria-current="page"]::after {
     content: "";
     background: var(--gradient-magma);
     @apply absolute bottom-1 left-1/2 h-[3px] w-5 -translate-x-1/2 rounded-full;
-  }
-}
-@utility disclosure {
-  @apply rounded-md border border-paper-300 dark:border-ink-700;
-  & > summary {
-    @apply flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-5 py-3 font-heading text-xl font-bold text-ink-950 dark:text-paper-50;
-  }
-  & > summary::-webkit-details-marker {
-    display: none;
-  }
-  & > summary::after {
-    content: "";
-    @apply size-2.5 shrink-0 rotate-45 border-r-2 border-b-2 border-accent-600 transition-transform dark:border-accent-400;
-  }
-  &[open] > summary::after {
-    @apply -rotate-[135deg];
-  }
-  & > :not(summary) {
-    @apply px-5 pb-5;
   }
 }
 

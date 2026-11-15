@@ -35,10 +35,14 @@ export default function ProjectFilter({ items, categories }: Props) {
           key={o.id}
           aria-pressed={active === o.id}
           onClick={() => setActive(o.id)}
-          class="interactive inline-flex min-h-11 cursor-pointer items-center gap-2 rounded border px-3.5 text-sm font-semibold text-ink-700 dark:text-paper-300"
+          class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded border border-paper-300 px-3.5 text-sm font-semibold text-ink-700 transition-colors hover:border-accent-500 aria-pressed:border-accent-400 aria-pressed:bg-accent-400 aria-pressed:text-ink-950 dark:border-ink-700 dark:text-paper-300 dark:hover:border-accent-400 dark:aria-pressed:border-accent-400 dark:aria-pressed:text-ink-950"
         >
           <span class="capitalize">{o.label}</span>
-          <span class="font-mono text-xs text-accent-700 dark:text-accent-300">{o.count}</span>
+          <span
+            class={`font-mono text-xs ${active === o.id ? "text-ink-950" : "text-accent-700 dark:text-accent-300"}`}
+          >
+            {o.count}
+          </span>
         </button>
       ))}
       <p class="sr-only" aria-live="polite">

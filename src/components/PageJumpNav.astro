@@ -27,14 +27,16 @@ const { items } = Astro.props;
 
 <script>
   // Scroll-spy: mark the link of the section nearest the top with aria-current="location".
+  let observer: IntersectionObserver | undefined;
   document.addEventListener("astro:page-load", () => {
+    observer?.disconnect(); // one observer per visit, not one per navigation
     const nav = document.querySelector<HTMLElement>("[data-jump-nav]");
     if (!nav) return;
     const links = [...nav.querySelectorAll<HTMLAnchorElement>("a")];
     const targets = links
       .map((a) => document.getElementById(a.hash.slice(1)))
       .filter((el): el is HTMLElement => el !== null);
-    const observer = new IntersectionObserver(
+    const next = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
@@ -46,6 +48,7 @@ const { items } = Astro.props;
       },
       { rootMargin: "-80px 0px -70% 0px" },
     );
-    targets.forEach((t) => observer.observe(t));
+    targets.forEach((t) => next.observe(t));
+    observer = next;
   });
 </script>

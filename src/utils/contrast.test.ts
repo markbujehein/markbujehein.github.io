@@ -40,3 +40,7 @@ test.each(dark)("dark theme: %s on %s is at least 4.5:1", (fg, bg) => {
 test("hero accent on the hero background is at least 4.5:1", () => {
   expect(contrastRatio("#fe9f6d", "#14092e")).toBeGreaterThanOrEqual(4.5);
 });
+
+test("selected filter chip: ink-950 on accent-400 is at least 4.5:1", () => {
+  expect(contrastRatio(token("ink-950"), token("accent-400"))).toBeGreaterThanOrEqual(4.5);
+});
