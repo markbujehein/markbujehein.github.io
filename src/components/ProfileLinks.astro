@@ -1,0 +1,24 @@
+---
+import { site } from "../config/site";
+import { profileIcons } from "../config/profileIcons";
+---
+
+<ul aria-label="Academic profiles" class="mt-6 flex list-none flex-wrap gap-3 p-0">
+  {
+    site.profiles.map((p) => (
+      <li class="m-0 p-0">
+        <a class="chip no-underline" href={p.href} rel="noopener noreferrer">
+          <svg
+            viewBox="0 0 1000 1000"
+            class="size-4 fill-current"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d={profileIcons[p.icon]} />
+          </svg>
+          {p.label}
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -6,7 +6,8 @@ import Hero from "../components/Hero.astro";
 import NewsList from "../components/NewsList.astro";
 import ProjectList from "../components/ProjectList.astro";
 import { site } from "../config/site";
-import profile from "../assets/profile.jpg";
+import ProfileLinks from "../components/ProfileLinks.astro";
+import portrait from "../assets/portrait.jpg";
 import Base from "../layouts/Base.astro";
 import { sortByOrder } from "../utils/cv";
 import { latest } from "../utils/news";
@@ -37,17 +38,20 @@ const news = latest(await getCollection("news"), 5); // the full list lives at /
   <div class="mt-12 page-stack">
     <section>
       <h2 class="heading-bar mb-4 section-heading">who I am</h2>
-      <Image
-        class="float-right mb-4 ml-6 size-40 rounded-full object-cover"
-        src={profile}
-        alt="Portrait of Mark Buje Hein"
-        width={160}
-        height={160}
-        densities={[1, 2]}
-      />
-      <div class="prose-site">
-        <Bio />
+      <div class="grid gap-8 sm:grid-cols-[14rem_1fr] sm:items-start">
+        <Image
+          class="mx-auto aspect-[3/4] w-48 rounded-md object-cover shadow-lg sm:w-full"
+          src={portrait}
+          alt="Portrait of Mark Buje Hein"
+          width={448}
+          height={597}
+          densities={[1, 2]}
+        />
+        <div class="prose-site prose-p:first:mt-0">
+          <Bio />
+        </div>
       </div>
+      <ProfileLinks />
     </section>
 
     <section>
