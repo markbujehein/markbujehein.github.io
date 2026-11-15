@@ -1,0 +1,37 @@
+---
+import { getCollection, render } from "astro:content";
+import DetailShell from "../../components/DetailShell.astro";
+import ProjectList from "../../components/ProjectList.astro";
+import Base from "../../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  const skills = await getCollection("skills");
+  const projects = await getCollection("projects");
+  return skills.map((skill) => ({
+    params: { slug: skill.id },
+    props: { skill, examples: projects.filter((p) => skill.data.projects.includes(p.id)) },
+    cacheKey: String(skill.digest),
+  }));
+}
+
+const { skill, examples } = Astro.props;
+const { Content } = await render(skill);
+---
+
+<Base title={`${skill.data.term}: ${skill.data.name}`} description={skill.data.summary}>
+  <DetailShell
+    title={`${skill.data.term}`}
+    summary={`${skill.data.name}. ${skill.data.summary}`}
+    crumbs={[{ label: "Home", href: "/" }, { label: skill.data.term }]}
+  >
+    <Content />
+    {
+      examples.length > 0 && (
+        <section class="not-prose mt-10">
+          <h2 class="heading-bar mb-4 section-heading">Examples</h2>
+          <ProjectList projects={examples} headingLevel="h3" />
+        </section>
+      )
+    }
+  </DetailShell>
+</Base>

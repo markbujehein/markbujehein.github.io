@@ -1,5 +1,6 @@
 ---
 import type { CVSection } from "../utils/cv";
+import Terms from "./Terms.astro";
 
 interface Props {
   section: Extract<CVSection, { type: "nested_list" }>;
@@ -16,7 +17,9 @@ const { section } = Astro.props;
           <h3 class="mb-2 entry-title">{group.title}</h3>
           <ul class="list-disc space-y-1 pl-5 entry-summary marker:text-accent-500">
             {group.elements.map((element) => (
-              <li>{element}</li>
+              <li>
+                <Terms text={element} />
+              </li>
             ))}
           </ul>
         </div>

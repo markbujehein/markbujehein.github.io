@@ -68,4 +68,15 @@ const cv = defineCollection({
   ]),
 });
 
-export const collections = { projects, news, home, cv };
+// Glossary of technical terms: the term as written in the CV, a one-line explanation and the projects that show it.
+const skills = defineCollection({
+  loader: glob({ pattern: "*.{md,mdx}", base: "./src/content/skills" }),
+  schema: z.object({
+    term: z.string(),
+    name: z.string(),
+    summary: z.string(),
+    projects: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { projects, news, home, cv, skills };

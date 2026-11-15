@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+  /** The term as written in the glossary, e.g. "INS". Without a glossary entry it renders as plain text. */
+  t: string;
+}
+
+const { t } = Astro.props;
+const entry = (await getCollection("skills")).find((s) => s.data.term === t);
+const id = `tip-${t.toLowerCase()}-${Math.random().toString(36).slice(2, 7)}`;
+---
+
+{
+  entry ? (
+    <span class="keyword-wrap">
+      <a class="keyword" href={`/skills/${entry.id}/`} aria-describedby={id}>
+        {t}
+      </a>
+      <span class="keyword-tip" role="tooltip" id={id}>
+        <strong class="block text-ink-950 dark:text-paper-50">{entry.data.name}</strong>
+        {entry.data.summary}
+      </span>
+    </span>
+  ) : (
+    t
+  )
+}
