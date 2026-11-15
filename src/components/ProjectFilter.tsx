@@ -35,12 +35,10 @@ export default function ProjectFilter({ items, categories }: Props) {
           key={o.id}
           aria-pressed={active === o.id}
           onClick={() => setActive(o.id)}
-          class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded border border-sunlit-vellum-darker px-3.5 text-sm font-semibold text-lampblack-ink-lighter transition-colors hover:border-arcane-intellect aria-pressed:border-spice-melange aria-pressed:bg-spice-melange aria-pressed:text-sunlit-vellum dark:aria-pressed:bg-gravity-gun dark:border-midnight-codex-lighter dark:text-lunar-vellum-darker dark:hover:border-arcane-torrent dark:aria-pressed:border-gravity-gun dark:aria-pressed:text-iron-gall"
+          class="chip group"
         >
           <span class="capitalize">{o.label}</span>
-          <span
-            class={`font-mono text-xs ${active === o.id ? "text-sunlit-vellum dark:text-iron-gall" : "text-spice-melange dark:text-gravity-gun"}`}
-          >
+          <span class="font-mono text-xs text-spice-melange group-aria-pressed:text-sunlit-vellum dark:text-gravity-gun dark:group-aria-pressed:text-iron-gall">
             {o.count}
           </span>
         </button>

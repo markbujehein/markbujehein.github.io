@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "katex/dist/katex.min.css";
 @plugin "@tailwindcss/typography";
+/* Icons: Lucide through Iconify, as CSS masks. Write <span class="icon-[lucide--name] size-5" aria-hidden="true">; only the icons used reach the CSS. */
+@plugin "@iconify/tailwind4";
 
 /* Dark mode follows <html data-theme="dark">, set by the inline script in Base.astro.
    Without JavaScript nothing sets data-theme, so the system setting decides instead. */
@@ -143,6 +145,15 @@
 /* Actions */
 @utility action-link {
   @apply inline-flex min-h-11 items-center gap-1.5 rounded px-1 text-sm font-bold text-spice-melange no-underline underline-offset-4 transition-colors duration-200 hover:text-arcane-intellect hover:underline dark:text-gravity-gun dark:hover:text-arcane-torrent;
+}
+
+/* Own components, shaped after kinu (https://github.com/developit/kinu, MIT): one filled button, one toggle chip.
+   Orange rests, the lavender pair answers hover and focus, a press moves the button 1px. */
+@utility btn {
+  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded border-2 border-spice-melange bg-spice-melange px-4 font-bold text-sunlit-vellum no-underline transition-[background-color,border-color,transform] duration-150 hover:border-arcane-intellect hover:bg-arcane-intellect motion-safe:active:translate-y-px dark:border-gravity-gun dark:bg-gravity-gun dark:text-iron-gall dark:hover:border-arcane-torrent dark:hover:bg-arcane-torrent;
+}
+@utility chip {
+  @apply inline-flex min-h-11 cursor-pointer items-center gap-2 rounded border border-sunlit-vellum-darker px-3.5 text-sm font-semibold text-lampblack-ink-lighter transition-colors hover:border-arcane-intellect aria-pressed:border-spice-melange aria-pressed:bg-spice-melange aria-pressed:text-sunlit-vellum dark:border-midnight-codex-lighter dark:text-lunar-vellum-darker dark:hover:border-arcane-torrent dark:aria-pressed:border-gravity-gun dark:aria-pressed:bg-gravity-gun dark:aria-pressed:text-iron-gall;
 }
 
 /* Rendered Markdown: Tailwind Typography, themed with the site palette. */
@@ -298,5 +309,31 @@
   }
   .prose-site :is(section[data-footnotes], section.references) li::marker {
     content: "[" counter(list-item) "] ";
+  }
+}
+
+/* The search dialog fades and scales in. @starting-style gives the entry its start; allow-discrete keeps it on screen while it fades out. */
+#search-dialog {
+  opacity: 0;
+  transform: scale(0.97);
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease,
+    display 200ms allow-discrete,
+    overlay 200ms allow-discrete;
+}
+#search-dialog[open] {
+  opacity: 1;
+  transform: none;
+}
+@starting-style {
+  #search-dialog[open] {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #search-dialog {
+    transition: none;
   }
 }

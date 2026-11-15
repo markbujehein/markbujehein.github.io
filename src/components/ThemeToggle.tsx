@@ -33,30 +33,8 @@ export default function ThemeToggle() {
       class="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded border border-sunlit-vellum-darker text-silverpoint transition-colors hover:text-arcane-intellect focus-visible:ring-2 focus-visible:ring-arcane-intellect dark:border-midnight-codex-lighter dark:text-lunar-vellum-darker dark:hover:text-arcane-torrent"
     >
       {/* Both icons are in the markup and CSS picks one from data-theme, so the first paint is right before any script runs. */}
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-        class="dark:hidden"
-      >
-        <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
-      </svg>
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        aria-hidden="true"
-        class="hidden dark:block"
-      >
-        <circle cx="12" cy="12" r="4" />
-      </svg>
+      <span class="icon-[lucide--moon] size-5 dark:hidden" aria-hidden="true" />
+      <span class="icon-[lucide--sun] hidden size-5 dark:inline-block" aria-hidden="true" />
     </button>
   );
 }

@@ -14,12 +14,7 @@ const sections = sortByOrder(await getCollection("cv"));
   <header class="page-header mb-8">
     <h1 class="page-title">cv</h1>
     <p class="page-description">Research and professional experience, education and skills.</p>
-    <a
-      href="/pdf/cv.pdf"
-      class="inline-flex min-h-11 items-center rounded border-2 border-spice-melange bg-spice-melange px-4 font-bold text-sunlit-vellum no-underline transition-colors hover:border-arcane-intellect hover:bg-arcane-intellect dark:border-gravity-gun dark:bg-gravity-gun dark:text-iron-gall dark:hover:border-arcane-torrent dark:hover:bg-arcane-torrent"
-    >
-      Download CV (PDF)
-    </a>
+    <a href="/pdf/cv.pdf" class="btn"> Download CV (PDF) </a>
   </header>
   <div class="grid grid-cols-1 gap-8 md:grid-cols-[14rem_minmax(0,1fr)]">
     <PageJumpNav items={sections.map((s) => ({ id: s.id, label: s.data.title }))} />

@@ -203,6 +203,12 @@ importers:
       '@astrojs/ts-content-mapper':
         specifier: ^0.2.0
         version: 0.2.0
+      '@iconify-json/lucide':
+        specifier: ^1.2.154
+        version: 1.2.154
+      '@iconify/tailwind4':
+        specifier: ^1.2.3
+        version: 1.2.3(tailwindcss@4.3.5)
       '@playwright/test':
         specifier: ^1.65.1
         version: 1.65.1
@@ -238,6 +244,9 @@ importers:
         version: 5.1.0(@types/node@24.19.2)(vite@8.3.8(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1))
 
 packages:
+
+  '@antfu/install-pkg@2.1.0':
+    resolution: {integrity: sha512-sdg9NxU3zR4Mnawfbc/x6GB5Wf17WYud5qOuEuxXjaKpYpMkISSJEjItGebXJ2bQ4DIcly4NYH23mtkGJjvKUw==}
 
   '@astrojs/astro2tsx@0.1.4':
     resolution: {integrity: sha512-5dJqY4i1AlXxcsSFHkaegnrgdVs9J4U93y/YF0xmvmSOcNYVQnf4db3IhvqHZ5v8biLPlPlFmlYsqHj0c4/ZSA==}
@@ -534,6 +543,9 @@ packages:
     resolution: {integrity: sha512-tEj8X2No2A1c9NDnZECxiiJ8TP3vmFlN9tLlLeSaMqVW4tUmVG2R4qpv/eP4zymWxnymYLkLcIYVV0VcWj3RCQ==}
     engines: {node: '>= 20.12.0'}
 
+  '@cyberalien/svg-utils@1.2.21':
+    resolution: {integrity: sha512-exLnXg7+DfTRHD6Qm0SbWLXAICO0L4SdYevvY3irn3bU6zJ+WvIS6ogomE3T7EXE3krJjCpUKmkiRq4Mp/HoTw==}
+
   '@emnapi/core@1.11.1':
     resolution: {integrity: sha512-RSvbQmHzdKzNsLYa/wHrbc3KN4sYLKAdPZxqiM2HATqv/SBk2/ENSHpvXGaLOMcsAyz0poEGqkmmKYG3OWiJEQ==}
 
@@ -560,6 +572,23 @@ packages:
 
   '@emnapi/wasi-threads@2.2.0':
     resolution: {integrity: sha512-JP7OYH38Q7+pyTAe14raZHLQIK7BDKbdwji+Xi3pcd/6QkJYQH3SX4wu6EplGrGJWRepoNzedfm0G3B9Z4e9Rw==}
+
+  '@iconify-json/lucide@1.2.154':
+    resolution: {integrity: sha512-8+fuquLzqefUqEsnQSn77laDESOd9AX5ZM9zQzL5HT9DN58DtzwMIkLXxDjX77GAQ8PF4HTMuxhShQCOynwADg==}
+
+  '@iconify/tailwind4@1.2.3':
+    resolution: {integrity: sha512-z8SKiMHRASJKF/IY//87MF88lcB7ulxh8vlhQXXLWsBkNtOh6ese9R41MyGpQeqXdRvQVt+/fX2glQtHFjQ+MA==}
+    peerDependencies:
+      tailwindcss: '>= 4.0.0'
+
+  '@iconify/tools@5.0.14':
+    resolution: {integrity: sha512-wJ4ZE3/HZh2iBqLwG+8FOMHe7CMJAJqwSXZSpPwMdj1gZM3Z4t2hbQMVw4Vm45oQ985qn0g89PUIcDEdKTheBA==}
+
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+
+  '@iconify/utils@3.1.7':
+    resolution: {integrity: sha512-JZHlwdID+dy+lTgbYC8NEC4zeugqeYsc6jewvzb4c58kHauJn+X7rNwQjxz5p2qSjqaEeQoLkCIQ9v/H4PK0/w==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -1852,6 +1881,9 @@ packages:
       picomatch:
         optional: true
 
+  fflate@0.8.3:
+    resolution: {integrity: sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA==}
+
   flattie@1.1.1:
     resolution: {integrity: sha512-9UbaD6XdAL97+k/n+N7JwX46K/M6Zc6KcFYskrYL8wbBV/Uyk0CTAMY0VT+qiK5PM7AIc9aTWYtq65U7T+aCNQ==}
     engines: {node: '>=8'}
@@ -1939,6 +1971,9 @@ packages:
 
   http-cache-semantics@4.3.0:
     resolution: {integrity: sha512-M5t5LlJpS1UHMjvwRQVdFHvPISGeLAxNcrWuJkeGh0KxsqCHZ1O3NXZU/8x7cD0BDcGW8kapxMKTvwlqrNkHkA==}
+
+  import-meta-resolve@4.2.0:
+    resolution: {integrity: sha512-Iqv2fzaTQN28s/FwZAoFq0ZSs/7hMAHJVX+w8PZl3cY19Pxk6jFFalxQoIfW2826i/fDLXv8IiEZRIT0lDuWcg==}
 
   inline-style-parser@0.2.7:
     resolution: {integrity: sha512-Nb2ctOyNR8DqQoR0OwRG95uNWIC0C1lCgf5Naz5H6Ji72KZ8OcFZLz2P5sNgwlyoJ8Yif11oMuYs5pBQa86csA==}
@@ -2278,6 +2313,10 @@ packages:
   micromark@4.0.3:
     resolution: {integrity: sha512-oGYfQzHSG5dOMovQcJ3fyTmZlWAWpi0XA0sJwJs+i6OT88o1+Jtw/8z0CmdowSLxGhhFK89rQ/oXph/wN02PNw==}
 
+  modern-tar@0.8.6:
+    resolution: {integrity: sha512-LYSks0tNVqbtez/9OB0YFP6qLRSqkdAxJWOQpVaR67lNTbj2zNLyYpowkRMia5lXLCZKzxwoxkxH2MbbBR2aEg==}
+    engines: {node: '>=18.0.0'}
+
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -2386,6 +2425,9 @@ packages:
 
   parse5@8.1.1:
     resolution: {integrity: sha512-EcR/6WDcU7b2N3vQSxKALCk9lXGtUMQxXio008OEMBE0kavu/7JLfBEeFPzi43nMqVDSbEn3QCK+BMCc9zO//w==}
+
+  pathe@2.0.3:
+    resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
   piccolore@0.1.3:
     resolution: {integrity: sha512-o8bTeDWjE086iwKrROaDf31K0qC/BENdm15/uH9usSC/uZjJOKb2YGiVHfLY4GhwsERiPI1jmwI2XrA7ACOxVw==}
@@ -3003,6 +3045,11 @@ packages:
 
 snapshots:
 
+  '@antfu/install-pkg@2.1.0':
+    dependencies:
+      package-manager-detector: 1.9.0
+      tinyexec: 1.3.1
+
   '@astrojs/astro2tsx@0.1.4':
     dependencies:
       '@emnapi/core': 1.11.3
@@ -3358,6 +3405,10 @@ snapshots:
       fast-wrap-ansi: 0.2.2
       sisteransi: 2.0.0
 
+  '@cyberalien/svg-utils@1.2.21':
+    dependencies:
+      '@iconify/types': 2.0.0
+
   '@emnapi/core@1.11.1':
     dependencies:
       '@emnapi/wasi-threads': 1.2.2
@@ -3402,6 +3453,35 @@ snapshots:
     dependencies:
       tslib: 2.9.1
     optional: true
+
+  '@iconify-json/lucide@1.2.154':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify/tailwind4@1.2.3(tailwindcss@4.3.5)':
+    dependencies:
+      '@iconify/tools': 5.0.14
+      '@iconify/types': 2.0.0
+      '@iconify/utils': 3.1.7
+      tailwindcss: 4.3.5
+
+  '@iconify/tools@5.0.14':
+    dependencies:
+      '@cyberalien/svg-utils': 1.2.21
+      '@iconify/types': 2.0.0
+      '@iconify/utils': 3.1.7
+      fflate: 0.8.3
+      modern-tar: 0.8.6
+      pathe: 2.0.3
+      svgo: 4.1.0
+
+  '@iconify/types@2.0.0': {}
+
+  '@iconify/utils@3.1.7':
+    dependencies:
+      '@antfu/install-pkg': 2.1.0
+      '@iconify/types': 2.0.0
+      import-meta-resolve: 4.2.0
 
   '@img/colour@1.1.0':
     optional: true
@@ -4444,6 +4524,8 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.7
 
+  fflate@0.8.3: {}
+
   flattie@1.1.1: {}
 
   fnv1a-64@0.1.2: {}
@@ -4622,6 +4704,8 @@ snapshots:
   html-void-elements@3.0.0: {}
 
   http-cache-semantics@4.3.0: {}
+
+  import-meta-resolve@4.2.0: {}
 
   inline-style-parser@0.2.7: {}
 
@@ -5216,6 +5300,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  modern-tar@0.8.6: {}
+
   mri@1.2.0: {}
 
   mrmime@2.0.1: {}
@@ -5351,6 +5437,8 @@ snapshots:
   parse5@8.1.1:
     dependencies:
       entities: 9.0.0
+
+  pathe@2.0.3: {}
 
   piccolore@0.1.3: {}
 
