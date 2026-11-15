@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Logo proof sheet</title>
+<!-- Source of docs/brand/proof.png. The SVGs in logo/ are the logo source of truth. -->
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #888; font: 14px/1.5 system-ui, sans-serif; }
+  .sheet { width: 1600px; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .cell { padding: 28px 32px; min-height: 250px; }
+  .dark { background: #0F0A24; color: #E9E4FA; } .light { background: #F8F6FF; color: #1D1538; } .brand { background: #2EE6B0; color: #0F0A24; }
+  .cap { margin: 0 0 16px; font-size: 12px; opacity: .75; }
+  .row { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; }
+  .tab { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #2b2b33; color: #eee; border-radius: 8px 8px 0 0; font-size: 12px; }
+  .tab img { width: 16px; height: 16px; }
+  .crop { width: 160px; height: 160px; border-radius: 50%; overflow: hidden; }
+  .crop img { width: 100%; height: 100%; display: block; }
+  .zone { position: relative; display: inline-block; padding: 48px; outline: 1px dashed currentColor; outline-offset: -1px; }
+  .zone img { display: block; }
+  .pat-rings { height: 120px; border-radius: 6px; background: repeating-radial-gradient(circle at 70% 50%, transparent 0 14px, rgba(46,230,176,.35) 14px 16px); background-color: #1A1236; }
+  .pat-dots { height: 120px; border-radius: 6px; background: radial-gradient(circle, rgba(169,139,255,.55) 1.2px, transparent 1.4px) 0 0 / 22px 22px; background-color: #1A1236; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <section class="cell dark"><p class="cap">Lockup, stacked, wordmark on dark</p>
+    <div class="row"><img src="logo/lockup-dark.svg" height="48" alt="" /><img src="logo/stacked-dark.svg" height="90" alt="" /></div>
+    <div class="row" style="margin-top:22px"><img src="logo/wordmark-dark.svg" height="30" alt="" /><img src="logo/icon-dark.svg" height="48" alt="" /></div></section>
+  <section class="cell light"><p class="cap">Lockup, stacked, wordmark on light</p>
+    <div class="row"><img src="logo/lockup-light.svg" height="48" alt="" /><img src="logo/stacked-light.svg" height="90" alt="" /></div>
+    <div class="row" style="margin-top:22px"><img src="logo/wordmark-light.svg" height="30" alt="" /><img src="logo/icon-light.svg" height="48" alt="" /></div></section>
+  <section class="cell brand"><p class="cap">Wordmark and dark icon on Athena Core (#2EE6B0)</p>
+    <div class="row"><img src="logo/wordmark-light.svg" height="40" alt="" style="filter:none" /><img src="logo/icon-dark.svg" height="64" alt="" /></div></section>
+
+  <section class="cell dark"><p class="cap">Icon at 16, 32, 48 and 180 px</p>
+    <div class="row" style="align-items:flex-end"><img src="logo/icon-dark.svg" width="16" height="16" alt="" /><img src="logo/icon-dark.svg" width="32" height="32" alt="" /><img src="logo/icon-dark.svg" width="48" height="48" alt="" /><img src="logo/icon-dark.svg" width="120" height="120" alt="" /></div>
+    <p class="cap" style="margin-top:18px">Light icon at the same sizes</p>
+    <div class="row" style="align-items:flex-end"><img src="logo/icon-light.svg" width="16" height="16" alt="" /><img src="logo/icon-light.svg" width="32" height="32" alt="" /><img src="logo/icon-light.svg" width="48" height="48" alt="" /></div></section>
+  <section class="cell light"><p class="cap">Favicon in a browser tab, and the 400 px avatar in a circle crop</p>
+    <div style="background:#15151a;padding:10px 10px 0;border-radius:8px 8px 0 0;display:inline-block"><span class="tab"><img src="logo/favicon.svg" alt="" />Mark Buje Hein</span></div>
+    <div class="row" style="margin-top:22px"><div class="crop"><img src="logo/avatar.svg" alt="" /></div><img src="logo/avatar.svg" width="160" height="160" alt="" /></div></section>
+  <section class="cell dark"><p class="cap">Clear space: the height of the icon on every side</p>
+    <div class="zone"><img src="logo/lockup-dark.svg" height="48" alt="" /></div>
+    <p class="cap" style="margin-top:16px">Minimum size: icon 16 px, lockup 120 px wide</p></section>
+
+  <section class="cell dark" style="grid-column: span 3; min-height: 0"><p class="cap">Patterns: rings (from the hero) and dots</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px"><div class="pat-rings"></div><div class="pat-dots"></div></div></section>
+</div>
+</body>
+</html>

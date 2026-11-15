@@ -12,7 +12,7 @@ OUT = Path(sys.argv[1]).resolve()
 SITE = (sys.argv[2] if len(sys.argv) > 2 else "").rstrip("/")
 # Strings that must never appear in rendered HTML (template leftovers).
 FORBIDDEN = [r"einstein", r"dracoargenteus", r"Write your biography", r"\bNone\b(?=[\"'<&/])", r"\{\{|\{%"]
-REQUIRED_PAGES = ["index.html"]
+REQUIRED_PAGES = ["index.html", "pagefind/pagefind.js"]  # the second is the search index (pnpm run build)
 
 
 class P(HTMLParser):
