@@ -1,6 +1,6 @@
 # markbujehein.github.io
 
-Source for the personal academic website of **Mark B.H. Sørensen**, published at
+Source for the personal academic website of **Mark Buje Hein**, published at
 <https://markbujehein.github.io>. A static site built with [Astro](https://astro.build/) 7, TypeScript 7 and
 Tailwind CSS 4, with Preact islands and view transitions.
 
@@ -38,6 +38,7 @@ pnpm install
 pnpm dev             # http://localhost:4321
 pnpm run check       # astro sync + type check
 pnpm test            # Vitest
+pnpm run e2e         # Playwright end-to-end tests against the built site (CHROMIUM_PATH=/usr/bin/chromium to use a system browser)
 pnpm run lint        # Oxlint
 pnpm run format      # Oxfmt (src) + Prettier (.astro)
 pnpm run build       # check + astro build into dist/

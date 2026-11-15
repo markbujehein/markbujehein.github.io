@@ -57,7 +57,7 @@
 **Interfaces:**
 - Produces: `site: { title: string; author: string; url: string; description: string; nav: { label: string; href: string }[]; footer: string }` exported from `src/config/site.ts`. `Base` keeps its props (`title`, `description?`) and now also renders the shell.
 
-- [ ] **Step 1: Define `site`** with the values from `content/config.yml` (title "Mark B.H. Sørensen", description, the three nav entries, footer text "Design based on al-folio adapted for Pelican." replaced by "Built with Astro.").
+- [ ] **Step 1: Define `site`** with the values from `content/config.yml` (title "Mark Buje Hein", description, the three nav entries, footer text "Design based on al-folio adapted for Pelican." replaced by "Built with Astro.").
 - [ ] **Step 2: Build `Nav.astro`** (a `<nav aria-label="Main">` with a link per `site.nav` entry; current page marked `aria-current="page"` using `Astro.url.pathname`) and `Footer.astro`.
 - [ ] **Step 3: Verify** `pnpm run build`; open `dist/index.html`; expected: three nav links, the hero, and the footer.
 - [ ] **Step 4: Commit** `Add site config, nav and footer`.
