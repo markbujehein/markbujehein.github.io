@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "check": "astro sync && tsc --noEmit --runExternalCode",
-    "build": "pnpm run check && astro build && pagefind --site dist",
+    "build": "node -e \"require('fs').rmSync('public/pagefind',{recursive:true,force:true})\" && pnpm run check && astro build && pagefind --site dist",
+    "index:dev": "astro build --outDir .pagefind-build && pagefind --site .pagefind-build --output-path public/pagefind",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",

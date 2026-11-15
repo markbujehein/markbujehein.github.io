@@ -11,6 +11,8 @@ staging/*
 # Astro / Node
 node_modules/
 dist/
+.pagefind-build/
+public/pagefind/
 .astro/
 test-results/
 playwright-report/

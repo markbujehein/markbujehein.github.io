@@ -65,7 +65,7 @@
 
   async function load(): Promise<Pagefind | undefined> {
     try {
-      pagefind ??= await import(/* @vite-ignore */ INDEX);
+      pagefind ??= await import(/* @vite-ignore */ new URL(INDEX, location.origin).href);
     } catch {
       // dev server: no index yet
     }
@@ -84,7 +84,7 @@
     }
     const pf = await load();
     if (!pf) {
-      status.textContent = "The search index is created by the build: run pnpm run build.";
+      status.textContent = "No search index yet: run pnpm run index:dev, then reload.";
       return;
     }
     const { results } = await pf.search(q);
