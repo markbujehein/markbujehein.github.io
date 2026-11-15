@@ -9,11 +9,12 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
+    "e2e": "pnpm run build && playwright test",
     "notebooks": "bash notebooks/export.sh",
     "check:output": "python -I tools/check_output.py dist https://markbujehein.github.io",
-    "lint": "oxlint src",
-    "format": "oxfmt src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --write \"src/**/*.astro\"",
-    "format:check": "oxfmt --check src astro.config.mjs vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --check \"src/**/*.astro\""
+    "lint": "oxlint src e2e",
+    "format": "oxfmt src e2e astro.config.mjs playwright.config.ts vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --write \"src/**/*.astro\"",
+    "format:check": "oxfmt --check src e2e astro.config.mjs playwright.config.ts vitest.config.ts tsconfig.json package.json .oxfmtrc.json && prettier --check \"src/**/*.astro\""
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.9",

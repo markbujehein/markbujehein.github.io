@@ -1,7 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 const lastRingOpacity = (page: import("@playwright/test").Page) =>
-  page.locator(".hero .ring").last().evaluate((el) => Number(getComputedStyle(el).opacity));
+  page
+    .locator(".hero .ring")
+    .last()
+    .evaluate((el) => Number(getComputedStyle(el).opacity));
 
 test("the hero rings fade into view on load", async ({ page }) => {
   await page.goto("/");
