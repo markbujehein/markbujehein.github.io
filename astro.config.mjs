@@ -29,7 +29,8 @@ export default defineConfig({
     incrementalBuild: true,
   },
 
-  prefetch: true,
+  // Prefetch links as they scroll into view; the site is small, so this is cheap.
+  prefetch: { prefetchAll: true, defaultStrategy: "viewport" },
 
   // KaTeX math in Markdown: $inline$ and $$ blocks $$, rendered at build time.
   markdown: { processor: unified({ remarkPlugins, rehypePlugins }) },

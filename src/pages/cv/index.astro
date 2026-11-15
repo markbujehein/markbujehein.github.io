@@ -24,9 +24,7 @@ const sections = sortByOrder(await getCollection("cv"));
   <div class="grid grid-cols-1 gap-8 md:grid-cols-[14rem_minmax(0,1fr)]">
     <PageJumpNav items={sections.map((s) => ({ id: s.id, label: s.data.title }))} />
     <div class="space-y-12">
-      {sections.map((section) => (
-        <CVSection id={section.id} section={section.data} />
-      ))}
+      {sections.map((section) => <CVSection id={section.id} section={section.data} />)}
     </div>
   </div>
 </Base>

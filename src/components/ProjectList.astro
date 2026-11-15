@@ -12,23 +12,25 @@ const { projects, headingLevel: Heading = "h3" } = Astro.props;
 
 <div class="@container">
   <ul class="grid gap-4 @xl:grid-cols-2 @4xl:grid-cols-3">
-    {projects.map((project) => (
-      <li
-        class="surface-card-hover relative flex flex-col gap-2"
-        data-project={project.id}
-        data-category={project.data.category}
-      >
-        <span class="meta-chip self-start capitalize">{project.data.category}</span>
-        <Heading class="entry-title">
-          <a
-            href={`/projects/${project.id}/`}
-            class="text-inherit no-underline after:absolute after:inset-0 after:content-['']"
-          >
-            {project.data.title}
-          </a>
-        </Heading>
-        <p class="entry-supporting">{project.data.summary}</p>
-      </li>
-    ))}
+    {
+      projects.map((project) => (
+        <li
+          class="relative flex flex-col gap-2 surface-card-hover"
+          data-project={project.id}
+          data-category={project.data.category}
+        >
+          <span class="meta-chip self-start capitalize">{project.data.category}</span>
+          <Heading class="entry-title">
+            <a
+              href={`/projects/${project.id}/`}
+              class="text-inherit no-underline after:absolute after:inset-0 after:content-['']"
+            >
+              {project.data.title}
+            </a>
+          </Heading>
+          <p class="entry-supporting">{project.data.summary}</p>
+        </li>
+      ))
+    }
   </ul>
 </div>

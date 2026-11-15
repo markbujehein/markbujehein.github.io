@@ -35,14 +35,12 @@ const rings = [
           baseFrequency="0.9"
           numOctaves="2"
           seed="11"
-          result="noise"
-        ></feTurbulence>
+          result="noise"></feTurbulence>
         <feColorMatrix
           in="noise"
           type="matrix"
           values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -3.4 2.2"
-          result="speckle"
-        ></feColorMatrix>
+          result="speckle"></feColorMatrix>
         <feComposite in="SourceGraphic" in2="speckle" operator="in"></feComposite>
       </filter>
       <radialGradient id="hero-glow" cx="50%" cy="50%" r="50%">
@@ -53,19 +51,21 @@ const rings = [
     </defs>
     <circle cx="300" cy="300" r="300" fill="url(#hero-glow)"></circle>
     <g filter="url(#hero-grain)" fill="none">
-      {rings.map((ring, i) => (
-        <g class="shift" style={`--depth:${ring.depth}; --grow:${ring.grow}`}>
-          <circle
-            class="ring"
-            style={`--i:${i}`}
-            cx="300"
-            cy="300"
-            r={ring.r}
-            stroke={ring.c}
-            stroke-width={ring.w}
-          />
-        </g>
-      ))}
+      {
+        rings.map((ring, i) => (
+          <g class="shift" style={`--depth:${ring.depth}; --grow:${ring.grow}`}>
+            <circle
+              class="ring"
+              style={`--i:${i}`}
+              cx="300"
+              cy="300"
+              r={ring.r}
+              stroke={ring.c}
+              stroke-width={ring.w}
+            />
+          </g>
+        ))
+      }
     </g>
     <circle cx="300" cy="300" r="22" fill="#14092e"></circle>
   </svg>
@@ -77,24 +77,24 @@ const rings = [
     <p class="hero-headline">{headline}</p>
     <p class="hero-detail">{detail}</p>
     {role && <p class="hero-role">{role}</p>}
-    {(start || location) && (
-      <ul class="hero-facts">
-        {start && <li>{start}</li>}
-        {location && <li>{location}</li>}
-      </ul>
-    )}
+    {
+      (start || location) && (
+        <ul class="hero-facts">
+          {start && <li>{start}</li>}
+          {location && <li>{location}</li>}
+        </ul>
+      )
+    }
     <p class="hero-actions">
-      <a class="hero-btn hero-btn-primary" href={cvHref}>
-        Read my CV
-      </a>
-      <a class="hero-btn" href={projectsHref}>
-        See my projects
-      </a>
-      {linkedin && (
-        <a class="hero-btn" href={linkedin} target="_blank" rel="noopener noreferrer">
-          LinkedIn
-        </a>
-      )}
+      <a class="hero-btn hero-btn-primary" href={cvHref}> Read my CV </a>
+      <a class="hero-btn" href={projectsHref}> See my projects </a>
+      {
+        linkedin && (
+          <a class="hero-btn" href={linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn
+          </a>
+        )
+      }
     </p>
     {contact && <p class="hero-contact">{contact}</p>}
   </div>

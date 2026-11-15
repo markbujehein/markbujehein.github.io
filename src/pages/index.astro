@@ -34,9 +34,9 @@ const news = latest(await getCollection("news"), 5); // the full list lives at /
     projectsHref="/projects/"
   />
 
-  <div class="page-stack mt-12">
+  <div class="mt-12 page-stack">
     <section>
-      <h2 class="section-heading heading-bar mb-4">who I am</h2>
+      <h2 class="heading-bar mb-4 section-heading">who I am</h2>
       <Image
         class="float-right mb-4 ml-6 size-40 rounded-full object-cover"
         src={profile}
@@ -51,19 +51,21 @@ const news = latest(await getCollection("news"), 5); // the full list lives at /
     </section>
 
     <section>
-      <h2 class="section-heading heading-bar mb-4">what I have done</h2>
+      <h2 class="heading-bar mb-4 section-heading">what I have done</h2>
       <ProjectList projects={featured} />
     </section>
 
-    {skills && skills.data.type === "nested_list" && (
-      <section>
-        <h2 class="section-heading heading-bar mb-4">what I can do</h2>
-        <CVNested section={skills.data} />
-      </section>
-    )}
+    {
+      skills && skills.data.type === "nested_list" && (
+        <section>
+          <h2 class="heading-bar mb-4 section-heading">what I can do</h2>
+          <CVNested section={skills.data} />
+        </section>
+      )
+    }
 
     <section>
-      <h2 class="section-heading heading-bar mb-4">
+      <h2 class="heading-bar mb-4 section-heading">
         <a
           href="/news/"
           class="text-inherit no-underline hover:text-accent-700 dark:hover:text-accent-300"

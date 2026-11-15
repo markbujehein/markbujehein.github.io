@@ -13,14 +13,16 @@ const rendered = await Promise.all(
 ---
 
 <ul class="timeline">
-  {rendered.map(({ item, Content }) => (
-    <li class="timeline-item">
-      <time class="entry-index" datetime={isoDate(item.data.date, item.data.monthOnly)}>
-        {formatNewsDate(item.data.date, item.data.monthOnly)}
-      </time>
-      <div class="prose-site mt-1">
-        <Content />
-      </div>
-    </li>
-  ))}
+  {
+    rendered.map(({ item, Content }) => (
+      <li class="timeline-item">
+        <time class="entry-index" datetime={isoDate(item.data.date, item.data.monthOnly)}>
+          {formatNewsDate(item.data.date, item.data.monthOnly)}
+        </time>
+        <div class="prose-site mt-1">
+          <Content />
+        </div>
+      </li>
+    ))
+  }
 </ul>

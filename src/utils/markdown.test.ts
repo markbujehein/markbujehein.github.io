@@ -30,3 +30,8 @@ test("two dollar amounts in one paragraph are not turned into math", async () =>
 test("invalid TeX fails the build instead of shipping a red error", async () => {
   await expect(render("Broken $$\\frac{1$$ formula.")).rejects.toThrow();
 });
+
+test("tables are wrapped so a wide table scrolls instead of widening the page", async () => {
+  const html = await render("| a | b |\n|---|---|\n| 1 | 2 |\n");
+  expect(html).toContain('<div class="table-wrap"><table>');
+});
