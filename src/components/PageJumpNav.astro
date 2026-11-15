@@ -8,7 +8,7 @@ const { items } = Astro.props;
 
 <nav
   aria-label="On this page"
-  class="jump-nav sticky top-[3.75rem] z-30 -mx-4 border-b border-paper-300 bg-paper-50/95 px-4 backdrop-blur md:top-20 md:mx-0 md:self-start md:border-0 md:bg-transparent md:px-0 md:backdrop-blur-none dark:border-ink-700 dark:bg-ink-950/95 dark:md:bg-transparent"
+  class="jump-nav sticky top-[3.75rem] z-30 -mx-4 border-b border-sunlit-vellum-darker bg-sunlit-vellum/95 px-4 backdrop-blur md:top-20 md:mx-0 md:self-start md:border-0 md:bg-transparent md:px-0 md:backdrop-blur-none dark:border-midnight-codex-lighter dark:bg-iron-gall/95 dark:md:bg-transparent"
   data-jump-nav
 >
   <ul class="flex gap-1 overflow-x-auto py-1 md:flex-col md:overflow-visible">
@@ -17,7 +17,7 @@ const { items } = Astro.props;
         <li>
           <a
             href={`#${item.id}`}
-            class="block rounded px-2 py-2 text-sm whitespace-nowrap text-ink-600 no-underline hover:text-accent-700 aria-[current=location]:bg-accent-100 aria-[current=location]:font-bold aria-[current=location]:text-accent-800 md:whitespace-normal dark:text-paper-400 dark:hover:text-accent-300 dark:aria-[current=location]:bg-ink-800 dark:aria-[current=location]:text-accent-300"
+            class="block rounded px-2 py-2 text-sm whitespace-nowrap text-silverpoint no-underline hover:text-arcane-intellect aria-[current=location]:bg-spice-melange/15 aria-[current=location]:font-bold aria-[current=location]:text-spice-melange md:whitespace-normal dark:text-marginalia dark:hover:text-arcane-torrent dark:aria-[current=location]:bg-midnight-codex-lighter dark:aria-[current=location]:text-gravity-gun"
           >
             {item.label}
           </a>

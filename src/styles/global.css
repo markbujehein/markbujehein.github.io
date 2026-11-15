@@ -15,62 +15,33 @@
   }
 }
 
-/* Palette anchored on the hero: ink #14092e, paper #f4f1fa, accent #fe9f6d. */
+/* Brand palette (README, Brand). Names are the palette's own; "-lighter" and "-darker" are its shade steps.
+   Bright mode: Sunlit Vellum, Illuminated Leaf, Lampblack Ink, Silverpoint, Oracle Core, Spice Melange, Arcane Intellect.
+   Dark mode: Iron Gall, Midnight Codex, Lunar Vellum, Marginalia, Athena Core, Gravity Gun, Arcane Torrent. */
 @theme {
-  --color-ink-50: #efecf6;
-  --color-ink-100: #d6d0e6;
-  --color-ink-200: #b3a9d0;
-  --color-ink-300: #9186b8;
-  --color-ink-400: #7a6da6;
-  --color-ink-500: #65588f;
-  --color-ink-600: #4f4373;
-  --color-ink-700: #3a2f58;
-  --color-ink-800: #2a2044;
-  --color-ink-900: #1d1238;
-  --color-ink-950: #14092e;
+  --color-sunlit-vellum: #f8f6ff;
+  --color-sunlit-vellum-darker: #e1dfe8;
+  --color-illuminated-leaf: #ffffff;
+  --color-lampblack-ink: #1d1538;
+  --color-lampblack-ink-lighter: #2d264b;
+  --color-silverpoint: #5a5078;
+  --color-oracle-core: #08705a;
+  --color-oracle-core-lighter: #2b856e;
+  --color-spice-melange: #a63f00;
+  --color-arcane-intellect: #5636d1;
 
-  --color-paper-50: #faf9fc;
-  --color-paper-100: #f4f1fa;
-  --color-paper-200: #e9e4f3;
-  --color-paper-300: #d9d4e5;
-  --color-paper-400: #b9b1cf;
-  --color-paper-500: #9a90b6;
-  --color-paper-600: #7d7299;
-  --color-paper-700: #62587c;
-  --color-paper-800: #483f5e;
-  --color-paper-900: #322b43;
-  --color-paper-950: #201b2b;
+  --color-iron-gall: #0f0a24;
+  --color-midnight-codex: #1a1236;
+  --color-midnight-codex-lighter: #2a2349;
+  --color-lunar-vellum: #e9e4fa;
+  --color-lunar-vellum-darker: #d2cde3;
+  --color-marginalia: #a79fc4;
+  --color-athena-core: #2ee6b0;
+  --color-gravity-gun: #ff7a1a;
+  --color-arcane-torrent: #a98bff;
 
-  --color-accent-50: #fff4ec;
-  --color-accent-100: #ffe5d3;
-  --color-accent-200: #ffcaa8;
-  --color-accent-300: #fead7d;
-  --color-accent-400: #fe9f6d;
-  --color-accent-500: #f0783b;
-  --color-accent-600: #d45a1f;
-  --color-accent-700: #a8420f;
-  --color-accent-800: #82330d;
-  --color-accent-900: #5e270c;
-  --color-accent-950: #331204;
-
-  /* Keyword teal: split-complement of the orange accent (OKLCH hue 198 vs 48), chosen over the pure
-     complement (azure, 228) because the indigo background is already blue. Orange is structure,
-     teal marks what you can interact with. Text steps: 600 on paper, 300 on ink. */
-  --color-key-50: #dafdfe;
-  --color-key-100: #c3f2f3;
-  --color-key-200: #a6e1e2;
-  --color-key-300: #71c8cb;
-  --color-key-400: #34abaf;
-  --color-key-500: #088285;
-  --color-key-600: #076b6e;
-  --color-key-700: #005355;
-  --color-key-800: #013b3d;
-  --color-key-900: #012526;
-  --color-key-950: #011111;
-  /* Light-mode keyword colour: azure, the true complement (hue 228). Teal above is for dark mode. */
-  --color-key-light-400: #49a4ca;
-  --color-key-light-500: #067da2;
-  --color-key-light-600: #066786;
+  /* The hero panel, in both modes. Not a page colour. */
+  --color-tyrian-folio: #14092e;
 
   /* The hero's ring colours, a magma scale. Used for small accent marks, not for text. */
   --color-magma-yellow: #fcfdbf;
@@ -106,13 +77,13 @@
     }
   }
   body {
-    @apply bg-paper-50 font-sans text-ink-700 dark:bg-ink-950 dark:text-paper-300;
+    @apply bg-sunlit-vellum font-sans text-lampblack-ink-lighter dark:bg-iron-gall dark:text-lunar-vellum-darker;
   }
   ::selection {
-    @apply bg-accent-400 text-ink-950;
+    @apply bg-spice-melange text-sunlit-vellum dark:bg-gravity-gun dark:text-iron-gall;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-accent-600 dark:outline-accent-400;
+    @apply outline-2 outline-offset-2 outline-arcane-intellect dark:outline-arcane-torrent;
   }
 }
 
@@ -124,108 +95,108 @@
   @apply space-y-8 pb-2 sm:space-y-12 sm:pb-4;
 }
 @utility page-header {
-  @apply relative space-y-3 border-b border-paper-300 pt-2 pb-5 sm:pb-6 dark:border-ink-700;
+  @apply relative space-y-3 border-b border-sunlit-vellum-darker pt-2 pb-5 sm:pb-6 dark:border-midnight-codex-lighter;
 }
 @utility page-title {
-  @apply font-heading leading-[1.05] font-bold tracking-[-0.02em] text-ink-950 dark:text-paper-50;
+  @apply font-heading leading-[1.05] font-bold tracking-[-0.02em] text-lampblack-ink dark:text-lunar-vellum;
   font-size: clamp(2.1rem, 1.5rem + 3vw, 3rem);
 }
 @utility page-description {
-  @apply max-w-[44rem] text-[1.0625rem] leading-7 text-ink-600 dark:text-paper-300;
+  @apply max-w-[44rem] text-[1.0625rem] leading-7 text-silverpoint dark:text-lunar-vellum-darker;
 }
 @utility section-heading {
-  @apply font-heading text-2xl leading-[1.1] font-bold tracking-[-0.015em] text-ink-950 sm:text-[1.75rem] dark:text-paper-50;
+  @apply font-heading text-2xl leading-[1.1] font-bold tracking-[-0.015em] text-lampblack-ink sm:text-[1.75rem] dark:text-lunar-vellum;
 }
 
 /* Entry hierarchy: title, supporting text, summary, metadata */
 @utility entry-title {
-  @apply font-heading text-[1.25rem] leading-[1.28] font-bold tracking-[-0.01em] text-ink-950 dark:text-paper-50;
+  @apply font-heading text-[1.25rem] leading-[1.28] font-bold tracking-[-0.01em] text-lampblack-ink dark:text-lunar-vellum;
 }
 @utility entry-supporting {
-  @apply text-base leading-6 text-ink-600 dark:text-paper-300;
+  @apply text-base leading-6 text-silverpoint dark:text-lunar-vellum-darker;
 }
 @utility entry-summary {
-  @apply text-base leading-[1.65rem] text-ink-700 dark:text-paper-300;
+  @apply text-base leading-[1.65rem] text-lampblack-ink-lighter dark:text-lunar-vellum-darker;
 }
 @utility entry-meta {
-  @apply text-sm leading-[1.375rem] text-ink-600 dark:text-paper-300;
+  @apply text-sm leading-[1.375rem] text-silverpoint dark:text-lunar-vellum-darker;
 }
 @utility entry-index {
-  @apply font-mono text-xs leading-[1.125rem] font-semibold whitespace-nowrap text-accent-700 tabular-nums dark:text-accent-300;
+  @apply font-mono text-xs leading-[1.125rem] font-semibold whitespace-nowrap text-spice-melange tabular-nums dark:text-gravity-gun;
 }
 
 /* Surfaces: solid fill, hairline border, the hero's 2px accent rule on the left */
 @utility surface-card {
-  @apply rounded-md border border-l-2 border-paper-300 border-l-accent-500 bg-paper-100 p-5 transition-[border-color,box-shadow] duration-200 sm:p-6 dark:border-ink-700 dark:border-l-accent-400 dark:bg-ink-900;
+  @apply rounded-md border border-l-2 border-sunlit-vellum-darker border-l-spice-melange bg-illuminated-leaf p-5 transition-[border-color,box-shadow] duration-200 sm:p-6 dark:border-midnight-codex-lighter dark:border-l-gravity-gun dark:bg-midnight-codex;
 }
 @utility surface-card-hover {
-  @apply surface-card focus-within:border-accent-500 hover:border-accent-500 dark:hover:border-accent-400;
+  @apply surface-card focus-within:border-arcane-intellect hover:border-arcane-intellect dark:hover:border-arcane-torrent;
   &:hover,
   &:focus-within {
     box-shadow: 0 0 26px -10px var(--color-magma-rose);
   }
 }
 @utility meta-chip {
-  @apply inline-flex min-h-7 items-center gap-1.5 rounded border border-paper-300 bg-paper-50 px-2.5 py-1 text-xs leading-none font-semibold text-ink-700 dark:border-ink-700 dark:bg-ink-800 dark:text-paper-300;
+  @apply inline-flex min-h-7 items-center gap-1.5 rounded border border-sunlit-vellum-darker bg-sunlit-vellum px-2.5 py-1 text-xs leading-none font-semibold text-lampblack-ink-lighter dark:border-midnight-codex-lighter dark:bg-midnight-codex-lighter dark:text-lunar-vellum-darker;
 }
 
 /* Actions */
 @utility action-link {
-  @apply inline-flex min-h-11 items-center gap-1.5 rounded px-1 text-sm font-bold text-accent-700 no-underline underline-offset-4 transition-colors duration-200 hover:text-accent-900 hover:underline dark:text-accent-300 dark:hover:text-accent-100;
+  @apply inline-flex min-h-11 items-center gap-1.5 rounded px-1 text-sm font-bold text-spice-melange no-underline underline-offset-4 transition-colors duration-200 hover:text-arcane-intellect hover:underline dark:text-gravity-gun dark:hover:text-arcane-torrent;
 }
 
 /* Rendered Markdown: Tailwind Typography, themed with the site palette. */
 @layer components {
   .prose-site {
     @apply prose relative max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-[-0.01em] prose-code:before:content-none prose-code:after:content-none;
-    --tw-prose-body: var(--color-ink-700);
-    --tw-prose-headings: var(--color-ink-950);
-    --tw-prose-lead: var(--color-ink-600);
-    --tw-prose-links: var(--color-accent-700);
-    --tw-prose-bold: var(--color-ink-950);
-    --tw-prose-counters: var(--color-accent-600);
-    --tw-prose-bullets: var(--color-accent-500);
-    --tw-prose-hr: var(--color-paper-300);
-    --tw-prose-quotes: var(--color-ink-600);
-    --tw-prose-quote-borders: var(--color-accent-500);
-    --tw-prose-captions: var(--color-ink-600);
-    --tw-prose-code: var(--color-ink-900);
-    --tw-prose-th-borders: var(--color-paper-300);
-    --tw-prose-td-borders: var(--color-paper-300);
+    --tw-prose-body: var(--color-lampblack-ink-lighter);
+    --tw-prose-headings: var(--color-lampblack-ink);
+    --tw-prose-lead: var(--color-silverpoint);
+    --tw-prose-links: var(--color-spice-melange);
+    --tw-prose-bold: var(--color-lampblack-ink);
+    --tw-prose-counters: var(--color-spice-melange);
+    --tw-prose-bullets: var(--color-spice-melange);
+    --tw-prose-hr: var(--color-sunlit-vellum-darker);
+    --tw-prose-quotes: var(--color-silverpoint);
+    --tw-prose-quote-borders: var(--color-spice-melange);
+    --tw-prose-captions: var(--color-silverpoint);
+    --tw-prose-code: var(--color-lampblack-ink);
+    --tw-prose-th-borders: var(--color-sunlit-vellum-darker);
+    --tw-prose-td-borders: var(--color-sunlit-vellum-darker);
   }
   [data-theme="dark"] .prose-site {
-    --tw-prose-body: var(--color-paper-300);
-    --tw-prose-headings: var(--color-paper-50);
-    --tw-prose-lead: var(--color-paper-400);
-    --tw-prose-links: var(--color-accent-300);
-    --tw-prose-bold: var(--color-paper-50);
-    --tw-prose-counters: var(--color-accent-400);
-    --tw-prose-bullets: var(--color-accent-400);
-    --tw-prose-hr: var(--color-ink-700);
-    --tw-prose-quotes: var(--color-paper-400);
-    --tw-prose-quote-borders: var(--color-accent-400);
-    --tw-prose-captions: var(--color-paper-400);
-    --tw-prose-code: var(--color-paper-100);
-    --tw-prose-th-borders: var(--color-ink-700);
-    --tw-prose-td-borders: var(--color-ink-700);
+    --tw-prose-body: var(--color-lunar-vellum-darker);
+    --tw-prose-headings: var(--color-lunar-vellum);
+    --tw-prose-lead: var(--color-marginalia);
+    --tw-prose-links: var(--color-gravity-gun);
+    --tw-prose-bold: var(--color-lunar-vellum);
+    --tw-prose-counters: var(--color-gravity-gun);
+    --tw-prose-bullets: var(--color-gravity-gun);
+    --tw-prose-hr: var(--color-midnight-codex-lighter);
+    --tw-prose-quotes: var(--color-marginalia);
+    --tw-prose-quote-borders: var(--color-gravity-gun);
+    --tw-prose-captions: var(--color-marginalia);
+    --tw-prose-code: var(--color-lunar-vellum);
+    --tw-prose-th-borders: var(--color-midnight-codex-lighter);
+    --tw-prose-td-borders: var(--color-midnight-codex-lighter);
   }
   /* The same dark values when no script has set data-theme (no JavaScript). Keep in step with the block above. */
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) .prose-site {
-      --tw-prose-body: var(--color-paper-300);
-      --tw-prose-headings: var(--color-paper-50);
-      --tw-prose-lead: var(--color-paper-400);
-      --tw-prose-links: var(--color-accent-300);
-      --tw-prose-bold: var(--color-paper-50);
-      --tw-prose-counters: var(--color-accent-400);
-      --tw-prose-bullets: var(--color-accent-400);
-      --tw-prose-hr: var(--color-ink-700);
-      --tw-prose-quotes: var(--color-paper-400);
-      --tw-prose-quote-borders: var(--color-accent-400);
-      --tw-prose-captions: var(--color-paper-400);
-      --tw-prose-code: var(--color-paper-100);
-      --tw-prose-th-borders: var(--color-ink-700);
-      --tw-prose-td-borders: var(--color-ink-700);
+      --tw-prose-body: var(--color-lunar-vellum-darker);
+      --tw-prose-headings: var(--color-lunar-vellum);
+      --tw-prose-lead: var(--color-marginalia);
+      --tw-prose-links: var(--color-gravity-gun);
+      --tw-prose-bold: var(--color-lunar-vellum);
+      --tw-prose-counters: var(--color-gravity-gun);
+      --tw-prose-bullets: var(--color-gravity-gun);
+      --tw-prose-hr: var(--color-midnight-codex-lighter);
+      --tw-prose-quotes: var(--color-marginalia);
+      --tw-prose-quote-borders: var(--color-gravity-gun);
+      --tw-prose-captions: var(--color-marginalia);
+      --tw-prose-code: var(--color-lunar-vellum);
+      --tw-prose-th-borders: var(--color-midnight-codex-lighter);
+      --tw-prose-td-borders: var(--color-midnight-codex-lighter);
     }
   }
   .table-wrap {
@@ -243,13 +214,13 @@
   }
 }
 @utility timeline {
-  @apply relative ml-1.5 border-l border-paper-300 pl-6 dark:border-ink-700;
+  @apply relative ml-1.5 border-l border-sunlit-vellum-darker pl-6 dark:border-midnight-codex-lighter;
 }
 @utility timeline-item {
   @apply relative pb-6;
   &::before {
     content: "";
-    @apply absolute top-1.5 -left-[1.9rem] size-3 rounded-full border-2 bg-paper-50 dark:bg-ink-950;
+    @apply absolute top-1.5 -left-[1.9rem] size-3 rounded-full border-2 bg-sunlit-vellum dark:bg-iron-gall;
     border-color: var(--color-magma-orange);
   }
   &:nth-child(3n + 2)::before {
@@ -280,13 +251,13 @@
 /* Keyword: a technical term that explains itself on hover or focus and links to examples.
    Works without JavaScript; the tooltip is CSS only. */
 @utility keyword {
-  @apply font-semibold text-key-light-600 underline decoration-key-light-400 decoration-dotted underline-offset-4 hover:decoration-solid dark:text-key-300 dark:decoration-key-500;
+  @apply font-semibold text-oracle-core underline decoration-oracle-core-lighter decoration-dotted underline-offset-4 hover:decoration-solid dark:text-athena-core dark:decoration-athena-core;
 }
 @layer components {
   /* The tip is anchored to the nearest positioned ancestor (the card), not to the keyword, so it can never
      reach past the card and widen the page. With no `top`, its margin (mt-6) lowers it from the keyword's own line to just below it. */
   .keyword-tip {
-    @apply invisible absolute right-0 left-0 z-30 mt-6 max-w-80 rounded-md border border-l-2 border-paper-300 border-l-key-light-500 bg-paper-50 p-3 text-sm leading-5 font-normal text-ink-700 opacity-0 transition-opacity duration-150 dark:border-ink-700 dark:border-l-key-400 dark:bg-ink-900 dark:text-paper-300;
+    @apply invisible absolute right-0 left-0 z-30 mt-6 max-w-80 rounded-md border border-l-2 border-sunlit-vellum-darker border-l-oracle-core bg-sunlit-vellum p-3 text-sm leading-5 font-normal text-lampblack-ink-lighter opacity-0 transition-opacity duration-150 dark:border-midnight-codex-lighter dark:border-l-athena-core dark:bg-midnight-codex dark:text-lunar-vellum-darker;
   }
   /* The tip is a child of the wrapper, so moving the pointer onto it keeps it open (WCAG 1.4.13). */
   .keyword-wrap:hover .keyword-tip,
@@ -301,13 +272,13 @@
 /* References: the footnote list that remark-gfm appends to a page. A rule, a small heading, smaller muted entries. */
 @layer components {
   .prose-site :is(section[data-footnotes], section.references) {
-    @apply mt-10 border-t border-paper-300 pt-4 dark:border-ink-700;
+    @apply mt-10 border-t border-sunlit-vellum-darker pt-4 dark:border-midnight-codex-lighter;
   }
   .prose-site .references-title {
-    @apply mt-0 mb-3 font-sans text-xs font-semibold tracking-wider text-ink-600 uppercase dark:text-paper-400;
+    @apply mt-0 mb-3 font-sans text-xs font-semibold tracking-wider text-silverpoint uppercase dark:text-marginalia;
   }
   .prose-site :is(section[data-footnotes], section.references) ol {
-    @apply my-0 space-y-2 pl-5 text-sm text-ink-600 dark:text-paper-400;
+    @apply my-0 space-y-2 pl-5 text-sm text-silverpoint dark:text-marginalia;
   }
   .prose-site :is(section[data-footnotes], section.references) li {
     @apply my-0 pl-1 break-words;

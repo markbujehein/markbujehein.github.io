@@ -17,7 +17,9 @@ const { id, section } = Astro.props;
       <dl class="grid gap-x-6 gap-y-2 surface-card sm:grid-cols-[max-content_1fr]">
         {section.contents.map((item) => (
           <>
-            <dt class="entry-meta font-bold text-ink-950 dark:text-paper-50">{item.name}</dt>
+            <dt class="entry-meta font-bold text-lampblack-ink dark:text-lunar-vellum">
+              {item.name}
+            </dt>
             <dd class="entry-summary">{item.value}</dd>
           </>
         ))}
@@ -34,7 +36,7 @@ const { id, section } = Astro.props;
             <h3 class="entry-title">{entry.title}</h3>
             {entry.institution && <p class="entry-supporting">{entry.institution}</p>}
             {entry.description.length > 0 && (
-              <ul class="mt-1 list-disc space-y-1 pl-5 entry-summary marker:text-accent-500">
+              <ul class="mt-1 list-disc space-y-1 pl-5 entry-summary marker:text-spice-melange">
                 {entry.description.map((line) => (
                   <li>{line}</li>
                 ))}
@@ -47,7 +49,7 @@ const { id, section } = Astro.props;
   }
   {
     section.type === "list" && (
-      <ul class="list-disc space-y-1 surface-card pl-9 entry-summary marker:text-accent-500">
+      <ul class="list-disc space-y-1 surface-card pl-9 entry-summary marker:text-spice-melange">
         {section.contents.map((line) => (
           <li>{line}</li>
         ))}

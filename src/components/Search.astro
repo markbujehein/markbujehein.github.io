@@ -8,7 +8,7 @@
   id="search-open"
   hidden
   aria-label="Search (press / or Ctrl+K)"
-  class="flex h-11 w-11 cursor-pointer items-center justify-center rounded border border-paper-300 text-ink-600 hover:text-accent-700 dark:border-ink-700 dark:text-paper-300 dark:hover:text-accent-300"
+  class="flex h-11 w-11 cursor-pointer items-center justify-center rounded border border-sunlit-vellum-darker text-silverpoint hover:text-arcane-intellect dark:border-midnight-codex-lighter dark:text-lunar-vellum-darker dark:hover:text-arcane-torrent"
 >
   <svg
     viewBox="0 0 24 24"
@@ -28,7 +28,7 @@
 <dialog
   id="search-dialog"
   aria-label="Search"
-  class="mx-auto mt-[10vh] mb-auto w-[min(40rem,calc(100vw-2rem))] rounded-md border border-paper-300 bg-paper-50 p-0 text-ink-700 backdrop:bg-ink-950/60 dark:border-ink-700 dark:bg-ink-900 dark:text-paper-300"
+  class="mx-auto mt-[10vh] mb-auto w-[min(40rem,calc(100vw-2rem))] rounded-md border border-sunlit-vellum-darker bg-sunlit-vellum p-0 text-lampblack-ink-lighter backdrop:bg-lampblack-ink/60 dark:border-midnight-codex-lighter dark:bg-midnight-codex dark:text-lunar-vellum-darker"
 >
   <input
     id="search-input"
@@ -36,17 +36,17 @@
     placeholder="Search the site"
     aria-label="Search the site"
     autocomplete="off"
-    class="w-full border-0 border-b border-paper-300 bg-transparent px-4 py-3 text-base text-ink-950 outline-none placeholder:text-ink-500 focus-visible:ring-2 focus-visible:ring-accent-500 dark:border-ink-700 dark:text-paper-50 dark:placeholder:text-paper-400"
+    class="w-full border-0 border-b border-sunlit-vellum-darker bg-transparent px-4 py-3 text-base text-lampblack-ink outline-none placeholder:text-silverpoint focus-visible:ring-2 focus-visible:ring-arcane-intellect dark:border-midnight-codex-lighter dark:text-lunar-vellum dark:placeholder:text-marginalia"
   />
   <p
     id="search-status"
-    class="m-0 px-4 py-2 text-sm text-ink-600 dark:text-paper-400"
+    class="m-0 px-4 py-2 text-sm text-silverpoint dark:text-marginalia"
     role="status"
   >
   </p>
   <ul
     id="search-results"
-    class="m-0 max-h-[60vh] list-none overflow-y-auto p-0 [&_mark]:bg-accent-300/40 [&_mark]:text-inherit"
+    class="m-0 max-h-[60vh] list-none overflow-y-auto p-0 [&_mark]:bg-spice-melange/30 [&_mark]:text-inherit"
   >
   </ul>
 </dialog>
@@ -96,9 +96,9 @@
       const a = document.createElement("a");
       a.href = hit.url;
       a.className =
-        "block px-4 py-3 text-ink-700 no-underline hover:bg-paper-200 focus-visible:bg-paper-200 dark:text-paper-300 dark:hover:bg-ink-800 dark:focus-visible:bg-ink-800";
+        "block px-4 py-3 text-lampblack-ink-lighter no-underline hover:bg-sunlit-vellum-darker focus-visible:bg-sunlit-vellum-darker dark:text-lunar-vellum-darker dark:hover:bg-midnight-codex-lighter dark:focus-visible:bg-midnight-codex-lighter";
       const title = document.createElement("strong");
-      title.className = "block text-ink-950 dark:text-paper-50";
+      title.className = "block text-lampblack-ink dark:text-lunar-vellum";
       title.textContent = hit.meta.title ?? hit.url;
       const excerpt = document.createElement("span");
       excerpt.className = "block text-sm";

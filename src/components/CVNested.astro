@@ -15,7 +15,7 @@ const { section } = Astro.props;
       section.contents.map((group) => (
         <div class="relative surface-card">
           <h3 class="mb-2 entry-title">{group.title}</h3>
-          <ul class="list-disc space-y-1 pl-5 entry-summary marker:text-accent-500">
+          <ul class="list-disc space-y-1 pl-5 entry-summary marker:text-spice-melange">
             {group.elements.map((element) => (
               <li>
                 <Terms text={element} />

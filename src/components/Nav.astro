@@ -6,14 +6,17 @@ import ThemeToggle from "./ThemeToggle";
 
 const path = Astro.url.pathname;
 const link =
-  "inline-flex min-h-11 items-center rounded px-3 text-sm font-semibold text-ink-600 no-underline hover:text-accent-700 aria-[current]:text-ink-950 dark:text-paper-300 dark:hover:text-accent-300 dark:aria-[current]:text-paper-50";
+  "inline-flex min-h-11 items-center rounded px-3 text-sm font-semibold text-silverpoint no-underline hover:text-arcane-intellect aria-[current]:text-lampblack-ink dark:text-lunar-vellum-darker dark:hover:text-arcane-torrent dark:aria-[current]:text-lunar-vellum";
 ---
 
 <header
-  class="sticky top-0 z-40 border-b border-paper-300 bg-paper-50/90 backdrop-blur dark:border-ink-700 dark:bg-ink-950/90"
+  class="sticky top-0 z-40 border-b border-sunlit-vellum-darker bg-sunlit-vellum/90 backdrop-blur dark:border-midnight-codex-lighter dark:bg-iron-gall/90"
 >
   <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2 sm:px-6">
-    <a href="/" class="font-heading text-lg font-bold text-ink-950 no-underline dark:text-paper-50">
+    <a
+      href="/"
+      class="font-heading text-lg font-bold text-lampblack-ink no-underline dark:text-lunar-vellum"
+    >
       {site.title}
     </a>
     <div class="flex items-center gap-2">
@@ -40,7 +43,7 @@ const link =
       <details class="relative sm:hidden">
         <summary
           aria-label="Menu"
-          class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded border border-paper-300 text-ink-600 dark:border-ink-700 dark:text-paper-300 [&::-webkit-details-marker]:hidden"
+          class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded border border-sunlit-vellum-darker text-silverpoint dark:border-midnight-codex-lighter dark:text-lunar-vellum-darker [&::-webkit-details-marker]:hidden"
         >
           <svg
             viewBox="0 0 24 24"
@@ -56,7 +59,7 @@ const link =
         </summary>
         <nav
           aria-label="Main (menu)"
-          class="absolute right-0 mt-2 w-52 rounded-md border border-l-2 border-paper-300 border-l-accent-500 bg-paper-50 p-2 dark:border-ink-700 dark:border-l-accent-400 dark:bg-ink-900"
+          class="absolute right-0 mt-2 w-52 rounded-md border border-l-2 border-sunlit-vellum-darker border-l-spice-melange bg-sunlit-vellum p-2 dark:border-midnight-codex-lighter dark:border-l-gravity-gun dark:bg-midnight-codex"
         >
           <ul>
             {
