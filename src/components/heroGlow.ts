@@ -26,6 +26,8 @@ uniform vec2 uCentre;   // ring centre, device px (origin bottom-left)
 uniform float uScale;   // device px per viewBox unit
 uniform float uPitch;   // pixel lattice pitch, device px
 uniform float uP;       // hero scroll progress 0..1
+uniform vec3 uWave;     // glow pulse: front radius (device px), opacity, ignition at the centre (read from the CSS animation)
+uniform float uRem;     // 1rem in device px
 uniform vec3 uTrail[${MAX_TRAIL}];  // pointer x, y (device px), age (s; < 0 = unused)
 uniform vec4 uRing[${MAX_RINGS}];   // radius, width, depth, grow
 uniform vec3 uCol[${MAX_RINGS}];
@@ -68,6 +70,15 @@ void main() {
   }
   tint /= wsum;
 
+  // the glow pulse passes: pixels just behind the front fire, thinning out into a trail, plus the ignition at the centre
+  float dc = length(centre - uCentre);
+  float behind = exp(-max(uWave.x - dc, 0.0) / (5.0 * uRem));
+  float ahead = exp(-pow(max(dc - uWave.x, 0.0) / uRem, 2.0));
+  float fade = exp(-max(dc - 20.0 * uRem, 0.0) / (20.0 * uRem)); // the burst weakens with distance (also keeps the text readable)
+  float w = uWave.y * (dc < uWave.x ? behind : ahead) * fade + uWave.z * exp(-pow(dc / (7.0 * uRem), 2.0));
+  float waveFire = step(r1, w * 0.9) * w;
+  vec3 waveCol = vec3(0.43, 1.0, 0.67);
+
   // every pixel is faintly there (a bit stronger on the rings), each with its own gain like a real detector
   float base = mix(0.12, 0.26, onRing) * (0.5 + r2);
   vec3 baseCol = mix(tint, vec3(0.96, 0.94, 1.0), 0.25);
@@ -75,8 +86,10 @@ void main() {
   // a fired pixel flashes pale, then settles into its ring's colour as it decays
   vec3 flash = vec3(0.99, 0.99, 0.75);
   vec3 col = mix(baseCol, mix(tint, flash, smoothstep(0.35, 0.9, fire)), smoothstep(0.0, 0.25, fire));
-  float alpha = max(base, fire * mix(0.5, 1.0, onRing));   // fired pixels are fainter in the gaps between rings
-  float radius = max(0.17, (0.2 + 0.22 * fire) * mix(0.8, 1.0, onRing));
+  col = mix(col, waveCol, smoothstep(0.0, 0.3, waveFire) * step(fire, waveFire));
+  float lit = max(fire, waveFire);
+  float alpha = max(base, lit * mix(0.5, 1.0, onRing));   // fired pixels are fainter in the gaps between rings
+  float radius = max(0.17, (0.2 + 0.22 * lit) * mix(0.8, 1.0, onRing));
 
   vec2 local = fract(gl_FragCoord.xy / uPitch) - 0.5;
   float aa = 0.6 / uPitch;
@@ -141,6 +154,16 @@ export function startHeroGlow(
   const trail: { x: number; y: number; t: number }[] = [];
   const trailData = new Float32Array(MAX_TRAIL * 3);
   let dpr = 1;
+  const dawn = hero.querySelector(".hero-dawn");
+  const wave = { r: 0, on: 0, core: 0 };
+  // the pulse is a CSS animation: read its live front radius (--r, a registered length, so computed in px) and strength
+  const readWave = () => {
+    if (!dawn) return;
+    const cs = getComputedStyle(dawn);
+    wave.r = (parseFloat(cs.getPropertyValue("--r")) || 0) * dpr;
+    wave.on = parseFloat(cs.opacity) || 0;
+    wave.core = (parseFloat(cs.getPropertyValue("--core")) || 0) * wave.on * 0.6;
+  };
 
   const resize = () => {
     dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
@@ -160,13 +183,19 @@ export function startHeroGlow(
 
   const draw = (now: number) => {
     while (trail.length && now - trail[0].t > TRAIL_LIFE * 1.5 * 1000) trail.shift();
-    dirty = trail.length > 0; // one more draw after the trail empties clears the canvas
+    readWave();
+    dirty = trail.length > 0 || wave.on > 0.01; // one more draw after trail and pulse end clears the canvas
     for (let i = 0; i < MAX_TRAIL; i++) {
       const p = trail[trail.length - 1 - i];
       trailData.set(p ? [p.x, p.y, (now - p.t) / 1000] : [0, 0, -1], i * 3);
     }
     gl.uniform3fv(u("uTrail"), trailData);
     gl.uniform1f(u("uP"), parseFloat(hero.style.getPropertyValue("--p")) || 0);
+    gl.uniform3f(u("uWave"), wave.r, wave.on, wave.core);
+    gl.uniform1f(
+      u("uRem"),
+      (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) * dpr,
+    );
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -181,8 +210,16 @@ export function startHeroGlow(
   const frame = (now: number) => {
     raf = 0;
     if (stopped || !canvas.isConnected) return;
-    // idle (no live trail, canvas already clear): nothing to draw, so just keep watching
-    if (visible && !document.hidden && (trail.length || dirty) && now - last >= FRAME_MS - 2) {
+    // idle (no live trail, no pulse, canvas already clear): nothing to draw, so just keep watching
+    readWave();
+    // the pulse alone needs only 30 fps; pointer trails get the full rate
+    const gap = trail.length ? FRAME_MS : 2 * FRAME_MS;
+    if (
+      visible &&
+      !document.hidden &&
+      (trail.length || dirty || wave.on > 0.01) &&
+      now - last >= gap - 2
+    ) {
       last = now;
       draw(now);
     }
