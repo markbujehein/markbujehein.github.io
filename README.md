@@ -38,6 +38,7 @@ pnpm install
 pnpm dev             # http://localhost:4321
 pnpm run check       # astro sync + type check
 pnpm test            # Vitest
+pnpm run e2e         # Playwright end-to-end tests against the built site (CHROMIUM_PATH=/usr/bin/chromium to use a system browser)
 pnpm run lint        # Oxlint
 pnpm run format      # Oxfmt (src) + Prettier (.astro)
 pnpm run build       # check + astro build into dist/
