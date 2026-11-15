@@ -48,7 +48,7 @@ const { title, description } = Astro.props;
   <body>
     <SkipLink />
     <Nav />
-    <main id="main">
+    <main id="main" data-pagefind-body>
       <slot name="hero" />
       <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6">
         <slot />

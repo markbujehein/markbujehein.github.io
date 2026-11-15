@@ -1,0 +1,142 @@
+---
+// Pagefind search: the index is built into dist/pagefind/ by `pnpm run build`, so it is absent in `pnpm dev`.
+---
+
+<!-- Hidden until the script runs: without JavaScript there is nothing to open. -->
+<button
+  type="button"
+  id="search-open"
+  hidden
+  aria-label="Search (press / or Ctrl+K)"
+  class="flex h-11 w-11 cursor-pointer items-center justify-center rounded border border-paper-300 text-ink-600 hover:text-accent-700 dark:border-ink-700 dark:text-paper-300 dark:hover:text-accent-300"
+>
+  <svg
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    aria-hidden="true"
+  >
+    <circle cx="11" cy="11" r="7"></circle>
+    <path d="m20 20-3.5-3.5"></path>
+  </svg>
+</button>
+
+<dialog
+  id="search-dialog"
+  aria-label="Search"
+  class="mx-auto mt-[10vh] mb-auto w-[min(40rem,calc(100vw-2rem))] rounded-md border border-paper-300 bg-paper-50 p-0 text-ink-700 backdrop:bg-ink-950/60 dark:border-ink-700 dark:bg-ink-900 dark:text-paper-300"
+>
+  <input
+    id="search-input"
+    type="search"
+    placeholder="Search the site"
+    aria-label="Search the site"
+    autocomplete="off"
+    class="w-full border-0 border-b border-paper-300 bg-transparent px-4 py-3 text-base text-ink-950 outline-none placeholder:text-ink-500 focus-visible:ring-2 focus-visible:ring-accent-500 dark:border-ink-700 dark:text-paper-50 dark:placeholder:text-paper-400"
+  />
+  <p
+    id="search-status"
+    class="m-0 px-4 py-2 text-sm text-ink-600 dark:text-paper-400"
+    role="status"
+  >
+  </p>
+  <ul
+    id="search-results"
+    class="m-0 max-h-[60vh] list-none overflow-y-auto p-0 [&_mark]:bg-accent-300/40 [&_mark]:text-inherit"
+  >
+  </ul>
+</dialog>
+
+<script>
+  type Hit = { url: string; meta: { title?: string }; excerpt: string };
+  type Pagefind = {
+    search: (q: string) => Promise<{ results: { data: () => Promise<Hit> }[] }>;
+  };
+
+  const INDEX = "/pagefind/pagefind.js"; // a variable: the file only exists after the build
+  let pagefind: Pagefind | undefined;
+  let run = 0; // drops answers to queries that were typed over
+
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+
+  async function load(): Promise<Pagefind | undefined> {
+    try {
+      pagefind ??= await import(/* @vite-ignore */ INDEX);
+    } catch {
+      // dev server: no index yet
+    }
+    return pagefind;
+  }
+
+  async function query(q: string) {
+    const list = $("search-results");
+    const status = $("search-status");
+    if (!list || !status) return;
+    const id = ++run;
+    list.replaceChildren();
+    if (!q.trim()) {
+      status.textContent = "";
+      return;
+    }
+    const pf = await load();
+    if (!pf) {
+      status.textContent = "The search index is created by the build: run pnpm run build.";
+      return;
+    }
+    const { results } = await pf.search(q);
+    const hits = await Promise.all(results.slice(0, 8).map((r) => r.data()));
+    if (id !== run) return;
+    status.textContent = hits.length ? "" : `Nothing found for "${q}".`;
+    for (const hit of hits) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = hit.url;
+      a.className =
+        "block px-4 py-3 text-ink-700 no-underline hover:bg-paper-200 focus-visible:bg-paper-200 dark:text-paper-300 dark:hover:bg-ink-800 dark:focus-visible:bg-ink-800";
+      const title = document.createElement("strong");
+      title.className = "block text-ink-950 dark:text-paper-50";
+      title.textContent = hit.meta.title ?? hit.url;
+      const excerpt = document.createElement("span");
+      excerpt.className = "block text-sm";
+      excerpt.innerHTML = hit.excerpt; // Pagefind escapes the text and only adds <mark>
+      a.append(title, excerpt);
+      li.append(a);
+      list.append(li);
+    }
+  }
+
+  function open() {
+    const dialog = $<HTMLDialogElement>("search-dialog");
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    $<HTMLInputElement>("search-input")?.select();
+    void load();
+  }
+
+  // The nav is re-rendered on every view transition, so listen on the document once.
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("#search-open")) open();
+    else if (target.id === "search-dialog") (target as HTMLDialogElement).close(); // backdrop click
+  });
+  document.addEventListener("input", (e) => {
+    if ((e.target as HTMLElement).id === "search-input")
+      void query((e.target as HTMLInputElement).value);
+  });
+  document.addEventListener("keydown", (e) => {
+    const typing = (e.target as HTMLElement).closest("input, textarea, [contenteditable]");
+    if ((e.key === "/" && !typing) || (e.key === "k" && (e.ctrlKey || e.metaKey))) {
+      e.preventDefault();
+      open();
+    }
+  });
+  document.addEventListener("astro:before-swap", () =>
+    $<HTMLDialogElement>("search-dialog")?.close(),
+  );
+  document.addEventListener("astro:page-load", () => $("search-open")?.removeAttribute("hidden"));
+  $("search-open")?.removeAttribute("hidden");
+</script>

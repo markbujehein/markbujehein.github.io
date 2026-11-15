@@ -49,6 +49,8 @@ jobs:
           pnpm test
       - name: Build
         run: pnpm exec astro build
+      - name: Search index
+        run: pnpm exec pagefind --site dist
       - name: Check output (internal links, HTML, placeholder leaks)
         run: python -I tools/check_output.py dist https://markbujehein.github.io
       - name: End-to-end tests
