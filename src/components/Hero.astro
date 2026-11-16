@@ -107,14 +107,11 @@ const rings = [
         <circle class="p-halo" cx="300" cy="300" r="11"></circle>
         <circle class="p-head" cx="300" cy="300" r="4.5"></circle>
       </g>
-      <circle
-        class="nucleus"
-        data-tip="nucleus"
-        cx="300"
-        cy="300"
-        r="22"
-        style="fill: var(--color-tyrian-folio)"></circle>
+      <circle class="nucleus" cx="300" cy="300" r="22" style="fill: var(--color-tyrian-folio)"
+      ></circle>
       <circle class="nucleus-flash" cx="300" cy="300" r="22"></circle>
+      <!-- Wider than the nucleus: on phones the rings centre on the bottom edge, so only the top half shows and needs a touch-sized target. -->
+      <circle class="hit" data-tip="nucleus" cx="300" cy="300" r="44"></circle>
     </svg>
 
     <div class="hero-copy">
@@ -144,6 +141,7 @@ const rings = [
     </div>
   </div>
   <div class="hero-tip" role="tooltip" hidden></div>
+  <button type="button" class="hero-explain" aria-expanded="false">Explain the diagram</button>
   <button type="button" class="hero-pause" aria-label="Pause animation" aria-pressed="false">
     <span class="i-pause icon-[lucide--pause] size-4" aria-hidden="true"></span>
     <span class="i-play icon-[lucide--play] size-4" aria-hidden="true"></span>
@@ -489,6 +487,29 @@ const rings = [
     line-height: 1.45;
     pointer-events: none;
   }
+  /* Keyboard route to the nucleus tooltip: hidden until it has focus (the diagram itself is decorative and aria-hidden). */
+  .hero-explain {
+    position: absolute;
+    right: 3.25rem;
+    bottom: 0.75rem;
+    z-index: 5;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .hero-explain:focus-visible {
+    width: auto;
+    height: 2rem;
+    padding: 0 0.75rem;
+    clip-path: none;
+    border: 1px solid rgb(244 241 250 / 0.6);
+    border-radius: 6px;
+    background: rgb(20 9 46 / 0.85);
+    color: #fff;
+    font-size: 0.8rem;
+  }
   .hero-pause {
     position: absolute;
     right: 0.75rem;
@@ -745,6 +766,7 @@ const rings = [
         shown = "";
         current = null;
         delete hero.dataset.paused; // the animation resumes
+        hero.querySelector(".hero-explain")?.setAttribute("aria-expanded", "false");
       };
       const show = (target: Element, key: string) => {
         const content = TIPS[key];
@@ -780,6 +802,14 @@ const rings = [
         show(target, target.getAttribute("data-tip") ?? "");
       };
       const onKey = (e: KeyboardEvent) => e.key === "Escape" && hide();
+      const explain = hero.querySelector<HTMLButtonElement>(".hero-explain");
+      const nucleus = hero.querySelector('[data-tip="nucleus"]');
+      explain?.addEventListener("click", (e) => {
+        if (e.detail !== 0 || !nucleus) return; // a keyboard activation; the pointer route is the diagram itself
+        if (current === nucleus) hide();
+        else show(nucleus, "nucleus");
+        explain.setAttribute("aria-expanded", String(current === nucleus));
+      });
       document.addEventListener("pointerdown", onPress);
       document.addEventListener("keydown", onKey);
       const pause = hero.querySelector<HTMLButtonElement>(".hero-pause");
