@@ -7,7 +7,7 @@ import NewsList from "../components/NewsList.astro";
 import ProjectList from "../components/ProjectList.astro";
 import { site } from "../config/site";
 import ProfileLinks from "../components/ProfileLinks.astro";
-import portrait from "../assets/portrait.jpg";
+import portrait from "../assets/about.jpg";
 import Base from "../layouts/Base.astro";
 import { sortByOrder } from "../utils/cv";
 import { latest } from "../utils/news";
@@ -42,7 +42,7 @@ const news = latest(await getCollection("news"), 5); // the full list lives at /
         <Image
           class="mx-auto aspect-[3/4] w-48 rounded-md object-cover shadow-lg sm:w-full"
           src={portrait}
-          alt="Portrait of Mark Buje Hein"
+          alt="Mark Buje Hein talking at a meeting"
           width={448}
           height={597}
           densities={[1, 2]}
