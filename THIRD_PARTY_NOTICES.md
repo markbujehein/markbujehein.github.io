@@ -34,3 +34,7 @@ The site's icons are from Lucide ([lucide-icons/lucide](https://github.com/lucid
 ## kinu (design reference)
 
 The shared `btn` and `chip` styles, the dialog fade and the CSS-only approach are shaped after [kinu](https://github.com/developit/kinu) by Jason Miller, which declares MIT in its `package.json`. No kinu code is copied; the components in `src/styles/global.css` are written for this site.
+
+## Profile icons
+
+The ORCID, ResearchGate, GitHub, Kaggle and LinkedIn icons in `src/config/profileIcons.ts` are glyph outlines taken from the Font Awesome brand icons as shipped in the Nerd Fonts symbol set ([ryanoasis/nerd-fonts](https://github.com/ryanoasis/nerd-fonts), MIT; Font Awesome Free icons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), by Fonticons, Inc.). They are inline SVG paths; no font is loaded.
