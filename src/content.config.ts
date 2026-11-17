@@ -33,8 +33,6 @@ const home = defineCollection({
       headline: z.string(),
       detail: z.string(),
       start: z.string().optional(),
-      contact: z.string().optional(),
-      linkedin: z.url({ protocol: /^https$/ }).optional(),
     }),
   }),
 });

@@ -4,8 +4,6 @@ hero:
   headline: Hire a physicist.
   detail: PhD position wanted. Modelling, experiments, fitting, Bayesian analysis.
   start: Available as soon as possible
-  contact: 'Email: mark.sorensen [at] nbi.ku.dk'
-  linkedin: https://www.linkedin.com/in/mbhs%C3%B8rensen
 ---
 
 
